@@ -19,7 +19,7 @@ lteLower mlen p = MkParser (\ plem => runParser p (lteTransitive plem mlen))
 ltLower : LT m n -> Parser toks tok mn a n -> Parser toks tok mn a m
 ltLower mltn = lteLower (lteSuccLeft mltn)
 
-implicit box : All (Parser toks tok mn a :-> Box (Parser toks tok mn a))
+implicit box : Parser toks tok mn a n -> Box (Parser toks tok mn a) n
 box = lteClose lteLower
 
 anyTok : (Inspect toks tok, Alternative mn) =>
