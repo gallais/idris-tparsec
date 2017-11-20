@@ -23,5 +23,8 @@ infixr 4 :.
 (:.) : (t : Type -> Type) -> (a : i -> Type) -> (i -> Type)
 (:.) t a i = t (a i)
 
+Cst : Type -> (i -> Type)
+Cst t i = t
+
 All : (a : i -> Type) -> Type
 All {i} a = {i : i} -> a i

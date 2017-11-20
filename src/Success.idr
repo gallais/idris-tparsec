@@ -27,7 +27,7 @@ ltLift p = lteLift (lteSuccLeft p)
 
 and : (p : Success toks tok a n) -> Success toks tok b (Size p) ->
       Success toks tok (Pair a b) n
-and p (MkSuccess q s lt ts) = ltLift (Small p) (MkSuccess (Value p, q) s lt ts)
+and p q = ltLift (Small p) (map (MkPair (Value p)) q)
 
 fromView : All (View toks tok :-> Success toks tok tok)
 fromView = go _ where
