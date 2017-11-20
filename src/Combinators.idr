@@ -152,3 +152,37 @@ betweenm : (Monad mn, Alternative mn) =>
            All (Parser toks tok mn a :-> Box (Parser toks tok mn c) :->
            Parser toks tok mn b :-> Parser toks tok mn b)
 betweenm open close p = landm (rmand open p) close
+
+LChain : (Nat -> Type) -> Type -> (Type -> Type) -> Type -> Nat -> Type
+LChain toks tok mn a n =
+  Success toks tok a n -> Box (Parser toks tok mn (a -> a)) n -> mn (Success toks tok a n)
+
+
+schainl : (Alternative mn, Monad mn) => All (LChain toks tok mn a)
+schainl {mn} {a} = fix _ $ \ rec, sa, op => schainlAux rec sa op <|> pure sa where
+
+  schainlAux : All (Box (LChain toks tok mn a) :-> LChain toks tok mn a)
+  schainlAux rec sa op =
+    runParser (call op (Small sa)) lteRefl (Leftovers sa) >>= \ sop =>
+    let sa' = Success.map (\ f => f (Value sa)) sop in
+    call rec (Small sa) sa' (Box.ltLower (Small sa) op) >>= \ res =>
+    pure (ltLift (Small sa) res)
+
+iteratel : (Alternative mn, Monad mn) =>
+           All (Parser toks tok mn a :-> Box (Parser toks tok mn (a -> a)) :-> Parser toks tok mn a)
+iteratel val op = MkParser (\ mlen, ts => runParser val mlen ts >>=
+                            \ sa => schainl sa (Box.lteLower mlen op))
+
+hchainl : (Alternative mn, Monad mn) =>
+          All (Parser toks tok mn a :-> Box (Parser toks tok mn (a -> b -> a)) :->
+          Box (Parser toks tok mn b) :-> Parser toks tok mn a)
+hchainl {toks} {tok} {mn} {a} {b} seed op arg =
+  let ty   = Parser toks tok mn in
+  let op'  = Box.map {a = ty (a -> b -> a)} (map flip) op in
+  let arg' = duplicate arg in
+  iteratel seed (map2 {a = ty (b -> a -> a)} app op' arg')
+
+
+nelist : (Alternative mn, Monad mn) =>
+         All (Parser toks tok mn a :-> Parser toks tok mn (NEList a))
+nelist = fix _ $ \ rec, p => Combinators.map (uncurry consm) (andmbind p (\ _ => Box.app rec p))
