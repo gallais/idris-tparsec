@@ -4,6 +4,7 @@ import Indexed
 import Induction as Box
 import Inspect
 import Success
+import NEList
 
 %default total
 %access public export
@@ -81,6 +82,10 @@ and : Monad mn =>
       All (Parser toks tok mn a :-> Box (Parser toks tok mn b) :-> Parser toks tok mn (Pair a b))
 and p q = andbind p (\ _ => q)
 
+ands : Monad mn =>
+       All (NEList :. Parser toks tok mn a :-> Parser toks tok mn (NEList a))
+ands ps = foldr1 (\ p, ps => map (uncurry (<+>)) (and p ps)) (Functor.map (map singleton) ps)
+
 andm : (Monad mn, Alternative mn) =>
        All (Parser toks tok mn a :-> Box (Parser toks tok mn b) :->
        Parser toks tok mn (Pair a (Maybe b)))
@@ -129,6 +134,10 @@ app p q = bind p (\ f => Box.map (map f) q)
 exact : (Inspect toks tok, DecEq tok, Monad mn, Alternative mn) =>
         tok -> All (Parser toks tok mn tok)
 exact t = guard (\ t' => decAsBool (decEq t t')) anyTok
+
+exacts : (Inspect toks tok, DecEq tok, Monad mn, Alternative mn) =>
+         NEList tok -> All (Parser toks tok mn (NEList tok))
+exacts ts = ands (map (\ t => exact t) ts)
 
 anyOf : (Inspect toks tok, DecEq tok, Monad mn, Alternative mn) =>
         List tok -> All (Parser toks tok mn tok)
