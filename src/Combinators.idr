@@ -185,4 +185,4 @@ hchainl {toks} {tok} {mn} {a} {b} seed op arg =
 
 nelist : (Alternative mn, Monad mn) =>
          All (Parser toks tok mn a :-> Parser toks tok mn (NEList a))
-nelist = fix _ $ \ rec, p => Combinators.map (uncurry consm) (andmbind p (\ _ => Box.app rec p))
+nelist = fix _ $ \ rec, p => Combinators.map (uncurry consm) (andm p (Box.app rec p))
