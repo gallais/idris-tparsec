@@ -18,7 +18,7 @@ decimalDigit =
 decimalNat : (Inspect toks Char, Monad mn, Alternative mn) =>
              All (Parser toks Char mn Nat)
 decimalNat =
-  let convert = foldl (\ d, ih => 10 * ih + d) 0 in
+  let convert = foldl (\ ih, d => 10 * ih + d) 0 in
   Combinators.map convert (nelist decimalDigit)
 
 decimalInteger : (Inspect toks Char, Monad mn, Alternative mn) =>
