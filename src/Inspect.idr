@@ -20,13 +20,16 @@ record SizedType (a : Type) (n : Nat) where
   Sized : sizeFromDict Dict Value = n
 
 SizedList : Type -> Nat -> Type
-SizedList a n = SizedType (List a) n
+SizedList a = SizedType (List a)
 
-Inspect (SizedType (List a)) a where
+MkSizedList : (xs : List a) -> SizedList a (length xs)
+MkSizedList xs = MkSizedType MkSizedDict xs Refl
+
+Inspect (SizedList a) a where
   inspect (MkSizedType MkSizedDict v s) = go _ v s where
 
     go : (n : Nat) -> (xs : List a) -> List.length xs = n ->
-         Maybe (View (SizedType (List a)) a n)
+         Maybe (View (SizedList a) a n)
     go Z      _         _ = Nothing
     go (S n) (x :: xs) eq = let eq' = succInjective _ _ eq
                             in Just (x, MkSizedType MkSizedDict xs eq')
