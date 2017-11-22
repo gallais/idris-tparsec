@@ -1,4 +1,4 @@
-module Examples
+module Examples.Arithmetic
 
 import TParsec
 import Running
