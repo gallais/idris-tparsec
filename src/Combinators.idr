@@ -157,7 +157,6 @@ LChain : (Nat -> Type) -> Type -> (Type -> Type) -> Type -> Nat -> Type
 LChain toks tok mn a n =
   Success toks tok a n -> Box (Parser toks tok mn (a -> a)) n -> mn (Success toks tok a n)
 
-
 schainl : (Alternative mn, Monad mn) => All (LChain toks tok mn a)
 schainl {mn} {a} = fix _ $ \ rec, sa, op => schainlAux rec sa op <|> pure sa where
 
@@ -173,6 +172,24 @@ iteratel : (Alternative mn, Monad mn) =>
 iteratel val op = MkParser (\ mlen, ts => runParser val mlen ts >>=
                             \ sa => schainl sa (Box.lteLower mlen op))
 
+RChain : (Nat -> Type) -> Type -> (Type -> Type) -> Type -> Nat -> Type
+RChain toks tok mn a n =
+  Parser toks tok mn (a -> a) n -> Parser toks tok mn a n -> Parser toks tok mn a n
+
+iterater : (Alternative mn, Monad mn) =>
+           All (Parser toks tok mn (a -> a) :-> Parser toks tok mn a :-> Parser toks tok mn a)
+iterater {toks} {tok} {mn} {a} = fix (RChain toks tok mn a) $ \ rec, op, val =>
+                    alt (iteraterAux rec op val) val where
+
+  iteraterAux : All (Box (RChain toks tok mn a) :-> RChain toks tok mn a)
+  iteraterAux rec op val = MkParser $ \ mlen, ts =>
+    runParser op mlen ts >>= \ sop =>
+    let sopltn = lteTransitive (Small sop) mlen in
+    let op'    = ltLower sopltn op in
+    let val'   = ltLower sopltn val in
+    runParser (call rec sopltn op' val') lteRefl (Leftovers sop) >>= \ res =>
+    pure (ltLift (Small sop) (Success.map (Value sop) res))
+
 hchainl : (Alternative mn, Monad mn) =>
           All (Parser toks tok mn a :-> Box (Parser toks tok mn (a -> b -> a)) :->
           Box (Parser toks tok mn b) :-> Parser toks tok mn a)
@@ -182,6 +199,10 @@ hchainl {toks} {tok} {mn} {a} {b} seed op arg =
   let arg' = duplicate arg in
   iteratel seed (map2 {a = ty (b -> a -> a)} app op' arg')
 
+chainl1 : (Alternative mn, Monad mn) =>
+          All (Parser toks tok mn a :-> Box (Parser toks tok mn (a -> a -> a)) :->
+          Parser toks tok mn a)
+chainl1 p op = hchainl p op p
 
 nelist : (Alternative mn, Monad mn) =>
          All (Parser toks tok mn a :-> Parser toks tok mn (NEList a))
