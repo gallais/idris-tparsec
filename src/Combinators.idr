@@ -199,10 +199,20 @@ hchainl {toks} {tok} {mn} {a} {b} seed op arg =
   let arg' = duplicate arg in
   iteratel seed (map2 {a = ty (b -> a -> a)} app op' arg')
 
+hchainr : (Alternative mn, Monad mn) =>
+          All (Parser toks tok mn a :-> Box (Parser toks tok mn (a -> b -> b)) :->
+               Parser toks tok mn b :-> Parser toks tok mn b)
+hchainr arg op seed = iterater (app (map (flip apply) arg) op) seed
+
 chainl1 : (Alternative mn, Monad mn) =>
           All (Parser toks tok mn a :-> Box (Parser toks tok mn (a -> a -> a)) :->
           Parser toks tok mn a)
 chainl1 p op = hchainl p op p
+
+chainr1 : (Alternative mn, Monad mn) =>
+          All (Parser toks tok mn a :-> Box (Parser toks tok mn (a -> a -> a)) :->
+          Parser toks tok mn a)
+chainr1 p op = hchainr p op p
 
 nelist : (Alternative mn, Monad mn) =>
          All (Parser toks tok mn a :-> Parser toks tok mn (NEList a))
