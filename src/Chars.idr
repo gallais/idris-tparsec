@@ -43,8 +43,11 @@ withSpaces p = rmand spaces (landm p spaces)
 
 alpha : (Inspect toks Char, Alternative mn, Monad mn) =>
         All (Parser toks Char mn Char)
-alpha = anyOf (unpack "abcdefghijklmnopqrstuvwxyz")
+alpha = anyOf (unpack "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
+alphas : (Inspect toks Char, Alternative mn, Monad mn) =>
+         All (Parser toks Char mn String)
+alphas = map (pack . NEList.toList) (nelist alpha)
 
 num : (Inspect toks Char, Alternative mn, Monad mn) =>
       All (Parser toks Char mn Nat)
