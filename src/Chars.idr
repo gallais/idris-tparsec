@@ -14,6 +14,13 @@ char : (Inspect toks Char, Alternative mn, Monad mn) =>
        Char -> All (Parser toks Char mn Char)
 char = exact
 
+string : (Inspect toks Char, Alternative mn, Monad mn) =>
+         (t : String) -> {auto pr : NonEmpty (unpack t)} ->
+         All (Parser toks Char mn String)
+string t {pr} with (unpack t)
+  | []        = absurd pr
+  | (x :: xs) = cmap t (ands (map (\ c => char c) $ MkNEList x xs))
+
 space : (Inspect toks Char, Alternative mn, Monad mn) =>
         All (Parser toks Char mn Char)
 space = anyOf (unpack " \t\n")
