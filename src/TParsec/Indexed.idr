@@ -1,4 +1,4 @@
-module Indexed
+module TParsec.Indexed
 
 %default total
 %access public export

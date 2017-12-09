@@ -1,10 +1,10 @@
-module Combinators
+module TParsec.Combinators
 
-import Indexed
-import Induction as Box
-import Inspect
-import Success
-import NEList
+import TParsec.Indexed
+import TParsec.Induction as Box
+import TParsec.Inspect
+import TParsec.Success
+import TParsec.NEList
 
 %default total
 %access public export

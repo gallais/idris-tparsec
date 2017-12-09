@@ -1,0 +1,16 @@
+package TParsec
+
+sourcedir = src
+modules = TParsec
+        , TParsec.Chars
+        , TParsec.Combinators
+        , TParsec.Indexed
+        , TParsec.Induction
+        , TParsec.Inspect
+        , TParsec.NEList
+        , TParsec.Numbers
+        , TParsec.Running
+        , TParsec.SizedDict
+        , TParsec.Success
+
+opts = "-total"

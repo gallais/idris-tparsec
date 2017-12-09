@@ -1,7 +1,7 @@
-module Inspect
+module TParsec.Inspect
 
-import Indexed
-import SizedDict
+import TParsec.Indexed
+import TParsec.SizedDict
 
 %default total
 %access public export

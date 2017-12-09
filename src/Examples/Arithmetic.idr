@@ -1,7 +1,7 @@
 module Examples.Arithmetic
 
 import TParsec
-import Running
+import TParsec.Running
 
 %default total
 

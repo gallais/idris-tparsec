@@ -1,11 +1,11 @@
-module Chars
+module TParsec.Chars
 
-import Indexed
-import Induction
-import Inspect
-import Combinators
-import NEList
-import Numbers
+import TParsec.Indexed
+import TParsec.Induction
+import TParsec.Inspect
+import TParsec.Combinators
+import TParsec.NEList
+import TParsec.Numbers
 
 %default total
 %access public export
