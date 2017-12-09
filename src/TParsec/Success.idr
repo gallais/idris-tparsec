@@ -1,7 +1,7 @@
-module Success
+module TParsec.Success
 
-import Indexed
-import Inspect
+import TParsec.Indexed
+import TParsec.Inspect
 
 %default total
 %access public export

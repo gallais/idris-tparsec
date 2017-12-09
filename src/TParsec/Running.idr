@@ -1,9 +1,9 @@
-module Running
+module TParsec.Running
 
-import Indexed
-import Success
-import Combinators
-import Inspect
+import TParsec.Indexed
+import TParsec.Success
+import TParsec.Combinators
+import TParsec.Inspect
 
 %default total
 %access public export

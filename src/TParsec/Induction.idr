@@ -1,6 +1,6 @@
-module Induction
+module TParsec.Induction
 
-import Indexed
+import TParsec.Indexed
 
 %access public export
 %default total

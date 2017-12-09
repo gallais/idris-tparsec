@@ -1,9 +1,9 @@
 module TParsec
 
-import public Indexed
-import public Induction
-import public Inspect
-import public Success
-import public Combinators
-import public Chars
-import public Numbers
+import public TParsec.Indexed
+import public TParsec.Induction
+import public TParsec.Inspect
+import public TParsec.Success
+import public TParsec.Combinators
+import public TParsec.Chars
+import public TParsec.Numbers

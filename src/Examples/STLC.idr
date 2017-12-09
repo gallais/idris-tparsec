@@ -1,8 +1,8 @@
 module Examples.STLC
 
 import TParsec
-import Running
-import NEList
+import TParsec.Running
+import TParsec.NEList
 
 %default total
 
