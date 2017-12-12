@@ -13,4 +13,4 @@ modules = TParsec
         , TParsec.SizedDict
         , TParsec.Success
 
-opts = "-total"
+opts = "--total"
