@@ -3,10 +3,10 @@ module TParsec.NEList
 %default total
 %access public export
 
-record NEList (A : Type) where
+record NEList (a : Type) where
   constructor MkNEList
-  head : A
-  tail : List A
+  head : a
+  tail : List a
 
 toList : NEList a -> List a
 toList xxs = head xxs :: tail xxs
