@@ -6,12 +6,12 @@ import TParsec.Inspect
 %default total
 %access public export
 
-record Success (Toks : Nat -> Type) (Tok : Type) (A : Type) (n : Nat) where
+record Success (toks : Nat -> Type) (tok : Type) (a : Type) (n : Nat) where
   constructor MkSuccess
-  Value     : A
+  Value     : a
   Size      : Nat
   Small     : LT Size n
-  Leftovers : Toks Size
+  Leftovers : toks Size
 
 map : (f : a -> b) -> All (Success toks tok a :-> Success toks tok b)
 map f (MkSuccess v s lt ts) = MkSuccess (f v) s lt ts
