@@ -114,7 +114,7 @@ language {toks} {mn} =
   -- * start with a `term`
   let expr   = hchainl (map EEmb term) addop term in
 
-  -- Going back to the very beginning: we are building a ̀`Language toks mn n`
+  -- Going back to the very beginning: we are building a `Language toks mn n`
   -- by recursion. Which means we need to return such a `Language` as a result.
   -- But we have just defined parsers for `Expr`, `Term` and `Factor` so we
   -- can just gather them in the record:
@@ -127,7 +127,7 @@ language {toks} {mn} =
 
 -- ̀`parse str p` is defined in `TParsec.Running`. It runs the parser `p` on
 -- the String `str` and if that succeeds with value `v`, it demands that the
--- give a proof of `Singleton v`. The only such proof is `MkSingleton v`.
+-- user gives a proof of `Singleton v`. The only such proof is `MkSingleton v`.
 
 -- So if the following `test` typechecks we have the guarantee that running
 -- `_expr Arithmetic.language` on `"1+3"` produces the abstract syntax tree

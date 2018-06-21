@@ -63,13 +63,13 @@ type =
   -- * `alt` takes the union of two grammars
   -- * `map f p` runs the parser `p` and modifies the returned value with `f`
   -- * `rand p q` (right and) runs `p` then `q` and returns the value of `q`
-  -- * `char c` matches exaclty the character `c`
+  -- * `char c` matches exactly the character `c`
   -- * `alphas` returns a non-empty string of letters
   -- * `parens p` matches an opening parenthesis, runs `p`, matches a closing
   --   parenthesis and returns the value of `p`.
 
-  -- Remenbering that `K` wraps a string into a TYPE this literally gives us:
-  -- LT = '<alpha>+ | (T)
+  -- Remenbering that `K` wraps a string into a TYPE the following definition
+  -- literally gives us: LT = '<alpha>+ | (T)
 
     let lt = alt (map K (rand (char '\'') alphas)) (parens rec) in
 
@@ -79,15 +79,13 @@ type =
   -- * `withSpaces p` strips spaces before and after running `p`
   -- * `string s` recognizes exactly the string s
 
-  -- So `arr` recognizes exactly "->" (potentially with spaces around) and
-  -- returns the function `ARR` of type `TYPE -> TYPE -> TYPE`.
+  -- So `arr` recognizes exactly "->" with spaces around it and returns the function
+  -- `ARR` of type `TYPE -> TYPE -> TYPE`.
     let arr = cmap ARR (withSpaces (string "->")) in
-
 
   -- Finally, we put everything together by using `chainr1`. `chainr1 elt cons`
   -- parses right-nested lists of the form `elt cons (elt cons (...))` with at
   -- least one `elt`.
-
   -- Remembering the part of the grammar `T := LT | LT -> T`, we see that this
   -- is the ideal candidate for us where `elt` is `lt` and `cons` is `arr`.
 
@@ -96,7 +94,7 @@ type =
 -- An example: We check that the parser succeeds on "'a -> ('b -> 'c) -> 'd"
 -- `parse str p` is defined in `TParsec.Running`. It runs the parser `p` on
 -- the String `str` and if that succeeds with value `v`, it demands that the
--- give a proof of `Singleton v`. The only such proof is `MkSingleton v`.
+-- user gives a proof of `Singleton v`. The only such proof is `MkSingleton v`.
 
 Test : Type
 Test = parse {tok = Char} {mn = Maybe} "'a -> ('b -> 'c) -> 'd" type
@@ -126,7 +124,7 @@ mutual
 -- Because `Emb` embeds `Neu` into `Val` and `Cut` embeds `Val` into `Neu`
 -- we can't write one parser independently of the other: both need to be
 -- defined at the same time.
--- We introduce ̀`Language` as a record packing a parser for each one of
+-- We introduce `Language` as a record packing a parser for each one of
 -- these and we will construct all of `All Language` as a big fixpoint.
 
 record Language (n : Nat) where
@@ -141,10 +139,10 @@ record Language (n : Nat) where
 -- NB: Most of the definitions will be parametrised by a value of type
 -- `Box (Parser' Val)` which we will call `rec`. It will correspond to the
 -- recursive call introduced by the use of `fix`. To guarantee totality we
--- can give `fix` the type `(A -> A) -> A` but rather a more limited type
+-- cannot give `fix` the type `(A -> A) -> A` but rather a more limited type
 -- ̀ All (Box A :-> A) -> All A` for any family `A : Nat -> Type`.
 -- Some parser combinators can take `Box`ed values and other can't depending
--- on whether they guarantee that a performing a recursive call will be safe.
+-- on whether they guarantee that performing a recursive call will be safe.
 -- Checking the types in `TParsec.Combinators` is helpful.
 
 
@@ -162,9 +160,9 @@ var = alphas
 cut : All (Box (Parser' Val) :-> Parser' (Pair Val TYPE))
 cut rec = parens (adjust rec (rand (withSpaces (char ':')) type)) where
 
-  -- The definition of `adjust` needs quite a bit of explaining.
+  -- The definition of `adjust` needs a bit more thoughts.
   -- As we've explained, to guarantee totality the recursive type is wrapped
-  -- in a `Box`. We can't just use ̀`and` on `rec` and `rand (...) type` to
+  -- in a `Box`. We can't just use `and` on `rec` and `rand (...) type` to
   -- grab a value & a type and return both because `and` takes as its first
   -- argument a `Parser A` and not a `Box (Parser A)`.
 
@@ -173,7 +171,7 @@ cut rec = parens (adjust rec (rand (withSpaces (char ':')) type)) where
   -- type `All (A :-> B :-> C)` and returns `All (Box A :-> Box B :-> Box C)`.
 
   -- The second piece of the puzzle is the fact that `Parser' A` embeds
-  -- into `Box (Parser' A)`. And because we've declared this as an implicit
+  -- into `Box (Parser' A)`. And because the library declared this as an implicit
   -- conversion rule we don't have to mention it explicitly here.
 
   -- Hence:
@@ -184,8 +182,8 @@ cut rec = parens (adjust rec (rand (withSpaces (char ':')) type)) where
 
 -- We now know how to parse variables and cuts. We can explain how to parse
 -- neutral terms. Remember that `E := x | E I | (I : T)`. We can see that the
--- only recursive call to `E` is in the application case. That is this grammar
--- is equivalent to `E := B | E I` where `B := x | (I : T)`.
+-- only recursive call to `E` is in the application case. That is to say that
+-- this grammar is equivalent to `E := B | E I` where `B := x | (I : T)`.
 -- In other words: we have a left-nested list of applications ending with either
 -- a variable or a cut.
 
