@@ -16,7 +16,7 @@ infixr 2 :+
 infixr 3 :*
 
 (:*) : (a, b : i -> Type) -> (i -> Type)
-(:*) a b i = Pair (a i) (b i)
+(:*) a b i = (a i, b i)
 
 infixr 4 :.
 
@@ -27,4 +27,4 @@ Cst : Type -> (i -> Type)
 Cst t i = t
 
 All : (a : i -> Type) -> Type
-All {i} a = {i : i} -> a i
+All {i} a = {j : i} -> a j

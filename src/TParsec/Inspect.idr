@@ -8,7 +8,7 @@ import TParsec.SizedDict
 
 View : (as : Nat -> Type) -> (a : Type) -> (n : Nat) -> Type
 View as a Z     = Void
-View as a (S n) = Pair a (as n)
+View as a (S n) = (a, as n)
 
 interface Inspect (As : Nat -> Type) (A : Type) where
   inspect : All (As :-> Maybe :. View As A)

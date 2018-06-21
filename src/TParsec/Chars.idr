@@ -41,9 +41,17 @@ withSpaces : (Inspect toks Char, Alternative mn, Monad mn) =>
              All (Parser toks Char mn a :-> Parser toks Char mn a)
 withSpaces p = rmand spaces (landm p spaces)
 
+lowerAlpha : (Inspect toks Char, Alternative mn, Monad mn) =>
+             All (Parser toks Char mn Char)
+lowerAlpha = anyOf (unpack "abcdefghijklmnopqrstuvwxyz")
+
+upperAlpha : (Inspect toks Char, Alternative mn, Monad mn) =>
+             All (Parser toks Char mn Char)
+upperAlpha = anyOf (unpack "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
 alpha : (Inspect toks Char, Alternative mn, Monad mn) =>
         All (Parser toks Char mn Char)
-alpha = anyOf (unpack "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+alpha = lowerAlpha `alt` upperAlpha
 
 alphas : (Inspect toks Char, Alternative mn, Monad mn) =>
          All (Parser toks Char mn String)

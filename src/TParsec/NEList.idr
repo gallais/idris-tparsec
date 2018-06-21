@@ -11,6 +11,9 @@ record NEList (a : Type) where
 toList : NEList a -> List a
 toList xxs = head xxs :: tail xxs
 
+Show a => Show (NEList a) where
+  show = show . toList
+
 fromList : List a -> Maybe (NEList a)
 fromList []        = Nothing
 fromList (x :: xs) = Just (MkNEList x xs)
@@ -36,6 +39,12 @@ foldr1 c (MkNEList x xs) = go x xs where
 
   go : a -> List a -> a
   go x []        = x
+  go x (y :: ys) = c x (go y ys)
+
+foldrf : (a -> b -> b) -> (a -> b) -> NEList a -> b
+foldrf c s (MkNEList x xs) = go x xs 
+  where
+  go x [] = s x
   go x (y :: ys) = c x (go y ys)
 
 Functor NEList where

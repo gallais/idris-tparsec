@@ -61,7 +61,7 @@ alts = foldr alt fail
 
 andmbind : (Monad mn, Alternative mn) =>
            All (Parser toks tok mn a :-> (Cst a :-> Box (Parser toks tok mn b)) :->
-                Parser toks tok mn (Pair a (Maybe b)))
+                Parser toks tok mn (a, Maybe b))
 andmbind p q = MkParser (\ mlen, ts =>
                runParser p mlen ts >>= \ sa =>
                let salen   = lteTransitive (Small sa) mlen in
@@ -71,7 +71,7 @@ andmbind p q = MkParser (\ mlen, ts =>
 
 andbind : Monad mn =>
            All (Parser toks tok mn a :-> (Cst a :-> Box (Parser toks tok mn b)) :->
-                Parser toks tok mn (Pair a b))
+                Parser toks tok mn (a, b))
 andbind p q = MkParser (\ mlen, ts =>
               runParser p mlen ts >>= \ sa =>
               let salen  = lteTransitive (Small sa) mlen in
@@ -79,7 +79,7 @@ andbind p q = MkParser (\ mlen, ts =>
               adjust (runParser (call (q (Value sa)) salen) lteRefl (Leftovers sa)))
 
 and : Monad mn =>
-      All (Parser toks tok mn a :-> Box (Parser toks tok mn b) :-> Parser toks tok mn (Pair a b))
+      All (Parser toks tok mn a :-> Box (Parser toks tok mn b) :-> Parser toks tok mn (a, b))
 and p q = andbind p (\ _ => q)
 
 ands : Monad mn =>
@@ -88,11 +88,11 @@ ands ps = foldr1 (\ p, ps => map (uncurry (<+>)) (and p ps)) (Functor.map (map s
 
 andm : (Monad mn, Alternative mn) =>
        All (Parser toks tok mn a :-> Box (Parser toks tok mn b) :->
-       Parser toks tok mn (Pair a (Maybe b)))
+       Parser toks tok mn (a, Maybe b))
 andm p q = andmbind p (\ _ => q)
 
 mand : (Monad mn, Alternative mn) =>
-       All (Parser toks tok mn a :-> Parser toks tok mn b :-> Parser toks tok mn (Pair (Maybe a) b))
+       All (Parser toks tok mn a :-> Parser toks tok mn b :-> Parser toks tok mn (Maybe a, b))
 mand p q = alt (and (map Just p) q) (map (MkPair Nothing) q)
 
 bind : Monad mn =>
