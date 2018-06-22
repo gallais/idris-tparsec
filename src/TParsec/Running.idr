@@ -26,13 +26,17 @@ implementation MonadRun List where
 implementation MonadRun Maybe where
   runMonad = lowerMaybe . map pure
 
+parseMaybe : (Tokenizer tok, MonadRun mn) =>
+        String -> (All (Parser (SizedList tok) tok mn a)) -> Maybe a
+parseMaybe str p =
+  let 
+    tokens = tokenize str 
+    input  = MkSizedList tokens
+    result = runParser p lteRefl input
+    valid  = \ s => if Size s == Z then Just (Value s) else Nothing
+    in
+  traverse valid (runMonad result) >>= head'
+
 parse : (Tokenizer tok, MonadRun mn) =>
         String -> (All (Parser (SizedList tok) tok mn a)) -> Type
-parse str p =
-  let tokens = tokenize str in
-  let input  = MkSizedList tokens in
-  let result = runParser p lteRefl input in
-  let valid  = \ s => if Size s == Z then Just (Value s) else Nothing in
-  case traverse valid (runMonad result) of
-    Just (hd :: _) => Singleton hd
-    _              => Void
+parse str p = maybe Void Singleton $ parseMaybe str p
