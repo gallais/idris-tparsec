@@ -8,14 +8,14 @@ import TParsec.Running
 -- Well-parenthesised string
 data PAR = LPAR | RPAR | LCUR | RCUR | LSQU | RSQU
 
-DecEq PAR where
-  decEq LPAR LPAR = Yes Refl
-  decEq RPAR RPAR = Yes Refl
-  decEq LCUR LCUR = Yes Refl
-  decEq RCUR RCUR = Yes Refl
-  decEq LSQU LSQU = Yes Refl
-  decEq RSQU RSQU = Yes Refl
-  decEq _    _    = No $ really_believe_me ()
+Eq PAR where
+  (==) LPAR LPAR = True
+  (==) RPAR RPAR = True
+  (==) LCUR LCUR = True
+  (==) RCUR RCUR = True
+  (==) LSQU LSQU = True
+  (==) RSQU RSQU = True
+  (==) _    _    = False
     
 Tokenizer PAR where
   tokenize = foldr ((++) . toPAR) [] . unpack

@@ -131,15 +131,15 @@ app : Monad mn =>
       All (Parser toks tok mn (a -> b) :-> Box (Parser toks tok mn a) :-> Parser toks tok mn b)
 app p q = bind p (\ f => Box.map (map f) q)
 
-exact : (Inspect toks tok, DecEq tok, Monad mn, Alternative mn) =>
+exact : (Inspect toks tok, Eq tok, Monad mn, Alternative mn) =>
         tok -> All (Parser toks tok mn tok)
-exact t = guard (\ t' => decAsBool (decEq t t')) anyTok
+exact t = guard (\ t' => t == t') anyTok
 
-exacts : (Inspect toks tok, DecEq tok, Monad mn, Alternative mn) =>
+exacts : (Inspect toks tok, Eq tok, Monad mn, Alternative mn) =>
          NEList tok -> All (Parser toks tok mn (NEList tok))
 exacts ts = ands (map (\ t => exact t) ts)
 
-anyOf : (Inspect toks tok, DecEq tok, Monad mn, Alternative mn) =>
+anyOf : (Inspect toks tok, Eq tok, Monad mn, Alternative mn) =>
         List tok -> All (Parser toks tok mn tok)
 anyOf ts = alts (map (\ t => exact t) ts)
 

@@ -49,23 +49,18 @@ isCHAR : TOK -> Maybe Char
 isCHAR (CHAR c) = Just c
 isCHAR _        = Nothing
 
-DecEq TOK where
-  decEq OPEN     OPEN     = Yes Refl
-  decEq NOPEN    NOPEN    = Yes Refl
-  decEq CLOSE    CLOSE    = Yes Refl
-  decEq STAR     STAR     = Yes Refl
-  decEq ANY      ANY      = Yes Refl
-  decEq DOTS     DOTS     = Yes Refl
-  decEq OR       OR       = Yes Refl
-  decEq LPAR     LPAR     = Yes Refl
-  decEq RPAR     RPAR     = Yes Refl
-  decEq (CHAR c) (CHAR d) with (decEq c d)
-    | Yes eq = Yes (cong eq)
-    | No neq = No $ neq . aux
-      where 
-      aux : CHAR a = CHAR b -> a = b
-      aux Refl = Refl
-  decEq _        _        = No $ really_believe_me ()
+Eq TOK where
+  (==) OPEN     OPEN     = True
+  (==) NOPEN    NOPEN    = True
+  (==) CLOSE    CLOSE    = True
+  (==) STAR     STAR     = True
+  (==) ANY      ANY      = True
+  (==) DOTS     DOTS     = True
+  (==) OR       OR       = True
+  (==) LPAR     LPAR     = True
+  (==) RPAR     RPAR     = True
+  (==) (CHAR c) (CHAR d) = c == d
+  (==) _        _        = False
 
 Tokenizer TOK where
   tokenize = toTOKs . unpack
