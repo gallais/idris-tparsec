@@ -1,8 +1,8 @@
 module Examples.RegExp 
 
+import Data.NEList
 import TParsec
 import TParsec.Running
-import TParsec.NEList
 
 %default total
     

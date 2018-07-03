@@ -1,16 +1,16 @@
 package TParsec
 
 sourcedir = src
-modules = TParsec
+modules = Relation.Indexed
+        , Induction.Nat
+        , Data.Inspect
+        , Data.NEList
+        , Data.SizedDict
+        , TParsec
         , TParsec.Chars
         , TParsec.Combinators
-        , TParsec.Indexed
-        , TParsec.Induction
-        , TParsec.Inspect
-        , TParsec.NEList
         , TParsec.Numbers
         , TParsec.Running
-        , TParsec.SizedDict
         , TParsec.Success
 
 opts = "--total"

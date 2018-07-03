@@ -1,4 +1,4 @@
-module TParsec.NEList
+module Data.NEList
 
 %default total
 %access public export

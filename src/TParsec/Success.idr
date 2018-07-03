@@ -1,40 +1,43 @@
 module TParsec.Success
 
-import TParsec.Indexed
-import TParsec.Inspect
+import Relation.Indexed
+import Data.Inspect
 
 %default total
 %access public export
 
-record Success (toks : Nat -> Type) (tok : Type) (a : Type) (n : Nat) where
+-- A successful partial parse of an A is a value A together leftovers
+-- which are proven to be smaller than the input
+
+record Success (toks : Nat -> Type) (a : Type) (n : Nat) where
   constructor MkSuccess
   Value     : a
   Size      : Nat
   Small     : LT Size n
   Leftovers : toks Size
 
-map : (f : a -> b) -> All (Success toks tok a :-> Success toks tok b)
+map : (f : a -> b) -> All (Success toks a :-> Success toks b)
 map f (MkSuccess v s lt ts) = MkSuccess (f v) s lt ts
 
-guardM : (a -> Maybe b) -> All (Success toks tok a :-> Maybe :. Success toks tok b)
+guardM : (a -> Maybe b) -> All (Success toks a :-> Maybe :. Success toks b)
 guardM p (MkSuccess v s lt ts) = Functor.map (\ v => MkSuccess v s lt ts) (p v)
 
-lteLift : LTE m n -> Success toks tok a m -> Success toks tok a n
+lteLift : LTE m n -> Success toks a m -> Success toks a n
 lteLift mlen (MkSuccess v s sltm ts) = MkSuccess v s (lteTransitive sltm mlen) ts
 
-ltLift : LT m n -> Success toks tok a m -> Success toks tok a n
+ltLift : LT m n -> Success toks a m -> Success toks a n
 ltLift p = lteLift (lteSuccLeft p)
 
-and : (p : Success toks tok a n) -> Success toks tok b (Size p) ->
-      Success toks tok (a, b) n
+and : (p : Success toks a n) -> Success toks b (Size p) ->
+      Success toks (a, b) n
 and p q = ltLift (Small p) (map (MkPair (Value p)) q)
 
-fromView : All (View toks tok :-> Success toks tok tok)
+fromView : All (View toks tok :-> Success toks tok)
 fromView = go _ where
 
-  go : (n : Nat) -> View toks tok n -> Success toks tok tok n
+  go : (n : Nat) -> View toks tok n -> Success toks tok n
   go Z     v       = absurd v
   go (S n) (v, vs) = MkSuccess v n lteRefl vs
 
-getTok : Inspect toks tok => All (toks :-> Maybe :. Success toks tok tok)
+getTok : Inspect toks tok => All (toks :-> Maybe :. Success toks tok)
 getTok {toks} {tok} ts = Functor.map fromView (inspect {As=toks} {A=tok} ts)

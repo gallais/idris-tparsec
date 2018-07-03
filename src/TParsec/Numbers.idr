@@ -1,9 +1,9 @@
 module TParsec.Numbers
 
-import TParsec.Indexed
-import TParsec.Inspect
+import Relation.Indexed
+import Data.Inspect
+import Data.NEList
 import TParsec.Combinators
-import TParsec.NEList
 
 %default total
 %access public export

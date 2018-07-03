@@ -1,9 +1,9 @@
 module TParsec.Running
 
-import TParsec.Indexed
+import Relation.Indexed
+import Data.Inspect
 import TParsec.Success
 import TParsec.Combinators
-import TParsec.Inspect
 
 %default total
 %access public export

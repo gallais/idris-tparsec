@@ -1,6 +1,6 @@
-module TParsec.Induction
+module Induction.Nat
 
-import TParsec.Indexed
+import Relation.Indexed
 
 %access public export
 %default total

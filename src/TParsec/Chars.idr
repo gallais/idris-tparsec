@@ -1,10 +1,10 @@
 module TParsec.Chars
 
-import TParsec.Indexed
-import TParsec.Induction
-import TParsec.Inspect
+import Relation.Indexed
+import Induction.Nat
+import Data.Inspect
+import Data.NEList
 import TParsec.Combinators
-import TParsec.NEList
 import TParsec.Numbers
 
 %default total

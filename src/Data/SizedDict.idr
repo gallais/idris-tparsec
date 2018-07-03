@@ -1,4 +1,4 @@
-module TParsec.SizedDict
+module Data.SizedDict
 
 %default total
 %access public export
