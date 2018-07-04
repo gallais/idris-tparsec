@@ -1,28 +1,31 @@
 module TParsec.Numbers
 
 import Relation.Indexed
+import Relation.Subset
 import Data.Inspect
 import Data.NEList
+import TParsec.Types
 import TParsec.Combinators
+import TParsec.Instruments
 
 %default total
 %access public export
 
-decimalDigit : (Inspect toks Char, Monad mn, Alternative mn) =>
-               All (Parser toks Char mn Nat)
+decimalDigit : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+               All (Parser p mn Nat)
 decimalDigit =
-  alts $ map (uncurry (\ v, c => cmap v $ exact c))
+  alts $ map (uncurry (\ v, c => cmap v $ exact $ into c))
        [ (0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4')
        , (5, '5'), (6, '6'), (7, '7'), (8, '8'), (9, '9') ]
 
-decimalNat : (Inspect toks Char, Monad mn, Alternative mn) =>
-             All (Parser toks Char mn Nat)
+decimalNat : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+             All (Parser p mn Nat)
 decimalNat =
-  let convert = foldl (\ ih, d => 10 * ih + d) 0 in
+  let convert = foldl (\ih, d => 10 * ih + d) 0 in
   Combinators.map convert (nelist decimalDigit)
 
-decimalInteger : (Inspect toks Char, Monad mn, Alternative mn) =>
-                 All (Parser toks Char mn Integer)
-decimalInteger =
-  let convert = \ s, v => maybe {a=Char} id (\ _ => negate) s (toIntegerNat v) in
-  Combinators.map (uncurry convert) (mand (exact '-') decimalNat)
+decimalInteger : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+                 All (Parser p mn Integer)
+decimalInteger {p} =
+  let convert = \s, v => maybe {a=Tok p} id (\ _ => negate) s (toIntegerNat v) in
+  Combinators.map (uncurry convert) (mand (exact $ into '-') decimalNat)

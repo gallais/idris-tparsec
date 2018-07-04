@@ -1,66 +1,70 @@
 module TParsec.Chars
 
 import Relation.Indexed
+import Relation.Subset
 import Induction.Nat
 import Data.Inspect
 import Data.NEList
+import TParsec.Types
 import TParsec.Combinators
+import TParsec.Instruments
 import TParsec.Numbers
 
 %default total
 %access public export
 
-char : (Inspect toks Char, Alternative mn, Monad mn) =>
-       Char -> All (Parser toks Char mn Char)
-char = exact
+char : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+       Char -> All (Parser p mn (Tok p))
+char = exact . into
 
-string : (Inspect toks Char, Alternative mn, Monad mn) =>
+string : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
          (t : String) -> {auto pr : NonEmpty (unpack t)} ->
-         All (Parser toks Char mn String)
+         All (Parser p mn String)
 string t {pr} with (unpack t)
   | []        = absurd pr
-  | (x :: xs) = cmap t (ands (map (\ c => char c) $ MkNEList x xs))
+  | (x :: xs) = cmap t (ands (map (\c => char c) $ MkNEList x xs))
 
-space : (Inspect toks Char, Alternative mn, Monad mn) =>
-        All (Parser toks Char mn Char)
-space = anyOf (unpack " \t\n")
+space : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+        All (Parser p mn (Tok p))
+space = anyOf (map into $ unpack " \t\n")
 
-spaces : (Inspect toks Char, Alternative mn, Monad mn) =>
-         All (Parser toks Char mn (NEList Char))
+spaces : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+         All (Parser p mn (NEList (Tok p)))
 spaces = nelist space
 
-parens : (Inspect toks Char, Alternative mn, Monad mn) =>
-         All (Box (Parser toks Char mn a) :-> Parser toks Char mn a)
+parens : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+         All (Box (Parser p mn a) :-> Parser p mn a)
 parens = between (char '(') (char ')')
 
-parensm : (Inspect toks Char, Alternative mn, Monad mn) =>
-          All (Parser toks Char mn a :-> Parser toks Char mn a)
+parensm : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+          All (Parser p mn a :-> Parser p mn a)
 parensm = betweenm (char '(') (char ')')
 
-withSpaces : (Inspect toks Char, Alternative mn, Monad mn) =>
-             All (Parser toks Char mn a :-> Parser toks Char mn a)
+withSpaces : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+             All (Parser p mn a :-> Parser p mn a)
 withSpaces p = rmand spaces (landm p spaces)
 
-lowerAlpha : (Inspect toks Char, Alternative mn, Monad mn) =>
-             All (Parser toks Char mn Char)
-lowerAlpha = anyOf (unpack "abcdefghijklmnopqrstuvwxyz")
+lowerAlpha : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+             All (Parser p mn (Tok p))
+lowerAlpha = anyOf (map into $ unpack "abcdefghijklmnopqrstuvwxyz")
 
-upperAlpha : (Inspect toks Char, Alternative mn, Monad mn) =>
-             All (Parser toks Char mn Char)
-upperAlpha = anyOf (unpack "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+upperAlpha : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+             All (Parser p mn (Tok p))
+upperAlpha = anyOf (map into $ unpack "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-alpha : (Inspect toks Char, Alternative mn, Monad mn) =>
-        All (Parser toks Char mn Char)
+alpha : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+        All (Parser p mn (Tok p))
 alpha = lowerAlpha `alt` upperAlpha
 
-alphas : (Inspect toks Char, Alternative mn, Monad mn) =>
-         All (Parser toks Char mn String)
-alphas = map (pack . NEList.toList) (nelist alpha)
+-- TODO define Bijection?
+alphas : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Subset (Tok p) Char, Eq (Tok p), Inspect (Toks p) (Tok p)) =>  
+         All (Parser p mn String)
+alphas = map (pack . map into . NEList.toList) (nelist alpha)
 
-num : (Inspect toks Char, Alternative mn, Monad mn) =>
-      All (Parser toks Char mn Nat)
+num : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+      All (Parser p mn Nat)
 num = decimalDigit
 
-alphanum : (Inspect toks Char, Alternative mn, Monad mn) =>
-           All (Parser toks Char mn (Either Char Nat))
+alphanum : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+           All (Parser p mn (Either (Tok p) Nat))
 alphanum = sum alpha num

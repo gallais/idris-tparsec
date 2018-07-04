@@ -1,5 +1,6 @@
 module Examples.Parentheses 
 
+import Relation.Subset -- for repl
 import TParsec
 import TParsec.Running
 
@@ -29,11 +30,14 @@ Tokenizer PAR where
     toPAR ']' = [RSQU]
     toPAR _ = [] -- ignoring other characters as noise
 
+Params : Parameters
+Params = unInstr PAR (SizedList PAR)
+
 Parser' : Type -> Nat -> Type
-Parser' = Parser (SizedList PAR) PAR Maybe
+Parser' = Parser Params Maybe
 
 PAR' : All (Parser' ())
-PAR' = fix _ $ \rec =>
+PAR' = fix (Parser' ()) $ \rec => 
          alts [ cmap () ((exact LPAR `andm` rec) `land` (exact RPAR `andm` rec))
               , cmap () ((exact LCUR `andm` rec) `land` (exact RCUR `andm` rec))
               , cmap () ((exact LSQU `andm` rec) `land` (exact RSQU `andm` rec))
@@ -41,5 +45,5 @@ PAR' = fix _ $ \rec =>
 
 ---- test
 
-test : parse "hel[{(lo({((wor))ld})wan)t}som{e()[n]o}i(s)e]?" PAR'
-test = MkSingleton ()
+--test : parse "hel[{(lo({((wor))ld})wan)t}som{e()[n]o}i(s)e]?" PAR'
+--test = MkSingleton ()
