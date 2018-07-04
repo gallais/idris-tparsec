@@ -38,9 +38,11 @@ Parser' = Parser Params Maybe
 
 PAR' : All (Parser' ())
 PAR' = fix (Parser' ()) $ \rec => 
-         alts [ cmap () ((exact LPAR `andm` rec) `land` (exact RPAR `andm` rec))
-              , cmap () ((exact LCUR `andm` rec) `land` (exact RCUR `andm` rec))
-              , cmap () ((exact LSQU `andm` rec) `land` (exact RSQU `andm` rec))
+  let lRrR = \ p, q => cmap () ((exact p `andm` rec) `land` (exact q `andm` rec))
+  in
+         alts [ lRrR LPAR RPAR
+              , lRrR LCUR RCUR
+              , lRrR LSQU RSQU
               ]
 
 ---- test
