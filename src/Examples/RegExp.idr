@@ -79,30 +79,43 @@ Tokenizer TOK where
     toTOKs ('|' :: cs)        = OR     :: toTOKs cs
     toTOKs (c :: cs)          = CHAR c :: toTOKs cs
 
+SizedInput TOK (SizedList TOK) where
+  sizedInput = MkSizedList    
+
+Params : Parameters
+Params = unInstr TOK (SizedList TOK)
+
 Parser' : Type -> Nat -> Type
-Parser' = Parser (SizedList TOK) TOK Maybe
+Parser' = Parser Params Maybe
+
+-- workarounds for #4504
+exactTOK : TOK -> All (Parser' TOK)   
+exactTOK = exact
+
+maybeTOK : (TOK -> Maybe Char) -> All (Parser' Char)   
+maybeTOK = maybeTok
 
 range : All (Parser' Range)
 range = map (uncurry $ \c => maybe (Single c) (Interval c))
-            (maybeTok isCHAR `andm` (exact DOTS `rand` maybeTok isCHAR))
+            (maybeTOK isCHAR `andm` (exactTOK DOTS `rand` maybeTOK isCHAR))
 
 regexp : All (Parser' RegExp)
 regexp = fix _ $ \rec => 
-           let parens   = between (exact LPAR) (exact RPAR)
-               parensm  = betweenm (exact LPAR) (exact RPAR)
-               ranges   = app ((cmap Bracket (exact OPEN)) `alt` (cmap (BracketNot . NEList.toList) (exact NOPEN)))
+           let parens   = between (exactTOK LPAR) (exactTOK RPAR)
+               parensm  = betweenm (exactTOK LPAR) (exactTOK RPAR)
+               ranges   = Combinators.app ((cmap Bracket (exactTOK OPEN)) `alt` (cmap (BracketNot . NEList.toList) (exactTOK NOPEN)))
                               ((nelist range) `land` (exact CLOSE))
-               literals = map (foldrf (Conj . literal) literal) (nelist (maybeTok isCHAR))
-               base     = alts [ranges, cmap (BracketNot []) (exact ANY), literals, parens rec]
+               literals = Combinators.map (foldrf (Conj . literal) literal) (nelist (maybeTOK isCHAR))
+               base     = alts [ranges, cmap (BracketNot []) (exactTOK ANY), literals, parens rec]
                star     = map (\(r,m) => maybe r (const $ Star r) m) (base `andm` exact STAR)
-               disj     = chainr1 star (Disj `cmap` exact OR)
+               disj     = chainr1 star (Disj `cmap` exactTOK OR)
               in 
            map (foldr1 Conj) (nelist (parensm disj))
 
 ---- test
 
 TestT : Type 
-TestT = parse {mn=Maybe} {tok=TOK} "[a..zA..Z0..9-]*\\.agd(a|ai)" regexp
+TestT = parse "[a..zA..Z0..9-]*\\.agd(a|ai)" regexp
 
 test : TestT
 test = MkSingleton (Conj (Star (Bracket (MkNEList (Interval 'a' 'z') [Interval 'A' 'Z', Interval '0' '9', Single '-']))) 

@@ -1,5 +1,6 @@
 module TParsec
 
+import public Relation.Subset
 import public Relation.Indexed
 import public Induction.Nat
 import public Data.Inspect

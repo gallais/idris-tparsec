@@ -39,7 +39,7 @@ import TParsec.Running
 -- Arithmetic example for a most-general-type approach).
 
 Parser' : Type -> Nat -> Type
-Parser' = Parser (SizedList Char) Char Maybe
+Parser' = Parser (unInstr Char (SizedList Char)) Maybe
 
 -- Parsing Types
 -------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ type =
 -- user gives a proof of `Singleton v`. The only such proof is `MkSingleton v`.
 
 Test : Type
-Test = parse {tok = Char} {mn = Maybe} "'a -> ('b -> 'c) -> 'd" type
+Test = parse "'a -> ('b -> 'c) -> 'd" type
 
 test : Test
 test = MkSingleton (ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d")))
@@ -178,7 +178,7 @@ cut rec = parens (adjust rec (rand (withSpaces (char ':')) type)) where
 
   adjust : All (Box (Parser' s) :-> Parser' t :-> Box (Parser' (Pair s t)))
   adjust {s} {t} p q =
-    Induction.map2 {a=Parser' s} {b=Parser' t} (\ p, q => Combinators.and p q) p q
+    Nat.map2 {a=Parser' s} {b=Parser' t} (\ p, q => Combinators.and p q) p q
 
 -- We now know how to parse variables and cuts. We can explain how to parse
 -- neutral terms. Remember that `E := x | E I | (I : T)`. We can see that the
@@ -213,20 +213,20 @@ lam rec = rand (char '\\') (and (withSpaces var) (rand (andm (char '.') spaces) 
 val : All (Box (Parser' Val) :-> Parser' Val)
 val rec = alt (map (uncurry Lam) (lam rec)) (map Emb (neu rec))
 
--- Finally we can put it all together. We use `Induction.map` to extract from
+-- Finally we can put it all together. We use `Nat.map` to extract from
 -- `Box Language` the `Box (Parser' Val)` we are interested in and use `val`
 -- and `neu` defined above.
 
 language : All Language
 language = fix Language $ \ rec =>
-  let ihv = Induction.map {a=Language} val rec in
+  let ihv = Nat.map {a=Language} val rec in
   MkLanguage (val ihv) (neu ihv)
 
 -- We can once more write a test by using `parse` and check that our parser indeed
 -- produces the right output.
 
 Test2 : Type
-Test2 = parse {tok=Char} {mn=Maybe} "\\ x . (\\ y . y : 'a -> 'a) x" (val language)
+Test2 = parse "\\ x . (\\ y . y : 'a -> 'a) x" (val language)
 
 test2 : Test2
 test2 = MkSingleton (Lam "x" (Emb (App (Cut (Lam "y" (Emb (Var "y"))) (ARR (K "a") (K "a")))

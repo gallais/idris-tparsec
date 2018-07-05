@@ -1,5 +1,6 @@
 module Examples.NList
 
+import Relation.Subset
 import TParsec
 import TParsec.Running
 
@@ -37,7 +38,7 @@ NList a  Z    = a
 NList a (S n) = List (NList a n)
 
 Parser' : Type -> Nat -> Type
-Parser' = Parser (SizedList Char) Char Maybe
+Parser' = Parser (unInstr Char (SizedList Char) Maybe
 
 NList' : All (Parser' a) -> (n : Nat) -> All (Parser' (NList a n))
 NList' a  Z    = a
