@@ -5,6 +5,7 @@ modules = Relation.Indexed
         , Relation.Subset
         , Induction.Nat
         , Data.Inspect
+        , Data.DList
         , Data.NEList
         , Data.SizedDict
         , TParsec

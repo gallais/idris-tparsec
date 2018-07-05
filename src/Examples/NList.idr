@@ -1,44 +1,17 @@
 module Examples.NList
 
-import Relation.Subset
+import Data.DList
 import TParsec
 import TParsec.Running
 
 %default total
-
--- Difference lists
-
-namespace DList
-
-  DList : Type -> Type
-  DList a = List a -> List a
-  
-  lift : (List a -> List a) -> (DList a -> DList a)
-  lift f xs = f . xs
-  
-  nil : DList a
-  nil = id
-  
-  cons : a -> DList a -> DList a
-  cons x = lift (x ::)
-  
-  wrap : a -> DList a
-  wrap x = cons x nil
-  
-  (++) : DList a -> DList a -> DList a
-  (++) xs ys = xs . ys
-  
-  toList : DList a -> List a
-  toList xs = xs []
-
-----
 
 NList : Type -> Nat -> Type
 NList a  Z    = a
 NList a (S n) = List (NList a n)
 
 Parser' : Type -> Nat -> Type
-Parser' = Parser (unInstr Char (SizedList Char) Maybe
+Parser' = Parser (unInstr Char (SizedList Char)) Maybe
 
 NList' : All (Parser' a) -> (n : Nat) -> All (Parser' (NList a n))
 NList' a  Z    = a
