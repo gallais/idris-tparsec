@@ -17,14 +17,14 @@ lteLower mlen p = MkParser (\plem => runParser p (lteTransitive plem mlen))
 ltLower : LT m n -> Parser p mn a n -> Parser p mn a m
 ltLower mltn = lteLower (lteSuccLeft mltn)
 
-implicit 
+implicit
 box : Parser p mn a n -> Box (Parser p mn a) n
 box = lteClose lteLower
 
 anyTok : (Alternative mn, Instrumented p mn, Inspect (Toks p) (Tok p)) =>
          All (Parser p mn (Tok p))
-anyTok {p} = MkParser (\mlen, ts => 
-  choiceMap (\t => recordToken {p} (Value t) *> pure t) 
+anyTok {p} = MkParser (\mlen, ts =>
+  choiceMap (\t => recordToken {p} (Value t) *> pure t)
             (getTok {toks=Toks p} {tok=Tok p} ts))
 
 guardM : (Alternative mn, Monad mn) =>
@@ -84,6 +84,33 @@ and p q = andbind p (\ _ => q)
 ands : Monad mn =>
        All (NEList :. Parser p mn a :-> Parser p mn (NEList a))
 ands ps = NEList.foldr1 (\ p, ps => map (uncurry (<+>)) (and p ps)) (Functor.map (map singleton) ps)
+
+andm : Monad mn =>
+       All (Parser p mn a :-> Cst (mn b) :-> Parser p mn (a, b))
+andm p q = MkParser $ \mlen, ts => do ra <- runParser p mlen ts
+                                      b <- q
+                                      pure $ map (flip MkPair b) ra
+
+landm : Monad mn =>
+        All (Parser p mn a :-> Cst (mn b) :-> Parser p mn a)
+landm p q = map fst (andm p q)
+
+randm : Monad mn =>
+        All (Parser p mn a :-> Cst (mn b) :-> Parser p mn b)
+randm p q = map snd (andm p q)
+
+mand : Monad mn =>
+       All (Cst (mn a) :-> Parser p mn b :-> Parser p mn (a, b))
+mand p q = MkParser $ \mlen, ts => do a <- p
+                                      Functor.map (Success.map (MkPair a)) (runParser q mlen ts)
+
+lmand : Monad mn =>
+        All (Cst (mn a) :-> Parser p mn b :-> Parser p mn a)
+lmand p q = map fst (mand p q)
+
+rmand : Monad mn =>
+        All (Cst (mn a) :-> Parser p mn b :-> Parser p mn b)
+rmand p q = map snd (mand p q)
 
 andopt : (Monad mn, Alternative mn) =>
          All (Parser p mn a :-> Box (Parser p mn b) :-> Parser p mn (a, Maybe b))
@@ -156,10 +183,10 @@ LChain p mn a n =
   Success (Toks p) a n -> Box (Parser p mn (a -> a)) n -> mn (Success (Toks p) a n)
 
 schainl : (Alternative mn, Monad mn) => All (LChain p mn a)
-schainl {mn} {a} = fix _ $ \rec, sa, op => schainlAux rec sa op <|> pure sa 
+schainl {mn} {a} = fix _ $ \rec, sa, op => schainlAux rec sa op <|> pure sa
   where
   schainlAux : All (Box (LChain p mn a) :-> LChain p mn a)
-  schainlAux rec sa op = do sop <- runParser (call op (Small sa)) lteRefl (Leftovers sa) 
+  schainlAux rec sa op = do sop <- runParser (call op (Small sa)) lteRefl (Leftovers sa)
                             let sa' = Success.map (\f => f (Value sa)) sop
                             res <- call rec (Small sa) sa' (Box.ltLower (Small sa) op)
                             pure (ltLift (Small sa) res)
@@ -176,14 +203,14 @@ RChain p mn a n =
 iterater : (Alternative mn, Monad mn) =>
            All (Parser p mn (a -> a) :-> Parser p mn a :-> Parser p mn a)
 iterater {mn} {p} {a} = fix (RChain p mn a) $ \rec, op, val =>
-                                     alt (iteraterAux rec op val) val 
+                                     alt (iteraterAux rec op val) val
   where
   iteraterAux : All (Box (RChain p mn a) :-> RChain p mn a)
   iteraterAux rec op val = MkParser $ \mlen, ts =>
-    do sop <- runParser op mlen ts 
-       let sopltn = lteTransitive (Small sop) mlen 
-       let op'    = ltLower sopltn op 
-       let val'   = ltLower sopltn val 
+    do sop <- runParser op mlen ts
+       let sopltn = lteTransitive (Small sop) mlen
+       let op'    = ltLower sopltn op
+       let val'   = ltLower sopltn val
        res <- runParser (call rec sopltn op' val') lteRefl (Leftovers sop)
        pure (ltLift (Small sop) (Success.map (Value sop) res))
 
@@ -191,9 +218,9 @@ hchainl : (Alternative mn, Monad mn) =>
           All (Parser p mn a :-> Box (Parser p mn (a -> b -> a)) :->
           Box (Parser p mn b) :-> Parser p mn a)
 hchainl {p} {mn} {a} {b} seed op arg =
-  let ty   = Parser p mn 
-      op'  = Box.map {a = ty (a -> b -> a)} (map flip) op 
-      arg' = duplicate arg 
+  let ty   = Parser p mn
+      op'  = Box.map {a = ty (a -> b -> a)} (map flip) op
+      arg' = duplicate arg
      in
   iteratel seed (map2 {a = ty (b -> a -> a)} app op' arg')
 
