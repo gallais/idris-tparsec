@@ -8,5 +8,5 @@ import public TParsec.Success
 import public TParsec.Types
 import public TParsec.Instruments
 import public TParsec.Combinators
-import public TParsec.Chars
-import public TParsec.Numbers
+import public TParsec.Combinators.Chars
+import public TParsec.Combinators.Numbers

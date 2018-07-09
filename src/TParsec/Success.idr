@@ -12,7 +12,7 @@ import Data.Inspect
 record Success (toks : Nat -> Type) (a : Type) (n : Nat) where
   constructor MkSuccess
   Value     : a
-  {Size      : Nat}
+  {Size     : Nat}
   Small     : LT Size n
   Leftovers : toks Size
 

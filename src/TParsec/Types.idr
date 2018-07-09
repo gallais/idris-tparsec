@@ -10,6 +10,9 @@ record Position where
   constructor MkPosition
   line : Nat
   offset : Nat
+
+Show Position where
+  show (MkPosition line offset) = show line ++ ":" ++ show offset
   
 start : Position
 start = MkPosition 0 0
@@ -33,16 +36,15 @@ record Parameters where
   --Mn   : Type -> Type -- The monad stack used
 
 posAnn : (tok : Type) -> (toks : Nat -> Type) -> (ann : Type) -> Parameters
-posAnn tok toks ann = MkParameters tok toks Position ann --(StateT (Position, List ann) mn) 
+posAnn tok toks ann = MkParameters tok toks Position ann 
 
 unInstr : (tok : Type) -> (toks : Nat -> Type) -> Parameters
-unInstr tok toks = MkParameters tok toks () Void --mn
+unInstr tok toks = MkParameters tok toks () Void 
 
 -- A parser is the ability to, given an input, return a computation for
 -- a success.
 
 record Parser (p : Parameters)
-           -- (toks : Nat -> Type) (tok : Type) 
               (mn : Type -> Type)
               (a : Type) (n : Nat) where
   constructor MkParser

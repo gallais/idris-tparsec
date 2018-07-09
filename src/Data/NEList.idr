@@ -18,8 +18,8 @@ fromList : List a -> Maybe (NEList a)
 fromList []        = Nothing
 fromList (x :: xs) = Just (MkNEList x xs)
 
-consm : a -> Maybe (NEList a) -> NEList a
-consm x mxs = MkNEList x (lowerMaybe (map toList mxs))
+consopt : a -> Maybe (NEList a) -> NEList a
+consopt x mxs = MkNEList x (lowerMaybe (map toList mxs))
 
 cons : a -> NEList a -> NEList a
 cons x xxs = MkNEList x (toList xxs)

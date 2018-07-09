@@ -4,15 +4,18 @@ sourcedir = src
 modules = Relation.Indexed
         , Relation.Subset
         , Induction.Nat
+        
         , Data.Inspect
         , Data.DList
         , Data.NEList
         , Data.SizedDict
+
         , TParsec
-        , TParsec.Chars
-        , TParsec.Combinators
-        , TParsec.Numbers
-        , TParsec.Running
         , TParsec.Success
+        , TParsec.Types
+        , TParsec.Combinators
+        , TParsec.Combinators.Chars
+        , TParsec.Combinators.Numbers
+        , TParsec.Running
 
 opts = "--total"

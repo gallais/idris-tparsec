@@ -1,4 +1,4 @@
-module TParsec.Chars
+module TParsec.Combinators.Chars
 
 import Relation.Indexed
 import Relation.Subset
@@ -6,9 +6,9 @@ import Induction.Nat
 import Data.Inspect
 import Data.NEList
 import TParsec.Types
-import TParsec.Combinators
 import TParsec.Instruments
-import TParsec.Numbers
+import TParsec.Combinators
+import TParsec.Combinators.Numbers
 
 %default total
 %access public export
@@ -36,13 +36,13 @@ parens : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (
          All (Box (Parser p mn a) :-> Parser p mn a)
 parens = between (char '(') (char ')')
 
-parensm : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+parensopt : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
           All (Parser p mn a :-> Parser p mn a)
-parensm = betweenm (char '(') (char ')')
+parensopt = betweenopt (char '(') (char ')')
 
 withSpaces : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
              All (Parser p mn a :-> Parser p mn a)
-withSpaces p = rmand spaces (landm p spaces)
+withSpaces p = roptand spaces (landopt p spaces)
 
 lowerAlpha : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
              All (Parser p mn (Tok p))

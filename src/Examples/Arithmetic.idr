@@ -65,7 +65,7 @@ record Language (p : Parameters) (mn : Type -> Type) (n : Nat) where
 -- We are now ready to build a `Language toks mn n` for all `n` by recursion.
 -- We have a few constraints which arise directly from the combinators we are
 -- going to use.
--- ̀`Inspect (Toks p) (Tok p)` and `Subset Char (Tok p)` together means that 
+-- ̀`Inspect (Toks p) (Tok p)` and `Subset Char (Tok p)` together mean that 
 -- `Toks` of `p` can essentially be viewed as a list of `Char`s.
 -- In particular, this means that we can make sure that the first character
 -- of the input string is a specific `Char` e.g. '+'.
@@ -83,21 +83,23 @@ language {p} {mn} =
   -- * `cmap v p` is used to return `v` whener `p` is a successful parse
 
   -- From these we can see that:
+  let 
   -- `addop` parses either `+` or `-` and returns the right `Expr` constructor
-  let addop  = alt (cmap EAdd (char '+')) (cmap ESub (char '-')) in
+    addop  = cmap EAdd (char '+') `alt` cmap ESub (char '-') 
   -- `mulop` parses either `*` or `/` and returns the right `Term` constructor
-  let mulop  = alt (cmap TMul (char '*')) (cmap TDiv (char '/')) in
+    mulop  = cmap TMul (char '*') `alt` cmap TDiv (char '/')
 
   -- We now need to use some new concepts
   -- * `parens p` parses an opening parenthesis, a value thanks to `p` and then
   --   a closing parenthesis. It returns whatever `p` produced.
   -- * `Nat.map f` applies the function `f` to a recusive call. Here it is
   --   used to project the parser for `Expr` out of `Language`.
-  -- * `decimalNat` is a parser for decimal numbers defined in `TParsec.Numbers`
+  -- * `decimalNat` is a parser for decimal numbers defined in `TParsec.Combinators.Numbers`
 
   -- `factor` recognizes either an `Expr` in between parentheses or a natural number
-  let factor = alt (map FEmb (parens (Nat.map {a = Language _ _} _expr rec)))
-                   (map FLit decimalNat) in
+    factor = map FEmb (parens (Nat.map {a = Language _ _} _expr rec))
+             `alt`
+             map FLit decimalNat
 
   -- We now have all the basic building blocks and can assemble them.
 
@@ -108,17 +110,18 @@ language {p} {mn} =
   -- we write the parser for `Term` as:
   -- * a left-nested list of `mulop` (i.e. * and /) and `factor`
   -- * starting with a `factor`.
-  let term   = hchainl (map TEmb factor) mulop factor in
+    term   = hchainl (map TEmb factor) mulop factor
 
   -- Similarly from `E := T | E + T | E - T` we derive that `Expr` is
   -- * a left-nested list of `addop` (i.e. + and -) and `term`
   -- * start with a `term`
-  let expr   = hchainl (map EEmb term) addop term in
+    expr   = hchainl (map EEmb term) addop term 
 
   -- Going back to the very beginning: we are building a `Language toks mn n`
   -- by recursion. Which means we need to return such a `Language` as a result.
   -- But we have just defined parsers for `Expr`, `Term` and `Factor` so we
   -- can just gather them in the record:
+    in
   MkLanguage expr term factor
 
 

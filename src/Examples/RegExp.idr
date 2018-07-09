@@ -97,7 +97,7 @@ maybeTOK = maybeTok
 
 range : All (Parser' Range)
 range = map (uncurry $ \c => maybe (Single c) (Interval c))
-            (maybeTOK isCHAR `andm` (exactTOK DOTS `rand` maybeTOK isCHAR))
+            (maybeTOK isCHAR `andopt` (exactTOK DOTS `rand` maybeTOK isCHAR))
 
 regexp : All (Parser' RegExp)
 regexp = fix _ $ \rec => 
@@ -107,7 +107,7 @@ regexp = fix _ $ \rec =>
                               ((nelist range) `land` (exact CLOSE))
                literals = Combinators.map (foldrf (Conj . literal) literal) (nelist (maybeTOK isCHAR))
                base     = alts [ranges, cmap (BracketNot []) (exactTOK ANY), literals, parens rec]
-               star     = map (\(r,m) => maybe r (const $ Star r) m) (base `andm` exact STAR)
+               star     = map (\(r,m) => maybe r (const $ Star r) m) (base `andopt` exact STAR)
                disj     = chainr1 star (Disj `cmap` exactTOK OR)
               in 
            map (foldr1 Conj) (nelist (parensm disj))

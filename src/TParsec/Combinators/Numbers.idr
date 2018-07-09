@@ -1,12 +1,12 @@
-module TParsec.Numbers
+module TParsec.Combinators.Numbers
 
 import Relation.Indexed
 import Relation.Subset
 import Data.Inspect
 import Data.NEList
 import TParsec.Types
-import TParsec.Combinators
 import TParsec.Instruments
+import TParsec.Combinators
 
 %default total
 %access public export
@@ -28,4 +28,4 @@ decimalInteger : (Alternative mn, Monad mn, Instrumented p mn, Subset Char (Tok 
                  All (Parser p mn Integer)
 decimalInteger {p} =
   let convert = \s, v => maybe {a=Tok p} id (\ _ => negate) s (toIntegerNat v) in
-  Combinators.map (uncurry convert) (mand (exact $ into '-') decimalNat)
+  Combinators.map (uncurry convert) (optand (exact $ into '-') decimalNat)

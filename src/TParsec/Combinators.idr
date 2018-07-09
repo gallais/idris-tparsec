@@ -59,18 +59,18 @@ alts : Alternative mn =>
        All (List :. Parser p mn a :-> Parser p mn a)
 alts = foldr alt fail
 
-andmbind : (Monad mn, Alternative mn) =>
-           All (Parser p mn a :-> (Cst a :-> Box (Parser p mn b)) :->
-                Parser p mn (a, Maybe b))
-andmbind p q = MkParser $ \mlen, ts =>
+andoptbind : (Monad mn, Alternative mn) =>
+             All (Parser p mn a :-> (Cst a :-> Box (Parser p mn b)) :->
+                  Parser p mn (a, Maybe b))
+andoptbind p q = MkParser $ \mlen, ts =>
                  do sa <- runParser p mlen ts
                     let salen   = lteTransitive (Small sa) mlen
                     let combine = Success.map (Functor.map Just) . (Success.and sa)
                     (Functor.map combine (runParser (call (q (Value sa)) salen) lteRefl (Leftovers sa))) <|> pure (Success.map (flip MkPair Nothing) sa)
 
 andbind : Monad mn =>
-           All (Parser p mn a :-> (Cst a :-> Box (Parser p mn b)) :->
-                Parser p mn (a, b))
+          All (Parser p mn a :-> (Cst a :-> Box (Parser p mn b)) :->
+               Parser p mn (a, b))
 andbind p q = MkParser $ \mlen, ts =>
                 do sa <- runParser p mlen ts
                    let salen  = lteTransitive (Small sa) mlen
@@ -85,14 +85,13 @@ ands : Monad mn =>
        All (NEList :. Parser p mn a :-> Parser p mn (NEList a))
 ands ps = NEList.foldr1 (\ p, ps => map (uncurry (<+>)) (and p ps)) (Functor.map (map singleton) ps)
 
-andm : (Monad mn, Alternative mn) =>
-       All (Parser p mn a :-> Box (Parser p mn b) :->
-       Parser p mn (a, Maybe b))
-andm p q = andmbind p (\ _ => q)
+andopt : (Monad mn, Alternative mn) =>
+         All (Parser p mn a :-> Box (Parser p mn b) :-> Parser p mn (a, Maybe b))
+andopt p q = andoptbind p (\ _ => q)
 
-mand : (Monad mn, Alternative mn) =>
-       All (Parser p mn a :-> Parser p mn b :-> Parser p mn (Maybe a, b))
-mand p q = alt (and (map Just p) q) (map (MkPair Nothing) q)
+optand : (Monad mn, Alternative mn) =>
+         All (Parser p mn a :-> Parser p mn b :-> Parser p mn (Maybe a, b))
+optand p q = alt (and (map Just p) q) (map (MkPair Nothing) q)
 
 bind : Monad mn =>
        All (Parser p mn a :-> (Cst a :-> Box (Parser p mn b)) :-> Parser p mn b)
@@ -106,21 +105,21 @@ rand : (Monad mn, Alternative mn) =>
        All (Parser p mn a :-> Box (Parser p mn b) :-> Parser p mn b)
 rand p q = map snd (and p q)
 
-landm : (Monad mn, Alternative mn) =>
-        All (Parser p mn a :-> Box (Parser p mn b) :-> Parser p mn a)
-landm p q = map fst (andm p q)
+landopt : (Monad mn, Alternative mn) =>
+          All (Parser p mn a :-> Box (Parser p mn b) :-> Parser p mn a)
+landopt p q = map fst (andopt p q)
 
-randm : (Monad mn, Alternative mn) =>
-        All (Parser p mn a :-> Box (Parser p mn b) :-> Parser p mn (Maybe b))
-randm p q = map snd (andm p q)
+randopt : (Monad mn, Alternative mn) =>
+          All (Parser p mn a :-> Box (Parser p mn b) :-> Parser p mn (Maybe b))
+randopt p q = map snd (andopt p q)
 
-lmand : (Monad mn, Alternative mn) =>
-        All (Parser p mn a :-> Parser p mn b :-> Parser p mn (Maybe a))
-lmand p q = map fst (mand p q)
+loptand : (Monad mn, Alternative mn) =>
+          All (Parser p mn a :-> Parser p mn b :-> Parser p mn (Maybe a))
+loptand p q = map fst (optand p q)
 
-rmand : (Monad mn, Alternative mn) =>
-        All (Parser p mn a :-> Parser p mn b :-> Parser p mn b)
-rmand p q = map snd (mand p q)
+roptand : (Monad mn, Alternative mn) =>
+          All (Parser p mn a :-> Parser p mn b :-> Parser p mn b)
+roptand p q = map snd (optand p q)
 
 sum : Alternative mn =>
       All (Parser p mn a :-> Parser p mn b :-> Parser p mn (Either a b))
@@ -147,10 +146,10 @@ between : (Monad mn, Alternative mn) =>
           Box (Parser p mn b) :-> Parser p mn b)
 between open close p = land (rand open p) close
 
-betweenm : (Monad mn, Alternative mn) =>
-           All (Parser p mn a :-> Box (Parser p mn c) :->
-           Parser p mn b :-> Parser p mn b)
-betweenm open close p = landm (rmand open p) close
+betweenopt : (Monad mn, Alternative mn) =>
+             All (Parser p mn a :-> Box (Parser p mn c) :->
+             Parser p mn b :-> Parser p mn b)
+betweenopt open close p = landopt (roptand open p) close
 
 LChain : Parameters -> (Type -> Type) -> Type -> Nat -> Type
 LChain p mn a n =
@@ -215,4 +214,4 @@ chainr1 p op = hchainr p op p
 
 nelist : (Alternative mn, Monad mn) =>
          All (Parser p mn a :-> Parser p mn (NEList a))
-nelist = fix _ $ \rec, p => Combinators.map (uncurry consm) (andm p (Box.app rec p))
+nelist = fix _ $ \rec, p => Combinators.map (uncurry consopt) (andopt p (Box.app rec p))
