@@ -23,9 +23,9 @@ box = lteClose lteLower
 
 anyTok : (Alternative mn, Instrumented p mn, Inspect (Toks p) (Tok p)) =>
          All (Parser p mn (Tok p))
-anyTok {p} = MkParser (\mlen, ts =>
+anyTok {p} = MkParser $ \_, ts =>
   choiceMap (\t => recordToken {p} (Value t) *> pure t)
-            (getTok {toks=Toks p} {tok=Tok p} ts))
+            (getTok {toks=Toks p} {tok=Tok p} ts)
 
 guardM : (Alternative mn, Monad mn) =>
          (a -> Maybe b) -> All (Parser p mn a :-> Parser p mn b)

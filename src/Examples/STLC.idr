@@ -56,7 +56,7 @@ type =
 
   -- The value `type` is built as a fixpoint. We can use the parser `rec` bound
   -- here to perform recursive calls (i.e. to parse substructures).
-  fix (Parser' TYPE) $ \ rec =>
+  fix _ $ \rec =>
 
   -- We start by writing the parser for LT. It uses various combinators from
   -- TParsec.Combinators:
@@ -68,7 +68,7 @@ type =
   -- * `parens p` matches an opening parenthesis, runs `p`, matches a closing
   --   parenthesis and returns the value of `p`.
   let
-  -- Remenbering that `K` wraps a string into a TYPE the following definition
+  -- Remembering that `K` wraps a string into a TYPE the following definition
   -- literally gives us: LT = '<alpha>+ | (T)
 
     lt = alt (map K (rand (char '\'') alphas)) (parens rec)
@@ -220,7 +220,7 @@ val rec = alt (map (uncurry Lam) (lam rec)) (map Emb (neu rec))
 -- and `neu` defined above.
 
 language : All Language
-language = fix Language $ \ rec =>
+language = fix _ $ \rec =>
   let ihv = Nat.map {a=Language} val rec in
   MkLanguage (val ihv) (neu ihv)
 

@@ -14,9 +14,9 @@ data TYPE : Type where
 
 data Error : Type where
   ParseError  : Position -> Error
-  OutOfScope  : Position -> String -> Error
-  ExpectedGot : Position -> TYPE -> TYPE -> Error
-  NotAnArrow  : Position -> TYPE -> Error
+-- OutOfScope  : Position -> String -> Error
+-- ExpectedGot : Position -> TYPE -> TYPE -> Error
+-- NotAnArrow  : Position -> TYPE -> Error
 
 Pars : Parameters
 Pars = posAnn Char (\n => Vect n Char) Void
@@ -47,9 +47,7 @@ Parser' = Parser Pars PosM
 
 parse' : String -> All (Parser' a) -> Either Error a
 parse' str p = let st = runParser p lteRefl $ fromList $ tokenize str in 
-               case runStateT st start of 
-                Left err => Left err
-                Right (s, _) => Right $ Value s
+               map (Success.Value . fst) $ runStateT st start
 
 using implementation altpos 
   using implementation isvect 
@@ -71,50 +69,72 @@ test = Refl
 
 mutual
   data Val : Type where
-    Lam : String -> Val -> Val
-    Emb : Neu -> Val
+    Lam : Position -> String -> Val -> Val
+    Emb : Position -> Neu -> Val
 
   data Neu : Type where
     Var : String -> Neu
-    Cut : Val -> TYPE -> Neu
-    App : Neu -> Val -> Neu
+    Cut : Position -> Val -> TYPE -> Neu
+    App : Position -> Neu -> Val -> Neu
 
-record Language (n : Nat) where
-  constructor MkLanguage
-  val : Parser' (Position, Val) n
-  neu : Parser' (Position, Neu) n
+record STLC (n : Nat) where
+  constructor MkSTLC
+  val : Parser' Val n
+  neu : Parser' Neu n
 
 using implementation altpos 
   using implementation isvect 
     using implementation invect 
-      var : All (Parser' String)
-      var = alphas
+      name : All (Parser' String)
+      name = alphas
 
-      cut : All (Box (Parser' Val) :-> Parser' (Val, Position, TYPE))
-      cut rec = parens (adjust rec (and (withSpaces (lmand getPosition (char ':'))) type)) where
-        adjust : All (Box (Parser' s) :-> Parser' t :-> Box (Parser' (s, t)))
-        adjust p q =
+      var : All (Parser' Neu)
+      var = map Var name
+
+      cut : All (Box (Parser' Val) :-> Parser' Neu)
+      cut rec = map (\(v,p,t) => Cut p v t) $ 
+                parens (andbox rec 
+                               (and (withSpaces (lmand getPosition (char ':'))) 
+                                    type))
+      where
+        andbox : All (Box (Parser' s) :-> Parser' t :-> Box (Parser' (s, t)))
+        andbox p q =
           Nat.map2 {a=Parser' _} {b=Parser' _} (\p, q => Combinators.and p q) p q
 
-      neu : All (Box (Parser' Val) :-> Parser' (Position, Neu))
-      neu rec = 
-        hchainl ((map (\s => MkPair {A=Position} {B=Neu} start (Var s)) var) `alt` (map (\(v,p,t) => (p, Cut v t)) (cut rec)))  
-                (Combinators.map (\p, (_, n), v => (p, App n v)) (randm space getPosition))
-                rec 
-      
-      lam : All (Box (Parser' Val) :-> Parser' ((Position, String), Val))
-      lam rec = rand (char '\\') (and (mand getPosition (withSpaces var)) (rand (andopt (char '.') spaces) rec))
-        
-      val : All (Box (Parser' Val) :-> Parser' (Position, Val))
-      val rec = alt (map (\((p,s),v) => (p, Lam s v)) (lam rec)) (mand getPosition (map (\(_, n) => Emb n) (neu rec)))
+      app : All (Parser' (Neu -> Val -> Neu))
+      app = map App $ randm space (getPosition {p=Pars})
 
-language : All Language
-language = fix _ $ \rec =>
-  let ihv = Nat.map {a=Language} (map snd . val) rec in
-  MkLanguage (val ihv) (neu ihv)
+      neu : All (Box (Parser' Val) :-> Parser' Neu)
+      neu rec = hchainl (var `alt` (cut rec)) app rec 
+      
+      lam : All (Box (Parser' Val) :-> Parser' Val)
+      lam rec = map (\((p,s),v) => Lam p s v) $ 
+                rand (char '\\') 
+                     (and (mand getPosition 
+                                (withSpaces name)) 
+                          (rand (andopt (char '.') spaces) 
+                                rec))
+
+      emb : All (Box (Parser' Val) :-> Parser' Val)
+      emb rec = map (uncurry Emb) $ mand (getPosition {p=Pars}) (neu rec)
+        
+      val : All (Box (Parser' Val) :-> Parser' Val)
+      val rec = (lam rec) `alt` (emb rec)
+
+stlc : All STLC
+stlc = fix _ $ \rec =>
+  let ihv = Nat.map {a=STLC} val rec in
+  MkSTLC (val ihv) (neu ihv)
   
 Test2 : Type
-Test2 = parse' "\\ x . (\\ y . y : 'a -> 'a) x" (val language) = Right (MkPosition 0 1, Lam "x" (Emb (App (Cut (Lam "y" (Emb (Var "y"))) (ARR (K "a") (K "a"))) (Emb (Var "x")))))
+Test2 = parse' "\\ x . (\\ y . y : 'a -> 'a) x" (val stlc) = Right (Lam (MkPosition 0 1) "x" 
+                                                                    (Emb (MkPosition 0 6) 
+                                                                     (App (MkPosition 0 27) 
+                                                                      (Cut (MkPosition 0 15) 
+                                                                       (Lam (MkPosition 0 8) "y" 
+                                                                        (Emb (MkPosition 0 13) (Var "y"))) 
+                                                                       (ARR (K "a") (K "a"))) 
+                                                                      (Emb (MkPosition 0 27) (Var "x"))))) 
 
 test2 : Test2
 test2 = Refl
