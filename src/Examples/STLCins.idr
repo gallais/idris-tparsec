@@ -21,15 +21,44 @@ data Error : Type where
 Pars : Parameters
 Pars = posAnn Char (\n => Vect n Char) Void
 
+data Result : Type -> Type where
+  HardFail : Error -> Result a
+  SoftFail : Error -> Result a
+  Value : a -> Result a
+
+Functor Result where
+  map _ (HardFail e) = HardFail e
+  map _ (SoftFail e) = SoftFail e
+  map f (Value a)    = Value (f a)
+
+Applicative Result where
+  pure = Value
+  (HardFail e) <*> _ = HardFail e
+  (SoftFail e) <*> _ = SoftFail e
+  _ <*> (HardFail e) = HardFail e
+  _ <*> (SoftFail e) = SoftFail e
+  (Value f) <*> (Value a) = Value (f a)
+
+Monad Result where
+  (HardFail e) >>= _ = HardFail e
+  (SoftFail e) >>= _ = SoftFail e
+  (Value a)    >>= f = f a
+
 PosM : Type -> Type
-PosM = StateT Position (Either Error)
+PosM = StateT Position Result  
+
+commitPos : PosM a -> PosM a
+commitPos (ST ma) = ST $ \pos => case ma pos of 
+  SoftFail e => HardFail e
+  r => r
 
 -- named because there stdlib already gives us (Monad f, Alternative f) => Alternative (StateT st f) which we can't use here
 [altpos] Alternative PosM where
-  empty = ST $ Left . ParseError
+  empty = ST $ SoftFail . ParseError
   (ST a) <|> (ST b) = ST $ \pos => case a pos of 
-                                     Left _ => b pos
-                                     Right x => Right x
+                                     SoftFail _ => b pos
+                                     r => r
+
 
 -- named because of lambda in the type                                     
 [isvect] Inspect (\n => Vect n Char) Char where
@@ -38,14 +67,17 @@ PosM = StateT Position (Either Error)
 
 [invect] Instrumented Pars PosM where
   withAnnotation Void _ impossible
-  recordToken c = ST $ \pos => Right ((), next c pos)
-  getPosition = ST $ \pos => Right (pos, pos)
-  getAnnotation = ST $ \pos => Right (Nothing, pos)
+  recordToken c = ST $ \pos => Value ((), next c pos)
+  getPosition   = ST $ \pos => Value (pos, pos)
+  getAnnotation = ST $ \pos => Value (Nothing, pos)
 
 Parser' : Type -> Nat -> Type
 Parser' = Parser Pars PosM
 
-parse' : String -> All (Parser' a) -> Either Error a
+commit : All (Parser' a :-> Parser' a)
+commit p = MkParser $ \mlen, ts => commitPos $ runParser p mlen ts
+
+parse' : String -> All (Parser' a) -> Result a
 parse' str p = let st = runParser p lteRefl $ fromList $ tokenize str in 
                map (Success.Value . fst) $ runStateT st start
 
@@ -62,7 +94,7 @@ using implementation altpos
         chainr1 lt arr
 
 Test : Type
-Test = parse' "'a -> ('b -> 'c) -> 'd" type = Right (ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d")))
+Test = parse' "'a -> ('b -> 'c) -> 'd" type = Value (ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d")))
 
 test : Test
 test = Refl
@@ -93,7 +125,7 @@ using implementation altpos
 
       cut : All (Box (Parser' Val) :-> Parser' Neu)
       cut rec = map (\(v,p,t) => Cut p v t) $ 
-                parens (andbox rec 
+                parens (andbox (Nat.map {a=Parser' _} commit rec)
                                (and (withSpaces (lmand getPosition (char ':'))) 
                                     type))
       where
@@ -113,7 +145,7 @@ using implementation altpos
                      (and (mand getPosition 
                                 (withSpaces name)) 
                           (rand (andopt (char '.') spaces) 
-                                rec))
+                                (Nat.map {a=Parser' _} commit rec)))
 
       emb : All (Box (Parser' Val) :-> Parser' Val)
       emb rec = map (uncurry Emb) $ mand (getPosition {p=Pars}) (neu rec)
@@ -125,9 +157,9 @@ stlc : All STLC
 stlc = fix _ $ \rec =>
   let ihv = Nat.map {a=STLC} val rec in
   MkSTLC (val ihv) (neu ihv)
-  
+
 Test2 : Type
-Test2 = parse' "\\ x . (\\ y . y : 'a -> 'a) x" (val stlc) = Right (Lam (MkPosition 0 1) "x" 
+Test2 = parse' "\\ x . (\\ y . y : 'a -> 'a) x" (val stlc) = Value (Lam (MkPosition 0 1) "x" 
                                                                     (Emb (MkPosition 0 6) 
                                                                      (App (MkPosition 0 27) 
                                                                       (Cut (MkPosition 0 15) 
@@ -138,3 +170,9 @@ Test2 = parse' "\\ x . (\\ y . y : 'a -> 'a) x" (val stlc) = Right (Lam (MkPosit
 
 test2 : Test2
 test2 = Refl
+
+Test3 : Type
+Test3 = parse' "\\ x . 1 : 'a -> 'a" (val stlc) = HardFail (ParseError (MkPosition 0 7))
+
+test3 : Test3
+test3 = Refl
