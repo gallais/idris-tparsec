@@ -80,7 +80,7 @@ language {p} {mn} =
   -- We start by writing the parsers recognizing basic operations on numbers:
   -- * `alt` is used to take the union of two grammars
   -- * `char c` is used to recognize exactly the character `c`
-  -- * `cmap v p` is used to return `v` whener `p` is a successful parse
+  -- * `cmap v p` is used to return `v` whenever `p` is a successful parse
 
   -- From these we can see that:
   let 
@@ -92,7 +92,7 @@ language {p} {mn} =
   -- We now need to use some new concepts
   -- * `parens p` parses an opening parenthesis, a value thanks to `p` and then
   --   a closing parenthesis. It returns whatever `p` produced.
-  -- * `Nat.map f` applies the function `f` to a recusive call. Here it is
+  -- * `Nat.map f` applies the function `f` to a recursive call. Here it is
   --   used to project the parser for `Expr` out of `Language`.
   -- * `decimalNat` is a parser for decimal numbers defined in `TParsec.Combinators.Numbers`
 
