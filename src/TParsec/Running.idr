@@ -56,3 +56,13 @@ parseMaybe {p} str par =
 parseType : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
         String -> (All (Parser mn p a)) -> Type
 parseType str par = maybe Void Singleton $ parseMaybe str par
+
+parseResult : (Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) => 
+              String -> All (Parser (TParsecM e an) p a) -> Result e a
+parseResult {p} str par =  
+  let 
+    input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str 
+    st = runParser par lteRefl input
+    res = runIdentity $ runResultT $ runStateT (runTPT st) (start, []) 
+    in 
+  map (Success.Value . fst) res

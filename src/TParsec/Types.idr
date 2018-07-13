@@ -102,14 +102,14 @@ commitT (MkTPT m) = MkTPT $ ST $ \pos => MkRT $ map (result HardFail HardFail Va
 chars : Monad m => Parameters (TParsecT e a m)
 chars = MkParameters Char (SizedList Char) recordChar
 
-TParsecI : (e : Type) -> (an : Type) -> Type -> Type
-TParsecI e an = TParsecT e an Identity
+TParsecM : (e : Type) -> (an : Type) -> Type -> Type
+TParsecM e an = TParsecT e an Identity
 
-commit : Functor m => All (Parser (TParsecI e an) p a :-> Parser (TParsecI e an) p a)
+commit : All (Parser (TParsecM e an) p a :-> Parser (TParsecM e an) p a)
 commit p = MkParser $ \mlen, ts => commitT $ runParser p mlen ts
 
 TParsecU : Type -> Type
-TParsecU = TParsecI () Void
+TParsecU = TParsecM () Void
 
 sizedtok : (tok : Type) -> Parameters TParsecU
 sizedtok tok = MkParameters tok (SizedList tok) (const $ pure ())  
