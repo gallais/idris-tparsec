@@ -56,11 +56,11 @@ mutual
 -- `Toks p` in the monad `mn` to produce respectively values of type `Expr`,
 -- `Term`, and `Factor`.
 
-record Language (p : Parameters) (mn : Type -> Type) (n : Nat) where
+record Language (mn : Type -> Type) (p : Parameters mn) (n : Nat) where
   constructor MkLanguage
-  _expr   : Parser p mn Expr n
-  _term   : Parser p mn Term n
-  _factor : Parser p mn Factor n
+  _expr   : Parser mn p Expr n
+  _term   : Parser mn p Term n
+  _factor : Parser mn p Factor n
 
 -- We are now ready to build a `Language toks mn n` for all `n` by recursion.
 -- We have a few constraints which arise directly from the combinators we are
@@ -70,12 +70,12 @@ record Language (p : Parameters) (mn : Type -> Type) (n : Nat) where
 -- In particular, this means that we can make sure that the first character
 -- of the input string is a specific `Char` e.g. '+'.
 
-language : (Alternative mn, Monad mn, Instrumented p mn, Inspect (Toks p) (Tok p), Eq (Tok p), Subset Char (Tok p)) => All (Language p mn)
+language : (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p), Subset Char (Tok p)) => All (Language mn p)
 language {p} {mn} =
 
   -- The value of type `Language` is build as a fixpoint.
   -- We can use the variable `rec` bound here to perform a recursive call.
-  fix (Language p mn) $ \rec =>
+  fix (Language mn p) $ \rec =>
 
   -- We start by writing the parsers recognizing basic operations on numbers:
   -- * `alt` is used to take the union of two grammars
@@ -135,5 +135,5 @@ language {p} {mn} =
 -- `_expr Arithmetic.language` on `"1+3"` produces the abstract syntax tree
 -- `EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3))`. Which it does.
 
-test : parse {p = unInstr Char (SizedList Char)} {mn = Maybe} "1+3" (_expr Arithmetic.language)
+test : parseType {mn=TParsecU} {p=Types.chars} "1+3" (_expr Arithmetic.language)
 test = MkSingleton (EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3)))

@@ -39,7 +39,7 @@ import TParsec.Running
 -- Arithmetic example for a most-general-type approach).
 
 Parser' : Type -> Nat -> Type
-Parser' = Parser (unInstr Char (SizedList Char)) Maybe
+Parser' = Parser TParsecU chars
 
 -- Parsing Types
 -------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ type =
 -- user gives a proof of `Singleton v`. The only such proof is `MkSingleton v`.
 
 Test : Type
-Test = parse "'a -> ('b -> 'c) -> 'd" type
+Test = parseType "'a -> ('b -> 'c) -> 'd" type
 
 test : Test
 test = MkSingleton (ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d")))
@@ -228,7 +228,7 @@ language = fix _ $ \rec =>
 -- produces the right output.
 
 Test2 : Type
-Test2 = parse "\\ x . (\\ y . y : 'a -> 'a) x" (val language)
+Test2 = parseType "\\ x . (\\ y . y : 'a -> 'a) x" (val language)
 
 test2 : Test2
 test2 = MkSingleton (Lam "x" (Emb (App (Cut (Lam "y" (Emb (Var "y"))) (ARR (K "a") (K "a")))

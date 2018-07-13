@@ -79,14 +79,8 @@ Tokenizer TOK where
     toTOKs ('|' :: cs)        = OR     :: toTOKs cs
     toTOKs (c :: cs)          = CHAR c :: toTOKs cs
 
-SizedInput TOK (SizedList TOK) where
-  sizedInput = MkSizedList    
-
-Params : Parameters
-Params = unInstr TOK (SizedList TOK)
-
 Parser' : Type -> Nat -> Type
-Parser' = Parser Params Maybe
+Parser' = Parser TParsecU (sizedtok TOK)
 
 -- workarounds for #4504
 exactTOK : TOK -> All (Parser' TOK)   
@@ -101,21 +95,21 @@ range = map (uncurry $ \c => maybe (Single c) (Interval c))
 
 regexp : All (Parser' RegExp)
 regexp = fix _ $ \rec => 
-           let parens   = between (exactTOK LPAR) (exactTOK RPAR)
-               parensm  = betweenm (exactTOK LPAR) (exactTOK RPAR)
-               ranges   = Combinators.app ((cmap Bracket (exactTOK OPEN)) `alt` (cmap (BracketNot . NEList.toList) (exactTOK NOPEN)))
-                              ((nelist range) `land` (exact CLOSE))
-               literals = Combinators.map (foldrf (Conj . literal) literal) (nelist (maybeTOK isCHAR))
-               base     = alts [ranges, cmap (BracketNot []) (exactTOK ANY), literals, parens rec]
-               star     = map (\(r,m) => maybe r (const $ Star r) m) (base `andopt` exact STAR)
-               disj     = chainr1 star (Disj `cmap` exactTOK OR)
+           let parens    = between (exactTOK LPAR) (exactTOK RPAR)
+               parensopt = betweenopt (exactTOK LPAR) (exactTOK RPAR)
+               ranges    = Combinators.app ((cmap Bracket (exactTOK OPEN)) `alt` (cmap (BracketNot . NEList.toList) (exactTOK NOPEN)))
+                               ((nelist range) `land` (exact CLOSE))
+               literals  = Combinators.map (foldrf (Conj . literal) literal) (nelist (maybeTOK isCHAR))
+               base      = alts [ranges, cmap (BracketNot []) (exactTOK ANY), literals, parens rec]
+               star      = map (\(r,m) => maybe r (const $ Star r) m) (base `andopt` exact STAR)
+               disj      = chainr1 star (Disj `cmap` exactTOK OR)
               in 
-           map (foldr1 Conj) (nelist (parensm disj))
+           map (foldr1 Conj) (nelist (parensopt disj))
 
 ---- test
 
 TestT : Type 
-TestT = parse "[a..zA..Z0..9-]*\\.agd(a|ai)" regexp
+TestT = parseType "[a..zA..Z0..9-]*\\.agd(a|ai)" regexp
 
 test : TestT
 test = MkSingleton (Conj (Star (Bracket (MkNEList (Interval 'a' 'z') [Interval 'A' 'Z', Interval '0' '9', Single '-']))) 

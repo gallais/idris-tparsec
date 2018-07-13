@@ -29,14 +29,8 @@ Tokenizer PAR where
     toPAR ']' = [RSQU]
     toPAR _ = [] -- ignoring other characters as noise
 
-SizedInput PAR (SizedList PAR) where
-  sizedInput = MkSizedList
-
-Params : Parameters
-Params = unInstr PAR (SizedList PAR)
-
 Parser' : Type -> Nat -> Type
-Parser' = Parser Params Maybe
+Parser' = Parser TParsecU (sizedtok PAR)
 
 PAR' : All (Parser' ())
 PAR' = fix _ $ \rec => 
@@ -48,5 +42,5 @@ PAR' = fix _ $ \rec =>
 
 ---- test
 
-test : parse "hel[{(lo({((wor))ld})wan)t}som{e()[n]o}i(s)e]?" PAR'
+test : parseType "hel[{(lo({((wor))ld})wan)t}som{e()[n]o}i(s)e]?" PAR'
 test = MkSingleton ()

@@ -3,8 +3,8 @@ module TParsec.Running
 import Relation.Indexed
 import Data.Inspect
 import TParsec.Success
+import TParsec.Result
 import TParsec.Types
-import TParsec.Instruments
 import TParsec.Combinators
 
 %default total
@@ -16,13 +16,13 @@ data Singleton : a -> Type where
 interface Tokenizer (tok : Type) where
   tokenize : String -> List tok
 
+Tokenizer Char where
+  tokenize = unpack
+  
 interface SizedInput (tok : Type) (toks : Nat -> Type) where
   sizedInput : (ts : List tok) -> toks (length ts)
 
-Tokenizer Char where
-  tokenize = unpack
-
-SizedInput Char (SizedList Char) where
+SizedInput a (SizedList a) where
   sizedInput = MkSizedList
 
 interface MonadRun (mn : Type -> Type) where
@@ -34,8 +34,17 @@ MonadRun List where
 MonadRun Maybe where
   runMonad = lowerMaybe . map pure
 
-parseMaybe : (MonadRun mn, Instrumented p mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
-             String -> (All (Parser p mn a)) -> Maybe a
+MonadRun Identity where
+  runMonad (Id a) = pure a
+
+MonadRun m => MonadRun (ResultT e m) where
+  runMonad (MkRT r) = runMonad r >>= result (const []) (const []) pure
+
+MonadRun m => MonadRun (TParsecT e a m) where
+  runMonad (MkTPT r) = map fst $ runMonad $ runStateT r (start, [])
+
+parseMaybe : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
+             String -> (All (Parser mn p a)) -> Maybe a
 parseMaybe {p} str par =
   let 
     input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str 
@@ -44,6 +53,6 @@ parseMaybe {p} str par =
     in
   traverse valid (runMonad result) >>= head'
 
-parse : (MonadRun mn, Instrumented p mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
-        String -> (All (Parser p mn a)) -> Type
-parse str par = maybe Void Singleton $ parseMaybe str par
+parseType : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
+        String -> (All (Parser mn p a)) -> Type
+parseType str par = maybe Void Singleton $ parseMaybe str par

@@ -12,6 +12,7 @@ modules = Relation.Indexed
 
         , TParsec
         , TParsec.Success
+        , TParsec.Result
         , TParsec.Types
         , TParsec.Combinators
         , TParsec.Combinators.Chars

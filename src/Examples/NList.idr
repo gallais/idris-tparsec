@@ -11,7 +11,7 @@ NList a  Z    = a
 NList a (S n) = List (NList a n)
 
 Parser' : Type -> Nat -> Type
-Parser' = Parser (unInstr Char (SizedList Char)) Maybe
+Parser' = Parser TParsecU chars
 
 NList' : All (Parser' a) -> (n : Nat) -> All (Parser' (NList a n))
 NList' a  Z    = a
@@ -22,17 +22,17 @@ NList' a (S n) = parens $ map DList.toList (chainl1 (map wrap (NList' a n)) (cma
 nnats : (n : Nat) -> All (Parser' (NList Nat n))
 nnats = NList' decimalNat
 
-test : parse "((1,2,3),(4,5,6))" (nnats 2)
+test : parseType "((1,2,3),(4,5,6))" (nnats 2)
 test = MkSingleton [[1, 2, 3], [4, 5, 6]]
 
-test2 : parse "((1,2,3),(4,5,6),(7,8,9,10))" (nnats 2)
+test2 : parseType "((1,2,3),(4,5,6),(7,8,9,10))" (nnats 2)
 test2 = MkSingleton [[1, 2, 3], [4, 5, 6], [7, 8, 9, 10]]
 
-test3 : parse "((1),(2))" (nnats 2)
+test3 : parseType "((1),(2))" (nnats 2)
 test3 = MkSingleton [[1], [2]]
 
-test4 : parse "((1,2))" (nnats 2)
+test4 : parseType "((1,2))" (nnats 2)
 test4 = MkSingleton [[1, 2]]
 
-test5 : parse "(((1,2),(3,4)),((5,6),(7,8)))" (nnats 3)
+test5 : parseType "(((1,2),(3,4)),((5,6),(7,8)))" (nnats 3)
 test5 = MkSingleton [[[1, 2], [3, 4]], [[5, 6], [7, 8]]]
