@@ -22,6 +22,7 @@ cache:
 install:
   - export PATH=$HOME/.cabal/bin:/opt/ghc/8.2.2/bin:/opt/cabal/2.0/bin:$PATH
   - cabal update
+  - sed -i 's/^jobs:/-- jobs:/' $HOME/.cabal/config
   - cabal install -f FFI -f LLVM -f GMP idris
 
 script:
