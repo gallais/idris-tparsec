@@ -26,7 +26,6 @@ install:
   - cabal install -f FFI -f LLVM -f GMP idris
 
 script:
-  - cd ..
   - idris --mkdoc TParsec.ipkg 
   - mv tparsec_doc/* .
 
