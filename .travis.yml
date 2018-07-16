@@ -4,7 +4,6 @@ sudo: false
 branches:
   only:
     - master
-    - travis
 
 addons:
   apt:
