@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: Prelude.Strings</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: Prelude.Strings<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>Prelude.Strings</h1><dl class="decls"><dt id="Prelude.Strings.words&#39;"><span class="name function" title="Prelude.Strings.words&#39;">words&#39;</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="Char">Char</span> ->
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> (<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="Char">Char</span>)</span></dt><dd><p>Splits a character list into a list of whitespace separated character lists.</p>
+<pre class="idris"><code>words' (unpack &quot; A B C  D E   &quot;)
+</code></pre>
+</dd><dt id="Prelude.Strings.words"><span class="name function" title="Prelude.Strings.words">words</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="String">String</span></span></dt><dd><p>Splits a string into a list of whitespace separated strings.</p>
+<pre class="idris"><code>words &quot; A B C  D E   &quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.unwords&#39;"><span class="name function" title="Prelude.Strings.unwords&#39;">unwords&#39;</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> (<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="Char">Char</span>) ->
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="Char">Char</span></span></dt><dd><p>Joins the character lists by spaces into a single character list.</p>
+<pre class="idris"><code>unwords' [['A'], ['B', 'C'], ['D'], ['E']]
+</code></pre>
+</dd><dt id="Prelude.Strings.unwords"><span class="name function" title="Prelude.Strings.unwords">unwords</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Joins the strings by spaces into a single string.</p>
+<pre class="idris"><code>unwords [&quot;A&quot;, &quot;BC&quot;, &quot;D&quot;, &quot;E&quot;]
+</code></pre>
+</dd><dt id="Prelude.Strings.unpack"><span class="name function" title="Prelude.Strings.unpack">unpack</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="Char">Char</span></span></dt><dd><p>Turns a string into a list of characters.</p>
+<pre class="idris"><code>unpack &quot;ABC&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.unlines&#39;"><span class="name function" title="Prelude.Strings.unlines&#39;">unlines&#39;</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> (<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="Char">Char</span>) ->
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="Char">Char</span></span></dt><dd><p>Joins the character lists by newlines into a single character list.</p>
+<pre class="idris"><code>unlines' [['l','i','n','e'], ['l','i','n','e','2'], ['l','n','3'], ['D']]
+</code></pre>
+</dd><dt id="Prelude.Strings.unlines"><span class="name function" title="Prelude.Strings.unlines">unlines</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Joins the strings by newlines into a single string.</p>
+<pre class="idris"><code>unlines [&quot;line&quot;, &quot;line2&quot;, &quot;ln3&quot;, &quot;D&quot;]
+</code></pre>
+</dd><dt id="Prelude.Strings.trim"><span class="name function" title="Prelude.Strings.trim">trim</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Removes whitespace (determined by 'isSpace') from<br />
+the start and end of the string.</p>
+<pre class="idris"><code>trim &quot; A\nB C &quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.toUpper"><span class="name function" title="Prelude.Strings.toUpper">toUpper</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Uppercases all characters in the string.</p>
+<pre class="idris"><code>toUpper &quot;aBc12!&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.toLower"><span class="name function" title="Prelude.Strings.toLower">toLower</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Lowercases all characters in the string.</p>
+<pre class="idris"><code>toLower &quot;aBc12!&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.substr"><span class="name function" title="Prelude.Strings.substr">substr</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="documented boundvar" title="The (zero based) index of the string to extract. If this is&lt;br /&gt;
+beyond the end of the string, the function returns the empty&lt;br /&gt;
+string.">index</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a>) ->
+(<span class="documented boundvar" title="The desired length of the substring. Truncated if this exceeds&lt;br /&gt;
+the length of the input.">len</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a>) ->
+(<span class="documented boundvar" title="The string to return a portion of">subject</span> : <span class="type" title="String">String</span>) ->
+<span class="type" title="String">String</span></span></dt><dd><p>Returns a substring of a given string</p>
+<dl><dt>index</dt><dd><p>The (zero based) index of the string to extract. If this is<br />
+beyond the end of the string, the function returns the empty<br />
+string.</p>
+</dd><dt>len</dt><dd><p>The desired length of the substring. Truncated if this exceeds<br />
+the length of the input.</p>
+</dd><dt>subject</dt><dd><p>The string to return a portion of</p>
+</dd></dl></dd><dt id="Prelude.Strings.strTail&#39;"><span class="name function" title="Prelude.Strings.strTail&#39;">strTail&#39;</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">x</span> : <span class="type" title="String">String</span>) ->
+(<a class="function" title="Prelude.Bool.not" href="Prelude.Bool.html#Prelude.Bool.not">not</a> (<span class="boundvar" title="">x</span> <a class="function" title="Prelude.Interfaces.==" href="Prelude.Interfaces.html#Prelude.Interfaces.==">==</a>
+<span class="data" title="&quot;&quot;">&quot;&quot;</span>) <a class="type" title="=" href="[builtins].html#=">=</a>
+<a class="constructor" title="Prelude.Bool.True" href="Prelude.Bool.html#Prelude.Bool.True">True</a>) ->
+<span class="type" title="String">String</span></span></dt><dd><p>Version of 'strTail' that statically verifies that the string is not empty.</p>
+</dd><dt id="Prelude.Strings.strTail"><span class="name function" title="Prelude.Strings.strTail">strTail</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Returns the characters specified after the head of the string.</p>
+<p>Doesn't work for empty strings.</p>
+<pre class="idris"><code>strTail &quot;AB&quot;
+</code></pre>
+<pre class="idris"><code>strTail &quot;A&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.strM"><span class="name function" title="Prelude.Strings.strM">strM</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">x</span> : <span class="type" title="String">String</span>) ->
+<a class="type" title="Prelude.Strings.StrM" href="Prelude.Strings.html#Prelude.Strings.StrM">StrM</a> <span class="boundvar" title="">x</span></span></dt><dd></dd><dt id="Prelude.Strings.strIndex"><span class="name function" title="Prelude.Strings.strIndex">strIndex</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="Int">Int</span> ->
+<span class="type" title="Char">Char</span></span></dt><dd><p>Returns the nth character (starting from 0) of the specified string.</p>
+<p>Precondition: '0 &lt; i &lt; length s' for 'strIndex s i'.</p>
+<pre class="idris"><code>strIndex &quot;AB&quot; 1
+</code></pre>
+</dd><dt id="Prelude.Strings.strHead&#39;"><span class="name function" title="Prelude.Strings.strHead&#39;">strHead&#39;</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">x</span> : <span class="type" title="String">String</span>) ->
+(<a class="function" title="Prelude.Bool.not" href="Prelude.Bool.html#Prelude.Bool.not">not</a> (<span class="boundvar" title="">x</span> <a class="function" title="Prelude.Interfaces.==" href="Prelude.Interfaces.html#Prelude.Interfaces.==">==</a>
+<span class="data" title="&quot;&quot;">&quot;&quot;</span>) <a class="type" title="=" href="[builtins].html#=">=</a>
+<a class="constructor" title="Prelude.Bool.True" href="Prelude.Bool.html#Prelude.Bool.True">True</a>) ->
+<span class="type" title="Char">Char</span></span></dt><dd><p>Version of 'strHead' that statically verifies that the string is not empty.</p>
+</dd><dt id="Prelude.Strings.strHead"><span class="name function" title="Prelude.Strings.strHead">strHead</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="Char">Char</span></span></dt><dd><p>Returns the first character in the specified string.</p>
+<p>Doesn't work for empty strings.</p>
+<pre class="idris"><code>strHead &quot;A&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.strCons"><span class="name function" title="Prelude.Strings.strCons">strCons</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="Char">Char</span> ->
+<span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Adds a character to the front of the specified string.</p>
+<pre class="idris"><code>strCons 'A' &quot;B&quot;
+</code></pre>
+<pre class="idris"><code>strCons 'A' &quot;&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.split"><span class="name function" title="Prelude.Strings.split">split</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="type" title="Char">Char</span> ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a>) ->
+<span class="type" title="String">String</span> ->
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="String">String</span></span></dt><dd><p>Splits the string into parts with the predicate<br />
+indicating separator characters.</p>
+<pre class="idris"><code>split (== '.') &quot;.AB.C..D&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.span"><span class="name function" title="Prelude.Strings.span">span</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="type" title="Char">Char</span> ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a>) ->
+<span class="type" title="String">String</span> ->
+<a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><span class="type" title="String">String</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
+<span class="type" title="String">String</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a></span></dt><dd><p>Splits the string into a part before the predicate<br />
+returns False and the rest of the string.</p>
+<pre class="idris"><code>span (/= 'C') &quot;ABCD&quot;
+</code></pre>
+<pre class="idris"><code>span (/= 'C') &quot;EFGH&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.singleton"><span class="name function" title="Prelude.Strings.singleton">singleton</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="Char">Char</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Creates a string of a single character.</p>
+<pre class="idris"><code>singleton 'A'
+</code></pre>
+</dd><dt id="Prelude.Strings.reverse"><span class="name function" title="Prelude.Strings.reverse">reverse</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Reverses the elements within a String.</p>
+<pre class="idris"><code>reverse &quot;ABC&quot;
+</code></pre>
+<pre class="idris"><code>reverse &quot;&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.pack"><span class="name function" title="Prelude.Strings.pack">pack</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
+<span class="implicit boundvar" title="">t</span> <span class="type" title="Char">Char</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Turns a Foldable of characters into a string.</p>
+</dd><dt id="Prelude.Strings.nullStr"><span class="name function" title="Prelude.Strings.nullStr">nullStr</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<a class="function" title="IO" href="[builtins].html#IO">IO</a> <a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd><p>Check if a supposed string was actually a null pointer</p>
+</dd><dt id="Prelude.Strings.nullPtr"><span class="name function" title="Prelude.Strings.nullPtr">nullPtr</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Ptr" href="[builtins].html#Ptr">Ptr</a> ->
+<a class="function" title="IO" href="[builtins].html#IO">IO</a> <a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd><p>Check if a foreign pointer is null</p>
+</dd><dt id="Prelude.Strings.null"><span class="name function" title="Prelude.Strings.null">null</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Ptr" href="[builtins].html#Ptr">Ptr</a></span></dt><dd></dd><dt id="Prelude.Strings.newStringBuffer"><span class="name function" title="Prelude.Strings.newStringBuffer">newStringBuffer</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">len</span> : <span class="type" title="Int">Int</span>) ->
+<a class="function" title="IO" href="[builtins].html#IO">IO</a> <a class="type" title="Prelude.Strings.StringBuffer" href="Prelude.Strings.html#Prelude.Strings.StringBuffer">StringBuffer</a></span></dt><dd><p>Create a buffer for a string with maximum length len</p>
+</dd><dt id="Prelude.Strings.ltrim"><span class="name function" title="Prelude.Strings.ltrim">ltrim</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Removes whitespace (determined by 'isSpace') from<br />
+the start of the string.</p>
+<pre class="idris"><code>ltrim &quot; A\nB&quot;
+</code></pre>
+<pre class="idris"><code>ltrim &quot; \nAB&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.lines&#39;"><span class="name function" title="Prelude.Strings.lines&#39;">lines&#39;</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="Char">Char</span> ->
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> (<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="Char">Char</span>)</span></dt><dd><p>Splits a character list into a list of newline separated character lists.</p>
+<pre class="idris"><code>lines' (unpack &quot;\rA BC\nD\r\nE\n&quot;)
+</code></pre>
+</dd><dt id="Prelude.Strings.lines"><span class="name function" title="Prelude.Strings.lines">lines</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="type" title="String">String</span></span></dt><dd><p>Splits a string into a list of newline separated strings.</p>
+<pre class="idris"><code>lines  &quot;\rA BC\nD\r\nE\n&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.length"><span class="name function" title="Prelude.Strings.length">length</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a></span></dt><dd><p>Returns the length of the string.</p>
+<pre class="idris"><code>length &quot;&quot;
+</code></pre>
+<pre class="idris"><code>length &quot;ABC&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.isSuffixOf"><span class="name function" title="Prelude.Strings.isSuffixOf">isSuffixOf</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span> ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd></dd><dt id="Prelude.Strings.isPrefixOf"><span class="name function" title="Prelude.Strings.isPrefixOf">isPrefixOf</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span> ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd></dd><dt id="Prelude.Strings.isInfixOf"><span class="name function" title="Prelude.Strings.isInfixOf">isInfixOf</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span> ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd></dd><dt id="Prelude.Strings.getStringFromBuffer"><span class="name function" title="Prelude.Strings.getStringFromBuffer">getStringFromBuffer</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Strings.StringBuffer" href="Prelude.Strings.html#Prelude.Strings.StringBuffer">StringBuffer</a> ->
+<a class="function" title="IO" href="[builtins].html#IO">IO</a> <span class="type" title="String">String</span></span></dt><dd><p>Get the string from a string buffer. The buffer is invalid after<br />
+this.</p>
+</dd><dt id="Prelude.Strings.foldr1"><span class="name function" title="Prelude.Strings.foldr1">foldr1</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">a</span>) ->
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">a</span></span></dt><dd></dd><dt id="Prelude.Strings.foldl1"><span class="name function" title="Prelude.Strings.foldl1">foldl1</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">a</span>) ->
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">a</span></span></dt><dd></dd><dt id="Prelude.Strings.break"><span class="name function" title="Prelude.Strings.break">break</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="type" title="Char">Char</span> ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a>) ->
+<span class="type" title="String">String</span> ->
+<a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><span class="type" title="String">String</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
+<span class="type" title="String">String</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a></span></dt><dd><p>Splits the string into a part before the predicate<br />
+returns True and the rest of the string.</p>
+<pre class="idris"><code>break (== 'C') &quot;ABCD&quot;
+</code></pre>
+<pre class="idris"><code>break (== 'C') &quot;EFGH&quot;
+</code></pre>
+</dd><dt id="Prelude.Strings.addToStringBuffer"><span class="name function" title="Prelude.Strings.addToStringBuffer">addToStringBuffer</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Strings.StringBuffer" href="Prelude.Strings.html#Prelude.Strings.StringBuffer">StringBuffer</a> ->
+<span class="type" title="String">String</span> ->
+<a class="function" title="IO" href="[builtins].html#IO">IO</a> <a class="type" title="Unit" href="[builtins].html#Unit">()</a></span></dt><dd><p>Append a string to the end of a string buffer</p>
+</dd><dt id="Prelude.Strings.StringBuffer"><span class="word">data&nbsp;</span><span class="name type" title="Prelude.Strings.StringBuffer">StringBuffer</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="Type">Type</span></span></dt><dd><p>A preallocated buffer for building a String. This allows a function (in IO)<br />
+to allocate enough space for a string which will be built from smaller<br />
+pieces without having to allocate at every step.<br />
+To build a string using a <code>StringBuffer</code>, see <code>newStringBuffer</code>,<br />
+<code>addToStringBuffer</code> and <code>getStringFromBuffer</code>.</p>
+<dl class="decls"><dt id="Prelude.Strings.MkString"><span class="name constructor" title="Prelude.Strings.MkString">MkString</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Ptr" href="[builtins].html#Ptr">Ptr</a> ->
+<a class="type" title="Prelude.Strings.StringBuffer" href="Prelude.Strings.html#Prelude.Strings.StringBuffer">StringBuffer</a></span></dt><dd></dd></dl></dd><dt id="Prelude.Strings.StrM"><span class="word">data&nbsp;</span><span class="name type" title="Prelude.Strings.StrM">StrM</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="Type">Type</span></span></dt><dd><dl class="decls"><dt id="Prelude.Strings.StrNil"><span class="name constructor" title="Prelude.Strings.StrNil">StrNil</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Strings.StrM" href="Prelude.Strings.html#Prelude.Strings.StrM">StrM</a> <span class="data" title="&quot;&quot;">&quot;&quot;</span></span></dt><dd></dd><dt id="Prelude.Strings.StrCons"><span class="name constructor" title="Prelude.Strings.StrCons">StrCons</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">x</span> : <span class="type" title="Char">Char</span>) ->
+(<span class="boundvar" title="">xs</span> : <span class="type" title="String">String</span>) ->
+<a class="type" title="Prelude.Strings.StrM" href="Prelude.Strings.html#Prelude.Strings.StrM">StrM</a> (<a class="function" title="Prelude.Strings.strCons" href="Prelude.Strings.html#Prelude.Strings.strCons">strCons</a> <span class="boundvar" title="">x</span>
+<span class="boundvar" title="">xs</span>)</span></dt><dd></dd></dl></dd><dt id="Prelude.Strings.++"><span class="name function" title="Prelude.Strings.++">(++)</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span> ->
+<span class="type" title="String">String</span></span></dt><dd><p>Appends two strings together.</p>
+<pre class="idris"><code>&quot;AB&quot; ++ &quot;C&quot;
+</code></pre>
+<dl><dt class="fixity">Fixity</dt><dd class="fixity" title="infixr 7">Left associative, precedence 7</dd></dl></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>

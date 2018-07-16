@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: Control.Monad.State</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: Control.Monad.State<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>Control.Monad.State</h1><dl class="decls"><dt id="Control.Monad.State.runState"><span class="name function" title="Control.Monad.State.runState">runState</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Control.Monad.State.StateT" href="Control.Monad.State.html#Control.Monad.State.StateT">StateT</a> <span class="implicit boundvar" title="">stateType</span>
+<a class="type" title="Control.Monad.Identity.Identity" href="Control.Monad.Identity.html#Control.Monad.Identity.Identity">Identity</a>
+<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">stateType</span> ->
+<a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><span class="implicit boundvar" title="">a</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
+<span class="implicit boundvar" title="">stateType</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a></span></dt><dd><p>Unwrap a State monad computation.</p>
+</dd><dt id="Control.Monad.State.modify"><span class="name function" title="Control.Monad.State.modify">modify</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Control.Monad.State.MonadState" href="Control.Monad.State.html#Control.Monad.State.MonadState">MonadState</a> <span class="implicit boundvar" title="">stateType</span>
+<span class="implicit boundvar" title="">m</span> =>
+(<span class="implicit boundvar" title="">stateType</span> ->
+<span class="implicit boundvar" title="">stateType</span>) ->
+<span class="implicit boundvar" title="">m</span> <a class="type" title="Unit" href="[builtins].html#Unit">()</a></span></dt><dd><p>Apply a function to modify the context of this computation</p>
+</dd><dt id="Control.Monad.State.gets"><span class="name function" title="Control.Monad.State.gets">gets</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Control.Monad.State.MonadState" href="Control.Monad.State.html#Control.Monad.State.MonadState">MonadState</a> <span class="implicit boundvar" title="">stateType</span>
+<span class="implicit boundvar" title="">m</span> =>
+(<span class="implicit boundvar" title="">stateType</span> ->
+<span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span></span></dt><dd><p>Evaluate a function in the context held by this computation</p>
+</dd><dt id="Control.Monad.State.execState"><span class="name function" title="Control.Monad.State.execState">execState</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="function" title="Control.Monad.State.State" href="Control.Monad.State.html#Control.Monad.State.State">State</a> <span class="implicit boundvar" title="">stateType</span>
+<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">stateType</span> ->
+<span class="implicit boundvar" title="">stateType</span></span></dt><dd><p>Unwrap a State monad computation, but discard the resulting value.</p>
+</dd><dt id="Control.Monad.State.evalState"><span class="name function" title="Control.Monad.State.evalState">evalState</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="function" title="Control.Monad.State.State" href="Control.Monad.State.html#Control.Monad.State.State">State</a> <span class="implicit boundvar" title="">stateType</span>
+<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">stateType</span> ->
+<span class="implicit boundvar" title="">a</span></span></dt><dd><p>Unwrap a State monad computation, but discard the final state.</p>
+</dd><dt id="Control.Monad.State.StateT"><span class="word">record&nbsp;</span><span class="name type" title="Control.Monad.State.StateT">StateT</span><span class="type">&nbsp;stateType m a</span></dt><dd><p>The transformer on which the State monad is based</p>
+<dl><dt>stateType</dt><dd>&nbsp;</dd><dt>m</dt><dd>&nbsp;</dd><dt>a</dt><dd>&nbsp;</dd></dl><dl class="decls"><dt id="Control.Monad.State.ST"><span class="name constructor" title="Control.Monad.State.ST">ST</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runStateT</span> : <span class="implicit boundvar" title="">stateType</span> ->
+<span class="implicit boundvar" title="">m</span> <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><span class="implicit boundvar" title="">a</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
+<span class="implicit boundvar" title="">stateType</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a>) ->
+<a class="type" title="Control.Monad.State.StateT" href="Control.Monad.State.html#Control.Monad.State.StateT">StateT</a> <span class="implicit boundvar" title="">stateType</span>
+<span class="implicit boundvar" title="">m</span>
+<span class="implicit boundvar" title="">a</span></span></dt><dd></dd></dl><dl class="decls"><dt id="Control.Monad.State.StateT.runStateT"><span class="name function" title="Control.Monad.State.StateT.runStateT">runStateT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="Control.Monad.State.StateT" href="Control.Monad.State.html#Control.Monad.State.StateT">StateT</a> <span class="implicit boundvar" title="">stateType</span>
+<span class="implicit boundvar" title="">m</span>
+<span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit boundvar" title="">stateType</span> ->
+<span class="implicit boundvar" title="">m</span> <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><span class="implicit boundvar" title="">a</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
+<span class="implicit boundvar" title="">stateType</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a></span></dt><dd></dd></dl></dd><dt id="Control.Monad.State.State"><span class="name function" title="Control.Monad.State.State">State</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">stateType</span> : <span class="type" title="Type">Type</span>) ->
+(<span class="boundvar" title="">ty</span> : <span class="type" title="Type">Type</span>) ->
+<span class="type" title="Type">Type</span></span></dt><dd><p>The State monad. See the MonadState interface</p>
+</dd><dt id="Control.Monad.State.ST"><span class="name constructor" title="Control.Monad.State.ST">ST</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runStateT</span> : <span class="implicit boundvar" title="">stateType</span> ->
+<span class="implicit boundvar" title="">m</span> <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><span class="implicit boundvar" title="">a</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
+<span class="implicit boundvar" title="">stateType</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a>) ->
+<a class="type" title="Control.Monad.State.StateT" href="Control.Monad.State.html#Control.Monad.State.StateT">StateT</a> <span class="implicit boundvar" title="">stateType</span>
+<span class="implicit boundvar" title="">m</span>
+<span class="implicit boundvar" title="">a</span></span></dt><dd></dd><dt id="Control.Monad.State.MonadState"><span class="word">interface&nbsp;</span><span class="name type" title="Control.Monad.State.MonadState">MonadState</span><span class="signature">&nbsp;</span></dt><dd><p>A computation which runs in a context and produces an output</p>
+<dl class="decls"><dt id="Control.Monad.State.get"><span class="name function" title="Control.Monad.State.get">get</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Control.Monad.State.MonadState" href="Control.Monad.State.html#Control.Monad.State.MonadState">MonadState</a> <span class="implicit boundvar" title="">stateType</span>
+<span class="implicit boundvar" title="">m</span> =>
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">stateType</span></span></dt><dd><p>Get the context</p>
+</dd><dt id="Control.Monad.State.put"><span class="name function" title="Control.Monad.State.put">put</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Control.Monad.State.MonadState" href="Control.Monad.State.html#Control.Monad.State.MonadState">MonadState</a> <span class="implicit boundvar" title="">stateType</span>
+<span class="implicit boundvar" title="">m</span> =>
+<span class="implicit boundvar" title="">stateType</span> ->
+<span class="implicit boundvar" title="">m</span> <a class="type" title="Unit" href="[builtins].html#Unit">()</a></span></dt><dd><p>Write a new context/output</p>
+</dd></dl></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>
