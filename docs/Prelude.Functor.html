@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: Prelude.Functor</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: Prelude.Functor<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>Prelude.Functor</h1><dl class="decls"><dt id="Prelude.Functor.ignore"><span class="name function" title="Prelude.Functor.ignore">ignore</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Functor.Functor" href="Prelude.Functor.html#Prelude.Functor.Functor">Functor</a> <span class="implicit boundvar" title="">f</span> =>
+<span class="implicit boundvar" title="">f</span> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">f</span> <a class="type" title="Unit" href="[builtins].html#Unit">()</a></span></dt><dd><p>Run something for effects, throwing away the return value</p>
+</dd><dt id="Prelude.Functor.Functor"><span class="word">interface&nbsp;</span><span class="name type" title="Prelude.Functor.Functor">Functor</span><span class="signature">&nbsp;</span></dt><dd><p>Functors allow a uniform action over a parameterised type.</p>
+<dl class="decls"><dt id="Prelude.Functor.map"><span class="name function" title="Prelude.Functor.map">map</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Functor.Functor" href="Prelude.Functor.html#Prelude.Functor.Functor">Functor</a> <span class="implicit boundvar" title="">f</span> =>
+(<span class="boundvar" title="">func</span> : <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span>) ->
+<span class="implicit boundvar" title="">f</span> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">f</span> <span class="implicit boundvar" title="">b</span></span></dt><dd><p>Apply a function across everything of type 'a' in a<br />
+parameterised type</p>
+</dd></dl></dd><dt id="Prelude.Functor.&lt;$&gt;"><span class="name function" title="Prelude.Functor.&lt;$&gt;">(&lt;$&gt;)</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Functor.Functor" href="Prelude.Functor.html#Prelude.Functor.Functor">Functor</a> <span class="implicit documented boundvar" title="the parameterised type">f</span> =>
+(<span class="documented boundvar" title="the function to apply">func</span> : <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span>) ->
+<span class="implicit documented boundvar" title="the parameterised type">f</span> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit documented boundvar" title="the parameterised type">f</span> <span class="implicit boundvar" title="">b</span></span></dt><dd><p>An infix alias for <code>map</code>, applying a function across everything of<br />
+type 'a' in a parameterised type</p>
+<dl><dt class="fixity">Fixity</dt><dd class="fixity" title="infixr 4">Left associative, precedence 4</dd><dt>f</dt><dd><p>the parameterised type</p>
+</dd><dt>func</dt><dd><p>the function to apply</p>
+</dd></dl></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>

@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: Prelude.Algebra</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: Prelude.Algebra<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>Prelude.Algebra</h1><dl class="decls"><dt id="Prelude.Algebra.Semigroup"><span class="word">interface&nbsp;</span><span class="name type" title="Prelude.Algebra.Semigroup">Semigroup</span><span class="signature">&nbsp;</span></dt><dd><p>Sets equipped with a single binary operation that is associative. Must<br />
+satisfy the following laws:</p>
+<ul>
+<li>Associativity of <code>&lt;+&gt;</code>:<br />
+forall a b c, a &lt;+&gt; (b &lt;+&gt; c) == (a &lt;+&gt; b) &lt;+&gt; c</li>
+</ul>
+<dl class="decls"><dt id="Prelude.Algebra.&lt;+&gt;"><span class="name function" title="Prelude.Algebra.&lt;+&gt;">(&lt;+&gt;)</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Algebra.Semigroup" href="Prelude.Algebra.html#Prelude.Algebra.Semigroup">Semigroup</a> <span class="implicit boundvar" title="">ty</span> =>
+<span class="implicit boundvar" title="">ty</span> ->
+<span class="implicit boundvar" title="">ty</span> ->
+<span class="implicit boundvar" title="">ty</span></span></dt><dd><dl><dt class="fixity">Fixity</dt><dd class="fixity" title="infixl 6">Left associative, precedence 6</dd></dl></dd></dl></dd><dt id="Prelude.Algebra.Monoid"><span class="word">interface&nbsp;</span><span class="name type" title="Prelude.Algebra.Monoid">Monoid</span><span class="signature">&nbsp;</span></dt><dd><p>Sets equipped with a single binary operation that is associative, along with<br />
+a neutral element for that binary operation. Must satisfy the following<br />
+laws:</p>
+<ul>
+<li>Associativity of <code>&lt;+&gt;</code>:<br />
+forall a b c, a &lt;+&gt; (b &lt;+&gt; c) == (a &lt;+&gt; b) &lt;+&gt; c</li>
+<li>Neutral for <code>&lt;+&gt;</code>:<br />
+forall a, a &lt;+&gt; neutral == a<br />
+forall a, neutral &lt;+&gt; a == a</li>
+</ul>
+<dl class="decls"><dt id="Prelude.Algebra.neutral"><span class="name function" title="Prelude.Algebra.neutral">neutral</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Algebra.Monoid" href="Prelude.Algebra.html#Prelude.Algebra.Monoid">Monoid</a> <span class="implicit boundvar" title="">ty</span> =>
+<span class="implicit boundvar" title="">ty</span></span></dt><dd></dd></dl></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>

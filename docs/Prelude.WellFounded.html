@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: Prelude.WellFounded</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: Prelude.WellFounded<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>Prelude.WellFounded</h1><p>Well-founded recursion.</p>
+<p>This is to let us implement some functions that don't have trivial<br />
+recursion patterns over datatypes, but instead are using some<br />
+other metric of size.</p>
+<dl class="decls"><dt id="Prelude.WellFounded.wfRec"><span class="name function" title="Prelude.WellFounded.wfRec">wfRec</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.WellFounded.WellFounded" href="Prelude.WellFounded.html#Prelude.WellFounded.WellFounded">WellFounded</a> <span class="implicit documented boundvar" title="a well-founded relation">rel</span> =>
+(<span class="boundvar" title="">step</span> : (<span class="boundvar" title="">x</span> : <span class="implicit boundvar" title="">a</span>) ->
+((<span class="boundvar" title="">y</span> : <span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit documented boundvar" title="a well-founded relation">rel</span> <span class="boundvar" title="">y</span>
+<span class="boundvar" title="">x</span> ->
+<span class="implicit boundvar" title="">b</span>) ->
+<span class="implicit boundvar" title="">b</span>) ->
+<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span></span></dt><dd><p>Use well-foundedness of a relation to write terminating operations.</p>
+<dl><dt>rel</dt><dd><p>a well-founded relation</p>
+</dd></dl></dd><dt id="Prelude.WellFounded.wfInd"><span class="name function" title="Prelude.WellFounded.wfInd">wfInd</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.WellFounded.WellFounded" href="Prelude.WellFounded.html#Prelude.WellFounded.WellFounded">WellFounded</a> <span class="implicit documented boundvar" title="a well-founded relation">rel</span> =>
+(<span class="documented boundvar" title="the induction step: take an element and its accessibility,&lt;br /&gt;
+and give back a demonstration of P for that element,&lt;br /&gt;
+potentially using accessibility">step</span> : (<span class="boundvar" title="">x</span> : <span class="implicit boundvar" title="">a</span>) ->
+((<span class="boundvar" title="">y</span> : <span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit documented boundvar" title="a well-founded relation">rel</span> <span class="boundvar" title="">y</span>
+<span class="boundvar" title="">x</span> ->
+<span class="implicit documented boundvar" title="the motive for the induction">P</span> <span class="boundvar" title="">y</span>) ->
+<span class="implicit documented boundvar" title="the motive for the induction">P</span> <span class="boundvar" title="">x</span>) ->
+(<span class="boundvar" title="">x10</span> : <span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit documented boundvar" title="the motive for the induction">P</span> <span class="boundvar" title="">x10</span></span></dt><dd><p>Use well-foundedness of a relation to write proofs</p>
+<dl><dt>rel</dt><dd><p>a well-founded relation</p>
+</dd><dt>P</dt><dd><p>the motive for the induction</p>
+</dd><dt>step</dt><dd><p>the induction step: take an element and its accessibility,<br />
+and give back a demonstration of P for that element,<br />
+potentially using accessibility</p>
+</dd></dl></dd><dt id="Prelude.WellFounded.sizeRec"><span class="name function" title="Prelude.WellFounded.sizeRec">sizeRec</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.WellFounded.Sized" href="Prelude.WellFounded.html#Prelude.WellFounded.Sized">Sized</a> <span class="implicit boundvar" title="">a</span> =>
+(<span class="boundvar" title="">step</span> : (<span class="boundvar" title="">x</span> : <span class="implicit boundvar" title="">a</span>) ->
+((<span class="boundvar" title="">y</span> : <span class="implicit boundvar" title="">a</span>) ->
+<a class="function" title="Prelude.WellFounded.Smaller" href="Prelude.WellFounded.html#Prelude.WellFounded.Smaller">Smaller</a> <span class="boundvar" title="">y</span>
+<span class="boundvar" title="">x</span> ->
+<span class="implicit boundvar" title="">b</span>) ->
+<span class="implicit boundvar" title="">b</span>) ->
+(<span class="boundvar" title="">z</span> : <span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit boundvar" title="">b</span></span></dt><dd><p>Strong recursion principle for sized types.</p>
+</dd><dt id="Prelude.WellFounded.sizeInd"><span class="name function" title="Prelude.WellFounded.sizeInd">sizeInd</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.WellFounded.Sized" href="Prelude.WellFounded.html#Prelude.WellFounded.Sized">Sized</a> <span class="implicit boundvar" title="">a</span> =>
+(<span class="boundvar" title="">step</span> : (<span class="boundvar" title="">x</span> : <span class="implicit boundvar" title="">a</span>) ->
+((<span class="boundvar" title="">y</span> : <span class="implicit boundvar" title="">a</span>) ->
+<a class="function" title="Prelude.WellFounded.Smaller" href="Prelude.WellFounded.html#Prelude.WellFounded.Smaller">Smaller</a> <span class="boundvar" title="">y</span>
+<span class="boundvar" title="">x</span> ->
+<span class="implicit boundvar" title="">P</span> <span class="boundvar" title="">y</span>) ->
+<span class="implicit boundvar" title="">P</span> <span class="boundvar" title="">x</span>) ->
+(<span class="boundvar" title="">z</span> : <span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit boundvar" title="">P</span> <span class="boundvar" title="">z</span></span></dt><dd><p>Strong induction principle for sized types.</p>
+</dd><dt id="Prelude.WellFounded.sizeAccessible"><span class="name function" title="Prelude.WellFounded.sizeAccessible">sizeAccessible</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.WellFounded.Sized" href="Prelude.WellFounded.html#Prelude.WellFounded.Sized">Sized</a> <span class="implicit boundvar" title="">a</span> =>
+(<span class="boundvar" title="">x</span> : <span class="implicit boundvar" title="">a</span>) ->
+<a class="function" title="Prelude.WellFounded.SizeAccessible" href="Prelude.WellFounded.html#Prelude.WellFounded.SizeAccessible">SizeAccessible</a> <span class="boundvar" title="">x</span></span></dt><dd><p>Proof of well-foundedness of <code>Smaller</code>.<br />
+Constructs accessibility for any given element of <code>a</code>, provided <code>Sized a</code>.</p>
+</dd><dt id="Prelude.WellFounded.accRec"><span class="name function" title="Prelude.WellFounded.accRec">accRec</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="documented boundvar" title="how to take steps on reducing arguments">step</span> : (<span class="boundvar" title="">x</span> : <span class="implicit boundvar" title="">a</span>) ->
+((<span class="boundvar" title="">y</span> : <span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit documented boundvar" title="the well-founded relation">rel</span> <span class="boundvar" title="">y</span>
+<span class="boundvar" title="">x</span> ->
+<span class="implicit boundvar" title="">b</span>) ->
+<span class="implicit boundvar" title="">b</span>) ->
+(<span class="documented boundvar" title="the starting point">z</span> : <span class="implicit boundvar" title="">a</span>) ->
+<a class="type" title="Prelude.WellFounded.Accessible" href="Prelude.WellFounded.html#Prelude.WellFounded.Accessible">Accessible</a> <span class="implicit documented boundvar" title="the well-founded relation">rel</span>
+<span class="documented boundvar" title="the starting point">z</span> ->
+<span class="implicit boundvar" title="">b</span></span></dt><dd><p>A recursor over accessibility.</p>
+<p>This allows us to recurse over the subset of some type that is<br />
+accessible according to some relation.</p>
+<dl><dt>rel</dt><dd><p>the well-founded relation</p>
+</dd><dt>step</dt><dd><p>how to take steps on reducing arguments</p>
+</dd><dt>z</dt><dd><p>the starting point</p>
+</dd></dl></dd><dt id="Prelude.WellFounded.accInd"><span class="name function" title="Prelude.WellFounded.accInd">accInd</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="documented boundvar" title="how to take steps on reducing arguments">step</span> : (<span class="boundvar" title="">x</span> : <span class="implicit boundvar" title="">a</span>) ->
+((<span class="boundvar" title="">y</span> : <span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit documented boundvar" title="the well-founded relation">rel</span> <span class="boundvar" title="">y</span>
+<span class="boundvar" title="">x</span> ->
+<span class="implicit boundvar" title="">P</span> <span class="boundvar" title="">y</span>) ->
+<span class="implicit boundvar" title="">P</span> <span class="boundvar" title="">x</span>) ->
+(<span class="documented boundvar" title="the starting point">z</span> : <span class="implicit boundvar" title="">a</span>) ->
+<a class="type" title="Prelude.WellFounded.Accessible" href="Prelude.WellFounded.html#Prelude.WellFounded.Accessible">Accessible</a> <span class="implicit documented boundvar" title="the well-founded relation">rel</span>
+<span class="documented boundvar" title="the starting point">z</span> ->
+<span class="implicit boundvar" title="">P</span> <span class="documented boundvar" title="the starting point">z</span></span></dt><dd><p>An induction principle for accessibility.</p>
+<p>This allows us to recurse over the subset of some type that is<br />
+accessible according to some relation, producing a dependent type<br />
+as a result.</p>
+<dl><dt>rel</dt><dd><p>the well-founded relation</p>
+</dd><dt>step</dt><dd><p>how to take steps on reducing arguments</p>
+</dd><dt>z</dt><dd><p>the starting point</p>
+</dd></dl></dd><dt id="Prelude.WellFounded.WellFounded"><span class="word">interface&nbsp;</span><span class="name type" title="Prelude.WellFounded.WellFounded">WellFounded</span><span class="signature">&nbsp;</span></dt><dd><p>A relation <code>rel</code> on <code>a</code> is well-founded if all elements of <code>a</code> are<br />
+acessible.</p>
+<dl class="decls"><dt id="Prelude.WellFounded.wellFounded"><span class="name function" title="Prelude.WellFounded.wellFounded">wellFounded</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.WellFounded.WellFounded" href="Prelude.WellFounded.html#Prelude.WellFounded.WellFounded">WellFounded</a> <span class="implicit boundvar" title="">rel</span> =>
+(<span class="boundvar" title="">x</span> : <span class="implicit boundvar" title="">a</span>) ->
+<a class="type" title="Prelude.WellFounded.Accessible" href="Prelude.WellFounded.html#Prelude.WellFounded.Accessible">Accessible</a> <span class="implicit boundvar" title="">rel</span>
+<span class="boundvar" title="">x</span></span></dt><dd></dd></dl></dd><dt id="Prelude.WellFounded.Smaller"><span class="name function" title="Prelude.WellFounded.Smaller">Smaller</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.WellFounded.Sized" href="Prelude.WellFounded.html#Prelude.WellFounded.Sized">Sized</a> <span class="implicit boundvar" title="">a</span> =>
+<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">a</span> ->
+<span class="type" title="Type">Type</span></span></dt><dd></dd><dt id="Prelude.WellFounded.Sized"><span class="word">interface&nbsp;</span><span class="name type" title="Prelude.WellFounded.Sized">Sized</span><span class="signature">&nbsp;</span></dt><dd><p>Interface of types with sized values.<br />
+The size is used for proofs of termination via accessibility.</p>
+<dl class="decls"><dt id="Prelude.WellFounded.size"><span class="name function" title="Prelude.WellFounded.size">size</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.WellFounded.Sized" href="Prelude.WellFounded.html#Prelude.WellFounded.Sized">Sized</a> <span class="implicit boundvar" title="">a</span> =>
+<span class="implicit boundvar" title="">a</span> ->
+<a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a></span></dt><dd></dd></dl></dd><dt id="Prelude.WellFounded.SizeAccessible"><span class="name function" title="Prelude.WellFounded.SizeAccessible">SizeAccessible</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.WellFounded.Sized" href="Prelude.WellFounded.html#Prelude.WellFounded.Sized">Sized</a> <span class="implicit boundvar" title="">a</span> =>
+<span class="implicit boundvar" title="">a</span> ->
+<span class="type" title="Type">Type</span></span></dt><dd></dd><dt id="Prelude.WellFounded.Accessible"><span class="word">data&nbsp;</span><span class="name type" title="Prelude.WellFounded.Accessible">Accessible</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="documented boundvar" title="a relation on a">rel</span> : <span class="implicit documented boundvar" title="the type of elements">a</span> ->
+<span class="implicit documented boundvar" title="the type of elements">a</span> ->
+<span class="type" title="Type">Type</span>) ->
+(<span class="documented boundvar" title="the acessible element">x</span> : <span class="implicit documented boundvar" title="the type of elements">a</span>) ->
+<span class="type" title="Type">Type</span></span></dt><dd><p>Accessibility: some element <code>x</code> is accessible if all <code>y</code> such that<br />
+<code>rel y x</code> are themselves accessible.</p>
+<dl><dt>a</dt><dd><p>the type of elements</p>
+</dd><dt>rel</dt><dd><p>a relation on a</p>
+</dd><dt>x</dt><dd><p>the acessible element</p>
+</dd></dl><dl class="decls"><dt id="Prelude.WellFounded.Access"><span class="name constructor" title="Prelude.WellFounded.Access">Access</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="documented boundvar" title="a demonstration that all smaller elements are also accessible">rec</span> : (<span class="boundvar" title="">y</span> : <span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit boundvar" title="">rel</span> <span class="boundvar" title="">y</span>
+<span class="implicit documented boundvar" title="the accessible element">x</span> ->
+<a class="type" title="Prelude.WellFounded.Accessible" href="Prelude.WellFounded.html#Prelude.WellFounded.Accessible">Accessible</a> <span class="implicit boundvar" title="">rel</span>
+<span class="boundvar" title="">y</span>) ->
+<a class="type" title="Prelude.WellFounded.Accessible" href="Prelude.WellFounded.html#Prelude.WellFounded.Accessible">Accessible</a> <span class="implicit boundvar" title="">rel</span>
+<span class="implicit documented boundvar" title="the accessible element">x</span></span></dt><dd><p>Accessibility</p>
+<dl><dt>x</dt><dd><p>the accessible element</p>
+</dd><dt>rec</dt><dd><p>a demonstration that all smaller elements are also accessible</p>
+</dd></dl></dd></dl></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>

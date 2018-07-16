@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: Decidable.Equality</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: Decidable.Equality<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>Decidable.Equality</h1><dl class="decls"><dt id="Decidable.Equality.trueNotFalse"><span class="name function" title="Decidable.Equality.trueNotFalse">trueNotFalse</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<a class="constructor" title="Prelude.Bool.True" href="Prelude.Bool.html#Prelude.Bool.True">True</a> <a class="type" title="=" href="[builtins].html#=">=</a>
+<a class="constructor" title="Prelude.Bool.False" href="Prelude.Bool.html#Prelude.Bool.False">False</a>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd></dd><dt id="Decidable.Equality.nothingNotJust"><span class="name function" title="Decidable.Equality.nothingNotJust">nothingNotJust</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<a class="constructor" title="Prelude.Maybe.Nothing" href="Prelude.Maybe.html#Prelude.Maybe.Nothing">Nothing</a> <a class="type" title="=" href="[builtins].html#=">=</a>
+<a class="constructor" title="Prelude.Maybe.Just" href="Prelude.Maybe.html#Prelude.Maybe.Just">Just</a> <span class="implicit boundvar" title="">x</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd></dd><dt id="Decidable.Equality.negEqSym"><span class="name function" title="Decidable.Equality.negEqSym">negEqSym</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">((<span class="implicit boundvar" title="">a</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">b</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a>) ->
+(<span class="implicit boundvar" title="">b</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">a</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd><p>The negation of equality is symmetric (follows from symmetry of equality)</p>
+</dd><dt id="Decidable.Equality.lemma_x_neq_xs_neq"><span class="name function" title="Decidable.Equality.lemma_x_neq_xs_neq">lemma_x_neq_xs_neq</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">((<span class="implicit boundvar" title="">x</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">y</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a>) ->
+((<span class="implicit boundvar" title="">xs</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">ys</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a>) ->
+(<span class="implicit boundvar" title="">x</span> <a class="constructor" title="Prelude.List.::" href="Prelude.List.html#Prelude.List.::">::</a>
+<span class="implicit boundvar" title="">xs</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">y</span> <a class="constructor" title="Prelude.List.::" href="Prelude.List.html#Prelude.List.::">::</a>
+<span class="implicit boundvar" title="">ys</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd></dd><dt id="Decidable.Equality.lemma_x_neq_xs_eq"><span class="name function" title="Decidable.Equality.lemma_x_neq_xs_eq">lemma_x_neq_xs_eq</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">((<span class="implicit boundvar" title="">x</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">y</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a>) ->
+(<span class="implicit boundvar" title="">xs</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">ys</span>) ->
+(<span class="implicit boundvar" title="">x</span> <a class="constructor" title="Prelude.List.::" href="Prelude.List.html#Prelude.List.::">::</a>
+<span class="implicit boundvar" title="">xs</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">y</span> <a class="constructor" title="Prelude.List.::" href="Prelude.List.html#Prelude.List.::">::</a>
+<span class="implicit boundvar" title="">ys</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd></dd><dt id="Decidable.Equality.lemma_x_eq_xs_neq"><span class="name function" title="Decidable.Equality.lemma_x_eq_xs_neq">lemma_x_eq_xs_neq</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="implicit boundvar" title="">x</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">y</span>) ->
+((<span class="implicit boundvar" title="">xs</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">ys</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a>) ->
+(<span class="implicit boundvar" title="">x</span> <a class="constructor" title="Prelude.List.::" href="Prelude.List.html#Prelude.List.::">::</a>
+<span class="implicit boundvar" title="">xs</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">y</span> <a class="constructor" title="Prelude.List.::" href="Prelude.List.html#Prelude.List.::">::</a>
+<span class="implicit boundvar" title="">ys</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd></dd><dt id="Decidable.Equality.lemma_val_not_nil"><span class="name function" title="Decidable.Equality.lemma_val_not_nil">lemma_val_not_nil</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="implicit boundvar" title="">x</span> <a class="constructor" title="Prelude.List.::" href="Prelude.List.html#Prelude.List.::">::</a>
+<span class="implicit boundvar" title="">xs</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="data" title="[]">[]</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd></dd><dt id="Decidable.Equality.lemma_snd_neq"><span class="name function" title="Decidable.Equality.lemma_snd_neq">lemma_snd_neq</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="implicit boundvar" title="">x</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">x</span>) ->
+((<span class="implicit boundvar" title="">y</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">y&#39;</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a>) ->
+(<a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">(</a><span class="implicit boundvar" title="">x</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">,</a>
+<span class="implicit boundvar" title="">y</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">)</a> <a class="type" title="=" href="[builtins].html#=">=</a>
+<a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">(</a><span class="implicit boundvar" title="">x</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">,</a>
+<span class="implicit boundvar" title="">y&#39;</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">)</a>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd></dd><dt id="Decidable.Equality.lemma_fst_neq_snd_eq"><span class="name function" title="Decidable.Equality.lemma_fst_neq_snd_eq">lemma_fst_neq_snd_eq</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">((<span class="implicit boundvar" title="">x</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">x&#39;</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a>) ->
+(<span class="implicit boundvar" title="">y</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">y&#39;</span>) ->
+(<a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">(</a><span class="implicit boundvar" title="">x</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">,</a>
+<span class="implicit boundvar" title="">y</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">)</a> <a class="type" title="=" href="[builtins].html#=">=</a>
+<a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">(</a><span class="implicit boundvar" title="">x&#39;</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">,</a>
+<span class="implicit boundvar" title="">y</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">)</a>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd></dd><dt id="Decidable.Equality.lemma_both_neq"><span class="name function" title="Decidable.Equality.lemma_both_neq">lemma_both_neq</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">((<span class="implicit boundvar" title="">x</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">x&#39;</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a>) ->
+((<span class="implicit boundvar" title="">y</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="implicit boundvar" title="">y&#39;</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a>) ->
+(<a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">(</a><span class="implicit boundvar" title="">x</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">,</a>
+<span class="implicit boundvar" title="">y</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">)</a> <a class="type" title="=" href="[builtins].html#=">=</a>
+<a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">(</a><span class="implicit boundvar" title="">x&#39;</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">,</a>
+<span class="implicit boundvar" title="">y&#39;</span><a class="constructor" title="Builtins.MkPair" href="Builtins.html#Builtins.MkPair">)</a>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd></dd><dt id="Decidable.Equality.leftNotRight"><span class="name function" title="Decidable.Equality.leftNotRight">leftNotRight</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<a class="constructor" title="Prelude.Either.Left" href="Prelude.Either.html#Prelude.Either.Left">Left</a> <span class="implicit boundvar" title="">x</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<a class="constructor" title="Prelude.Either.Right" href="Prelude.Either.html#Prelude.Either.Right">Right</a> <span class="implicit boundvar" title="">y</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd></dd><dt id="Decidable.Equality.decEqSelfIsYes"><span class="name function" title="Decidable.Equality.decEqSelfIsYes">decEqSelfIsYes</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Decidable.Equality.DecEq" href="Decidable.Equality.html#Decidable.Equality.DecEq">DecEq</a> <span class="implicit boundvar" title="">a</span> =>
+<a class="function" title="Decidable.Equality.decEq" href="Decidable.Equality.html#Decidable.Equality.decEq">decEq</a> <span class="implicit boundvar" title="">x</span>
+<span class="implicit boundvar" title="">x</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<a class="constructor" title="Prelude.Basics.Yes" href="Prelude.Basics.html#Prelude.Basics.Yes">Yes</a> <a class="constructor" title="Refl" href="[builtins].html#Refl">Refl</a></span></dt><dd><p>Everything is decidably equal to itself</p>
+</dd><dt id="Decidable.Equality.ZnotS"><span class="name function" title="Decidable.Equality.ZnotS">ZnotS</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="data" title="0">0</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<a class="constructor" title="Prelude.Nat.S" href="Prelude.Nat.html#Prelude.Nat.S">S</a> <span class="implicit boundvar" title="">n</span>) ->
+<a class="type" title="Void" href="[builtins].html#Void">Void</a></span></dt><dd></dd><dt id="Decidable.Equality.DecEq"><span class="word">interface&nbsp;</span><span class="name type" title="Decidable.Equality.DecEq">DecEq</span><span class="signature">&nbsp;</span></dt><dd><p>Decision procedures for propositional equality</p>
+<dl class="decls"><dt id="Decidable.Equality.decEq"><span class="name function" title="Decidable.Equality.decEq">decEq</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Decidable.Equality.DecEq" href="Decidable.Equality.html#Decidable.Equality.DecEq">DecEq</a> <span class="implicit boundvar" title="">t</span> =>
+(<span class="boundvar" title="">x1</span> : <span class="implicit boundvar" title="">t</span>) ->
+(<span class="boundvar" title="">x2</span> : <span class="implicit boundvar" title="">t</span>) ->
+<a class="type" title="Prelude.Basics.Dec" href="Prelude.Basics.html#Prelude.Basics.Dec">Dec</a> (<span class="boundvar" title="">x1</span> <a class="type" title="=" href="[builtins].html#=">=</a>
+<span class="boundvar" title="">x2</span>)</span></dt><dd><p>Decide whether two elements of <code>t</code> are propositionally equal</p>
+</dd></dl></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>
