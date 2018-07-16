@@ -1,4 +1,4 @@
-module TParsec.Indexed
+module Relation.Indexed
 
 %default total
 %access public export

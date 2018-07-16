@@ -51,52 +51,55 @@ mutual
 -- These dependencies mean that we are going to need to define all of the
 -- parsers at the same time by mutual induction.
 
--- So we define a record `Language` which, given a type of tokens `toks`,
+-- So we define a record `Language` which, given a record of parameters `p`,
 -- a monad `mn` and a natural number packs together `Parser`s processing
--- `toks` in the monad `mn` to produce respectively values of type `Expr`,
+-- `Toks p` in the monad `mn` to produce respectively values of type `Expr`,
 -- `Term`, and `Factor`.
 
-record Language (toks : Nat -> Type) (mn : Type -> Type) (n : Nat) where
+record Language (mn : Type -> Type) (p : Parameters mn) (n : Nat) where
   constructor MkLanguage
-  _expr   : Parser toks Char mn Expr n
-  _term   : Parser toks Char mn Term n
-  _factor : Parser toks Char mn Factor n
+  _expr   : Parser mn p Expr n
+  _term   : Parser mn p Term n
+  _factor : Parser mn p Factor n
 
 -- We are now ready to build a `Language toks mn n` for all `n` by recursion.
 -- We have a few constraints which arise directly from the combinators we are
 -- going to use.
--- ̀`Inspect toks Char` means that `toks` is essentially a list of `Char`s.
+-- ̀`Inspect (Toks p) (Tok p)` and `Subset Char (Tok p)` together mean that 
+-- `Toks` of `p` can essentially be viewed as a list of `Char`s.
 -- In particular, this means that we can make sure that the first character
 -- of the input string is a specific `Char` e.g. '+'.
 
-language : (Inspect toks Char, Alternative mn, Monad mn) => All (Language toks mn)
-language {toks} {mn} =
+language : (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p), Subset Char (Tok p)) => All (Language mn p)
+language {p} {mn} =
 
   -- The value of type `Language` is build as a fixpoint.
   -- We can use the variable `rec` bound here to perform a recursive call.
-  fix (Language toks mn) $ \ rec =>
+  fix (Language mn p) $ \rec =>
 
   -- We start by writing the parsers recognizing basic operations on numbers:
   -- * `alt` is used to take the union of two grammars
   -- * `char c` is used to recognize exactly the character `c`
-  -- * `cmap v p` is used to return `v` whener `p` is a successful parse
+  -- * `cmap v p` is used to return `v` whenever `p` is a successful parse
 
   -- From these we can see that:
+  let 
   -- `addop` parses either `+` or `-` and returns the right `Expr` constructor
-  let addop  = alt (cmap EAdd (char '+')) (cmap ESub (char '-')) in
+    addop  = cmap EAdd (char '+') `alt` cmap ESub (char '-') 
   -- `mulop` parses either `*` or `/` and returns the right `Term` constructor
-  let mulop  = alt (cmap TMul (char '*')) (cmap TDiv (char '/')) in
+    mulop  = cmap TMul (char '*') `alt` cmap TDiv (char '/')
 
   -- We now need to use some new concepts
   -- * `parens p` parses an opening parenthesis, a value thanks to `p` and then
   --   a closing parenthesis. It returns whatever `p` produced.
-  -- * `Induction.map f` applies the function `f` to a recusive call. Here it is
+  -- * `Nat.map f` applies the function `f` to a recursive call. Here it is
   --   used to project the parser for `Expr` out of `Language`.
-  -- * `decimalNat` is a parser for decimal numbers defined in `TParsec.Numbers`
+  -- * `decimalNat` is a parser for decimal numbers defined in `TParsec.Combinators.Numbers`
 
   -- `factor` recognizes either an `Expr` in between parentheses or a natural number
-  let factor = alt (map FEmb (parens (Induction.map {a = Language _ _} _expr rec)))
-                   (map FLit decimalNat) in
+    factor = map FEmb (parens (Nat.map {a = Language _ _} _expr rec))
+             `alt`
+             map FLit decimalNat
 
   -- We now have all the basic building blocks and can assemble them.
 
@@ -107,20 +110,19 @@ language {toks} {mn} =
   -- we write the parser for `Term` as:
   -- * a left-nested list of `mulop` (i.e. * and /) and `factor`
   -- * starting with a `factor`.
-  let term   = hchainl (map TEmb factor) mulop factor in
+    term   = hchainl (map TEmb factor) mulop factor
 
   -- Similarly from `E := T | E + T | E - T` we derive that `Expr` is
   -- * a left-nested list of `addop` (i.e. + and -) and `term`
   -- * start with a `term`
-  let expr   = hchainl (map EEmb term) addop term in
+    expr   = hchainl (map EEmb term) addop term 
 
   -- Going back to the very beginning: we are building a `Language toks mn n`
   -- by recursion. Which means we need to return such a `Language` as a result.
   -- But we have just defined parsers for `Expr`, `Term` and `Factor` so we
   -- can just gather them in the record:
+    in
   MkLanguage expr term factor
-
-
 
 
 -- Once we have these parsers, we can write a test:
@@ -133,5 +135,5 @@ language {toks} {mn} =
 -- `_expr Arithmetic.language` on `"1+3"` produces the abstract syntax tree
 -- `EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3))`. Which it does.
 
-test : parse {mn=Maybe} "1+3" (_expr Arithmetic.language)
+test : parseType {mn=TParsecU} {p=Types.chars} "1+3" (_expr Arithmetic.language)
 test = MkSingleton (EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3)))

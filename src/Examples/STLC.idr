@@ -1,8 +1,8 @@
 module Examples.STLC
 
+import Data.NEList
 import TParsec
 import TParsec.Running
-import TParsec.NEList
 
 %default total
 
@@ -39,7 +39,7 @@ import TParsec.NEList
 -- Arithmetic example for a most-general-type approach).
 
 Parser' : Type -> Nat -> Type
-Parser' = Parser (SizedList Char) Char Maybe
+Parser' = Parser TParsecU chars
 
 -- Parsing Types
 -------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ type =
 
   -- The value `type` is built as a fixpoint. We can use the parser `rec` bound
   -- here to perform recursive calls (i.e. to parse substructures).
-  fix (Parser' TYPE) $ \ rec =>
+  fix _ $ \rec =>
 
   -- We start by writing the parser for LT. It uses various combinators from
   -- TParsec.Combinators:
@@ -67,11 +67,11 @@ type =
   -- * `alphas` returns a non-empty string of letters
   -- * `parens p` matches an opening parenthesis, runs `p`, matches a closing
   --   parenthesis and returns the value of `p`.
-
-  -- Remenbering that `K` wraps a string into a TYPE the following definition
+  let
+  -- Remembering that `K` wraps a string into a TYPE the following definition
   -- literally gives us: LT = '<alpha>+ | (T)
 
-    let lt = alt (map K (rand (char '\'') alphas)) (parens rec) in
+    lt = alt (map K (rand (char '\'') alphas)) (parens rec)
 
   -- We can then move on to matching the symbol "->" for an arrow type. Here is
   -- a description of the new combinators we use:
@@ -81,15 +81,17 @@ type =
 
   -- So `arr` recognizes exactly "->" with spaces around it and returns the function
   -- `ARR` of type `TYPE -> TYPE -> TYPE`.
-    let arr = cmap ARR (withSpaces (string "->")) in
+
+    arr = cmap ARR (withSpaces (string "->"))
 
   -- Finally, we put everything together by using `chainr1`. `chainr1 elt cons`
   -- parses right-nested lists of the form `elt cons (elt cons (...))` with at
   -- least one `elt`.
   -- Remembering the part of the grammar `T := LT | LT -> T`, we see that this
   -- is the ideal candidate for us where `elt` is `lt` and `cons` is `arr`.
-
-    chainr1 lt arr
+  
+    in
+  chainr1 lt arr
 
 -- An example: We check that the parser succeeds on "'a -> ('b -> 'c) -> 'd"
 -- `parse str p` is defined in `TParsec.Running`. It runs the parser `p` on
@@ -97,7 +99,7 @@ type =
 -- user gives a proof of `Singleton v`. The only such proof is `MkSingleton v`.
 
 Test : Type
-Test = parse {tok = Char} {mn = Maybe} "'a -> ('b -> 'c) -> 'd" type
+Test = parseType "'a -> ('b -> 'c) -> 'd" type
 
 test : Test
 test = MkSingleton (ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d")))
@@ -157,7 +159,7 @@ var = alphas
 -- we expect.
 -- We use `adjust rec p` to run `rec` then `p` and return the pair of results
 
-cut : All (Box (Parser' Val) :-> Parser' (Pair Val TYPE))
+cut : All (Box (Parser' Val) :-> Parser' (Val, TYPE))
 cut rec = parens (adjust rec (rand (withSpaces (char ':')) type)) where
 
   -- The definition of `adjust` needs a bit more thoughts.
@@ -176,9 +178,9 @@ cut rec = parens (adjust rec (rand (withSpaces (char ':')) type)) where
 
   -- Hence:
 
-  adjust : All (Box (Parser' s) :-> Parser' t :-> Box (Parser' (Pair s t)))
-  adjust {s} {t} p q =
-    Induction.map2 {a=Parser' s} {b=Parser' t} (\ p, q => Combinators.and p q) p q
+  adjust : All (Box (Parser' s) :-> Parser' t :-> Box (Parser' (s, t)))
+  adjust p q =
+    Nat.map2 {a=Parser' _} {b=Parser' _} (\p, q => Combinators.and p q) p q
 
 -- We now know how to parse variables and cuts. We can explain how to parse
 -- neutral terms. Remember that `E := x | E I | (I : T)`. We can see that the
@@ -201,10 +203,10 @@ neu rec = hchainl (alt (map Var var) (map (uncurry Cut) (cut rec))) (cmap App sp
 
 -- The main combinators we use here are:
 -- * `rand p q` (right and) runs `p` then `q`; only returns the value produced by `q`
--- * `andm p q` (and maybe) runs `p` then `q` but `q` is allowed to fail
+-- * `andopt p q` (and maybe) runs `p` then `q` but `q` is allowed to fail
 
-lam : All (Box (Parser' Val) :-> Parser' (Pair String Val))
-lam rec = rand (char '\\') (and (withSpaces var) (rand (andm (char '.') spaces) rec))
+lam : All (Box (Parser' Val) :-> Parser' (String, Val))
+lam rec = rand (char '\\') (and (withSpaces var) (rand (andopt (char '.') spaces) rec))
 
 -- Given that parsing `Emb` is trivial (neutrals silently embed into values so we
 -- don't have to match anything), the parser for values is the simple union of the
@@ -213,20 +215,20 @@ lam rec = rand (char '\\') (and (withSpaces var) (rand (andm (char '.') spaces) 
 val : All (Box (Parser' Val) :-> Parser' Val)
 val rec = alt (map (uncurry Lam) (lam rec)) (map Emb (neu rec))
 
--- Finally we can put it all together. We use `Induction.map` to extract from
+-- Finally we can put it all together. We use `Nat.map` to extract from
 -- `Box Language` the `Box (Parser' Val)` we are interested in and use `val`
 -- and `neu` defined above.
 
 language : All Language
-language = fix Language $ \ rec =>
-  let ihv = Induction.map {a=Language} val rec in
+language = fix _ $ \rec =>
+  let ihv = Nat.map {a=Language} val rec in
   MkLanguage (val ihv) (neu ihv)
 
 -- We can once more write a test by using `parse` and check that our parser indeed
 -- produces the right output.
 
 Test2 : Type
-Test2 = parse {tok=Char} {mn=Maybe} "\\ x . (\\ y . y : 'a -> 'a) x" (val language)
+Test2 = parseType "\\ x . (\\ y . y : 'a -> 'a) x" (val language)
 
 test2 : Test2
 test2 = MkSingleton (Lam "x" (Emb (App (Cut (Lam "y" (Emb (Var "y"))) (ARR (K "a") (K "a")))

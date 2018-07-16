@@ -1,9 +1,12 @@
 module TParsec
 
-import public TParsec.Indexed
-import public TParsec.Induction
-import public TParsec.Inspect
+import public Relation.Subset
+import public Relation.Indexed
+import public Induction.Nat
+import public Data.Inspect
 import public TParsec.Success
+import public TParsec.Result
+import public TParsec.Types
 import public TParsec.Combinators
-import public TParsec.Chars
-import public TParsec.Numbers
+import public TParsec.Combinators.Chars
+import public TParsec.Combinators.Numbers

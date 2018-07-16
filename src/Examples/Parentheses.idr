@@ -30,16 +30,17 @@ Tokenizer PAR where
     toPAR _ = [] -- ignoring other characters as noise
 
 Parser' : Type -> Nat -> Type
-Parser' = Parser (SizedList PAR) PAR Maybe
+Parser' = Parser TParsecU (sizedtok PAR)
 
 PAR' : All (Parser' ())
-PAR' = fix _ $ \rec =>
-         alts [ cmap () ((exact LPAR `andm` rec) `land` (exact RPAR `andm` rec))
-              , cmap () ((exact LCUR `andm` rec) `land` (exact RCUR `andm` rec))
-              , cmap () ((exact LSQU `andm` rec) `land` (exact RSQU `andm` rec))
-              ]
+PAR' = fix _ $ \rec => 
+  let lRrR = \p, q => cmap () ((exact p `andopt` rec) `land` (exact q `andopt` rec)) in
+  alts [ lRrR LPAR RPAR
+       , lRrR LCUR RCUR
+       , lRrR LSQU RSQU
+       ]
 
 ---- test
 
-test : parse "hel[{(lo({((wor))ld})wan)t}som{e()[n]o}i(s)e]?" PAR'
+test : parseType "hel[{(lo({((wor))ld})wan)t}som{e()[n]o}i(s)e]?" PAR'
 test = MkSingleton ()
