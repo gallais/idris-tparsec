@@ -16,7 +16,8 @@
 <span class="implicit boundvar" title="">m</span>
 <a class="type" title="Unit" href="[builtins].html#Unit">()</a></span></dt><dd></dd><dt id="TParsec.Types.next"><span class="name function" title="TParsec.Types.next">next</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="Char">Char</span> ->
 <a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a> ->
-<a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a></span></dt><dd></dd><dt id="TParsec.Types.mapSnd"><span class="name function" title="TParsec.Types.mapSnd">mapSnd</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a></span></dt><dd><p>Every <code>Char</code> induces an action on <code>Position</code>s</p>
+</dd><dt id="TParsec.Types.mapSnd"><span class="name function" title="TParsec.Types.mapSnd">mapSnd</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="implicit boundvar" title="">b</span> ->
 <span class="implicit boundvar" title="">c</span>) ->
 <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><span class="implicit boundvar" title="">a</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
 <span class="implicit boundvar" title="">b</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a> ->
@@ -26,7 +27,8 @@
 <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><span class="implicit boundvar" title="">a</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
 <span class="implicit boundvar" title="">b</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a> ->
 <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><span class="implicit boundvar" title="">c</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
-<span class="implicit boundvar" title="">b</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a></span></dt><dd></dd><dt id="TParsec.Types.getPosition"><span class="name function" title="TParsec.Types.getPosition">getPosition</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
+<span class="implicit boundvar" title="">b</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a></span></dt><dd><p>Helpers</p>
+</dd><dt id="TParsec.Types.getPosition"><span class="name function" title="TParsec.Types.getPosition">getPosition</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
 <a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit boundvar" title="">e</span>
 <span class="implicit boundvar" title="">a</span>
 <span class="implicit boundvar" title="">m</span>
@@ -42,7 +44,9 @@
 <a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit boundvar" title="">e</span>
 <span class="implicit boundvar" title="">a</span>
 <span class="implicit boundvar" title="">m</span>
-<span class="implicit boundvar" title="">x</span></span></dt><dd></dd><dt id="TParsec.Types.commit"><span class="name function" title="TParsec.Types.commit">commit</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="function" title="Relation.Indexed.All" href="Relation.Indexed.html#Relation.Indexed.All">All</a> (<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> (<a class="function" title="TParsec.Types.TParsecM" href="TParsec.Types.html#TParsec.Types.TParsecM">TParsecM</a> <span class="implicit boundvar" title="">e</span>
+<span class="implicit boundvar" title="">x</span></span></dt><dd><p>Commiting to a branch makes all the failures in that branch hard failures<br />
+that we cannot recover from</p>
+</dd><dt id="TParsec.Types.commit"><span class="name function" title="TParsec.Types.commit">commit</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="function" title="Relation.Indexed.All" href="Relation.Indexed.html#Relation.Indexed.All">All</a> (<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> (<a class="function" title="TParsec.Types.TParsecM" href="TParsec.Types.html#TParsec.Types.TParsecM">TParsecM</a> <span class="implicit boundvar" title="">e</span>
 <span class="implicit boundvar" title="">an</span>)
 <span class="implicit boundvar" title="">p</span>
 <span class="implicit boundvar" title="">a</span> <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
@@ -52,16 +56,27 @@
 <span class="implicit boundvar" title="">a</span>)</span></dt><dd></dd><dt id="TParsec.Types.chars"><span class="name function" title="TParsec.Types.chars">chars</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
 <a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> (<a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit boundvar" title="">e</span>
 <span class="implicit boundvar" title="">a</span>
-<span class="implicit boundvar" title="">m</span>)</span></dt><dd></dd><dt id="TParsec.Types.TParsecU"><span class="name function" title="TParsec.Types.TParsecU">TParsecU</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="Type">Type</span> ->
-<span class="type" title="Type">Type</span></span></dt><dd></dd><dt id="TParsec.Types.TParsecT"><span class="word">record&nbsp;</span><span class="name type" title="TParsec.Types.TParsecT">TParsecT</span><span class="type">&nbsp;e an m a</span></dt><dd><dl><dt>e</dt><dd>&nbsp;</dd><dt>an</dt><dd>&nbsp;</dd><dt>m</dt><dd>&nbsp;</dd><dt>a</dt><dd>&nbsp;</dd></dl><dl class="decls"><dt id="TParsec.Types.MkTPT"><span class="name constructor" title="TParsec.Types.MkTPT">MkTPT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runTPT</span> : <a class="type" title="Control.Monad.State.StateT" href="Control.Monad.State.html#Control.Monad.State.StateT">StateT</a> <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
-<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">an</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a>
-(<a class="type" title="TParsec.Result.ResultT" href="TParsec.Result.html#TParsec.Result.ResultT">ResultT</a> <span class="implicit boundvar" title="">e</span>
-<span class="implicit boundvar" title="">m</span>)
-<span class="implicit boundvar" title="">a</span>) ->
-<a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit boundvar" title="">e</span>
-<span class="implicit boundvar" title="">an</span>
-<span class="implicit boundvar" title="">m</span>
-<span class="implicit boundvar" title="">a</span></span></dt><dd></dd></dl><dl class="decls"><dt id="TParsec.Types.TParsecT.runTPT"><span class="name function" title="TParsec.Types.TParsecT.runTPT">runTPT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit boundvar" title="">e</span>
+<span class="implicit boundvar" title="">m</span>)</span></dt><dd><p>Specialized versions of <code>Parameters</code> and <code>TParsecT</code> for common use cases</p>
+</dd><dt id="TParsec.Types.TParsecU"><span class="name function" title="TParsec.Types.TParsecU">TParsecU</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="Type">Type</span> ->
+<span class="type" title="Type">Type</span></span></dt><dd></dd><dt id="TParsec.Types.TParsecT"><span class="word">record&nbsp;</span><span class="name type" title="TParsec.Types.TParsecT">TParsecT</span><span class="type">&nbsp;e an m a</span></dt><dd><p><code>TParsecT</code> is the monad transformer one would typically use when defining<br />
+an instrumented parser</p>
+<dl><dt>e</dt><dd><p>the errors the parser may raise</p>
+</dd><dt>an</dt><dd><p>the annotations the user can put on subparses</p>
+</dd><dt>m</dt><dd><p>the monad the transformer acts upon</p>
+</dd><dt>a</dt><dd><p>the type of values it returns</p>
+</dd></dl><dl class="decls"><dt id="TParsec.Types.MkTPT"><span class="name constructor" title="TParsec.Types.MkTPT">MkTPT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runTPT</span> : <a class="type" title="Control.Monad.State.StateT" href="Control.Monad.State.html#Control.Monad.State.StateT">StateT</a> <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit documented boundvar" title="the annotations the user can put on subparses">an</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a>
+(<a class="type" title="TParsec.Result.ResultT" href="TParsec.Result.html#TParsec.Result.ResultT">ResultT</a> <span class="implicit documented boundvar" title="the errors the parser may raise">e</span>
+<span class="implicit documented boundvar" title="the monad the transformer acts upon">m</span>)
+<span class="implicit documented boundvar" title="the type of values it returns">a</span>) ->
+<a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit documented boundvar" title="the errors the parser may raise">e</span>
+<span class="implicit documented boundvar" title="the annotations the user can put on subparses">an</span>
+<span class="implicit documented boundvar" title="the monad the transformer acts upon">m</span>
+<span class="implicit documented boundvar" title="the type of values it returns">a</span></span></dt><dd><dl><dt>e</dt><dd><p>the errors the parser may raise</p>
+</dd><dt>an</dt><dd><p>the annotations the user can put on subparses</p>
+</dd><dt>m</dt><dd><p>the monad the transformer acts upon</p>
+</dd><dt>a</dt><dd><p>the type of values it returns</p>
+</dd></dl></dd></dl><dl class="decls"><dt id="TParsec.Types.TParsecT.runTPT"><span class="name function" title="TParsec.Types.TParsecT.runTPT">runTPT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit boundvar" title="">e</span>
 <span class="implicit boundvar" title="">an</span>
 <span class="implicit boundvar" title="">m</span>
 <span class="implicit boundvar" title="">a</span>) ->
@@ -72,21 +87,36 @@
 <span class="implicit boundvar" title="">a</span></span></dt><dd></dd></dl></dd><dt id="TParsec.Types.TParsecM"><span class="name function" title="TParsec.Types.TParsecM">TParsecM</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">e</span> : <span class="type" title="Type">Type</span>) ->
 (<span class="boundvar" title="">an</span> : <span class="type" title="Type">Type</span>) ->
 <span class="type" title="Type">Type</span> ->
-<span class="type" title="Type">Type</span></span></dt><dd></dd><dt id="TParsec.Types.Position"><span class="word">record&nbsp;</span><span class="name type" title="TParsec.Types.Position">Position</span><span class="type">&nbsp;</span></dt><dd><dl class="decls"><dt id="TParsec.Types.MkPosition"><span class="name constructor" title="TParsec.Types.MkPosition">MkPosition</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">line</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a>) ->
-(<span class="boundvar" title="">offset</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a>) ->
-<a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a></span></dt><dd></dd></dl><dl class="decls"><dt id="TParsec.Types.Position.line"><span class="name function" title="TParsec.Types.Position.line">line</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a>) ->
-<a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a></span></dt><dd></dd><dt id="TParsec.Types.Position.offset"><span class="name function" title="TParsec.Types.Position.offset">offset</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a>) ->
-<a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a></span></dt><dd></dd></dl></dd><dt id="TParsec.Types.Parser"><span class="word">record&nbsp;</span><span class="name type" title="TParsec.Types.Parser">Parser</span><span class="type">&nbsp;mn p a n</span></dt><dd><dl><dt>mn</dt><dd>&nbsp;</dd><dt>p</dt><dd>&nbsp;</dd><dt>a</dt><dd>&nbsp;</dd><dt>n</dt><dd>&nbsp;</dd></dl><dl class="decls"><dt id="TParsec.Types.MkParser"><span class="name constructor" title="TParsec.Types.MkParser">MkParser</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runParser</span> : <a class="type" title="Prelude.Nat.LTE" href="Prelude.Nat.html#Prelude.Nat.LTE">LTE</a> <span class="implicit boundvar" title="">m</span>
-<span class="implicit boundvar" title="">n</span> ->
-<a class="function" title="TParsec.Types.Parameters.Toks" href="TParsec.Types.Parameters.html#TParsec.Types.Parameters.Toks">Toks</a> <span class="implicit boundvar" title="">p</span>
+<span class="type" title="Type">Type</span></span></dt><dd></dd><dt id="TParsec.Types.Position"><span class="word">record&nbsp;</span><span class="name type" title="TParsec.Types.Position">Position</span><span class="type">&nbsp;</span></dt><dd><p>Position in the input string</p>
+<dl class="decls"><dt id="TParsec.Types.MkPosition"><span class="name constructor" title="TParsec.Types.MkPosition">MkPosition</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="documented boundvar" title="Line number (starting from 0)">line</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a>) ->
+(<span class="documented boundvar" title="Character offset in the given line">offset</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a>) ->
+<a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a></span></dt><dd><dl><dt>line</dt><dd><p>Line number (starting from 0)</p>
+</dd><dt>offset</dt><dd><p>Character offset in the given line</p>
+</dd></dl></dd></dl><dl class="decls"><dt id="TParsec.Types.Position.line"><span class="name function" title="TParsec.Types.Position.line">line</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a>) ->
+<a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a></span></dt><dd><p>Line number (starting from 0)</p>
+</dd><dt id="TParsec.Types.Position.offset"><span class="name function" title="TParsec.Types.Position.offset">offset</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a>) ->
+<a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a></span></dt><dd><p>Character offset in the given line</p>
+</dd></dl></dd><dt id="TParsec.Types.Parser"><span class="word">record&nbsp;</span><span class="name type" title="TParsec.Types.Parser">Parser</span><span class="type">&nbsp;mn p a n</span></dt><dd><p>A parser is the ability to, given an input, return a computation for<br />
+a success.</p>
+<dl><dt>mn</dt><dd><p>the monad used for parsing</p>
+</dd><dt>p</dt><dd><p>the parameters</p>
+</dd><dt>a</dt><dd><p>the type of value produced</p>
+</dd><dt>n</dt><dd><p>an upper bound on the size of the inputs it can deal with</p>
+</dd></dl><dl class="decls"><dt id="TParsec.Types.MkParser"><span class="name constructor" title="TParsec.Types.MkParser">MkParser</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runParser</span> : <a class="type" title="Prelude.Nat.LTE" href="Prelude.Nat.html#Prelude.Nat.LTE">LTE</a> <span class="implicit boundvar" title="">m</span>
+<span class="implicit documented boundvar" title="an upper bound on the size of the inputs it can deal with">n</span> ->
+<a class="function" title="TParsec.Types.Parameters.Toks" href="TParsec.Types.Parameters.html#TParsec.Types.Parameters.Toks">Toks</a> <span class="implicit documented boundvar" title="the parameters">p</span>
 <span class="implicit boundvar" title="">m</span> ->
-<span class="implicit boundvar" title="">mn</span> (<a class="type" title="TParsec.Success.Success" href="TParsec.Success.html#TParsec.Success.Success">Success</a> (<a class="function" title="TParsec.Types.Parameters.Toks" href="TParsec.Types.Parameters.html#TParsec.Types.Parameters.Toks">Toks</a> <span class="implicit boundvar" title="">p</span>)
-<span class="implicit boundvar" title="">a</span>
+<span class="implicit documented boundvar" title="the monad used for parsing">mn</span> (<a class="type" title="TParsec.Success.Success" href="TParsec.Success.html#TParsec.Success.Success">Success</a> (<a class="function" title="TParsec.Types.Parameters.Toks" href="TParsec.Types.Parameters.html#TParsec.Types.Parameters.Toks">Toks</a> <span class="implicit documented boundvar" title="the parameters">p</span>)
+<span class="implicit documented boundvar" title="the type of value produced">a</span>
 <span class="implicit boundvar" title="">m</span>)) ->
-<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
-<span class="implicit boundvar" title="">p</span>
-<span class="implicit boundvar" title="">a</span>
-<span class="implicit boundvar" title="">n</span></span></dt><dd></dd></dl><dl class="decls"><dt id="TParsec.Types.Parser.runParser"><span class="name function" title="TParsec.Types.Parser.runParser">runParser</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
+<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit documented boundvar" title="the monad used for parsing">mn</span>
+<span class="implicit documented boundvar" title="the parameters">p</span>
+<span class="implicit documented boundvar" title="the type of value produced">a</span>
+<span class="implicit documented boundvar" title="an upper bound on the size of the inputs it can deal with">n</span></span></dt><dd><dl><dt>mn</dt><dd><p>the monad used for parsing</p>
+</dd><dt>p</dt><dd><p>the parameters</p>
+</dd><dt>a</dt><dd><p>the type of value produced</p>
+</dd><dt>n</dt><dd><p>an upper bound on the size of the inputs it can deal with</p>
+</dd></dl></dd></dl><dl class="decls"><dt id="TParsec.Types.Parser.runParser"><span class="name function" title="TParsec.Types.Parser.runParser">runParser</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
 <span class="implicit boundvar" title="">p</span>
 <span class="implicit boundvar" title="">a</span>
 <span class="implicit boundvar" title="">n</span>) ->
@@ -96,39 +126,63 @@
 <span class="implicit boundvar" title="">m</span> ->
 <span class="implicit boundvar" title="">mn</span> (<a class="type" title="TParsec.Success.Success" href="TParsec.Success.html#TParsec.Success.Success">Success</a> (<a class="function" title="TParsec.Types.Parameters.Toks" href="TParsec.Types.Parameters.html#TParsec.Types.Parameters.Toks">Toks</a> <span class="implicit boundvar" title="">p</span>)
 <span class="implicit boundvar" title="">a</span>
-<span class="implicit boundvar" title="">m</span>)</span></dt><dd></dd></dl></dd><dt id="TParsec.Types.Parameters"><span class="word">record&nbsp;</span><span class="name type" title="TParsec.Types.Parameters">Parameters</span><span class="type">&nbsp;m</span></dt><dd><dl><dt>m</dt><dd>&nbsp;</dd></dl><dl class="decls"><dt id="TParsec.Types.MkParameters"><span class="name constructor" title="TParsec.Types.MkParameters">MkParameters</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">Tok</span> : <span class="type" title="Type">Type</span>) ->
-(<span class="boundvar" title="">Toks</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a> ->
+<span class="implicit boundvar" title="">m</span>)</span></dt><dd></dd></dl></dd><dt id="TParsec.Types.Parameters"><span class="word">record&nbsp;</span><span class="name type" title="TParsec.Types.Parameters">Parameters</span><span class="type">&nbsp;m</span></dt><dd><p>A parser is parametrised by some types and type constructors.<br />
+They are grouped in a <code>Parameters</code> record.</p>
+<dl><dt>m</dt><dd><p>is the monad the parser uses.</p>
+</dd></dl><dl class="decls"><dt id="TParsec.Types.MkParameters"><span class="name constructor" title="TParsec.Types.MkParameters">MkParameters</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="documented boundvar" title="Type of tokens">Tok</span> : <span class="type" title="Type">Type</span>) ->
+(<span class="documented boundvar" title="Type of sized input (~ Vec Tok)">Toks</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a> ->
 <span class="type" title="Type">Type</span>) ->
-(<span class="boundvar" title="">recordToken</span> : <span class="boundvar" title="">Tok</span> ->
-<span class="implicit boundvar" title="">m</span> <a class="type" title="Unit" href="[builtins].html#Unit">()</a>) ->
-<a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> <span class="implicit boundvar" title="">m</span></span></dt><dd></dd></dl><dl class="decls"><dt id="TParsec.Types.Parameters.Tok"><span class="name function" title="TParsec.Types.Parameters.Tok">Tok</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> <span class="implicit boundvar" title="">m</span>) ->
-<span class="type" title="Type">Type</span></span></dt><dd></dd><dt id="TParsec.Types.Parameters.Toks"><span class="name function" title="TParsec.Types.Parameters.Toks">Toks</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> <span class="implicit boundvar" title="">m</span>) ->
+(<span class="documented boundvar" title="The action allowing us to track consumed tokens">recordToken</span> : <span class="documented boundvar" title="Type of tokens">Tok</span> ->
+<span class="implicit documented boundvar" title="is the monad the parser uses.">m</span> <a class="type" title="Unit" href="[builtins].html#Unit">()</a>) ->
+<a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> <span class="implicit documented boundvar" title="is the monad the parser uses.">m</span></span></dt><dd><dl><dt>m</dt><dd><p>is the monad the parser uses.</p>
+</dd><dt>Tok</dt><dd><p>Type of tokens</p>
+</dd><dt>Toks</dt><dd><p>Type of sized input (~ Vec Tok)</p>
+</dd><dt>recordToken</dt><dd><p>The action allowing us to track consumed tokens</p>
+</dd></dl></dd></dl><dl class="decls"><dt id="TParsec.Types.Parameters.Tok"><span class="name function" title="TParsec.Types.Parameters.Tok">Tok</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> <span class="implicit boundvar" title="">m</span>) ->
+<span class="type" title="Type">Type</span></span></dt><dd><p>Type of tokens</p>
+</dd><dt id="TParsec.Types.Parameters.Toks"><span class="name function" title="TParsec.Types.Parameters.Toks">Toks</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> <span class="implicit boundvar" title="">m</span>) ->
 <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a> ->
-<span class="type" title="Type">Type</span></span></dt><dd></dd><dt id="TParsec.Types.Parameters.recordToken"><span class="name function" title="TParsec.Types.Parameters.recordToken">recordToken</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> <span class="implicit boundvar" title="">m</span>) ->
+<span class="type" title="Type">Type</span></span></dt><dd><p>Type of sized input (~ Vec Tok)</p>
+</dd><dt id="TParsec.Types.Parameters.recordToken"><span class="name function" title="TParsec.Types.Parameters.recordToken">recordToken</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> <span class="implicit boundvar" title="">m</span>) ->
 <a class="function" title="TParsec.Types.Parameters.Tok" href="TParsec.Types.Parameters.html#TParsec.Types.Parameters.Tok">Tok</a> <span class="boundvar" title="">rec</span> ->
-<span class="implicit boundvar" title="">m</span> <a class="type" title="Unit" href="[builtins].html#Unit">()</a></span></dt><dd></dd></dl></dd><dt id="TParsec.Types.MkTPT"><span class="name constructor" title="TParsec.Types.MkTPT">MkTPT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runTPT</span> : <a class="type" title="Control.Monad.State.StateT" href="Control.Monad.State.html#Control.Monad.State.StateT">StateT</a> <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
-<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">an</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a>
-(<a class="type" title="TParsec.Result.ResultT" href="TParsec.Result.html#TParsec.Result.ResultT">ResultT</a> <span class="implicit boundvar" title="">e</span>
-<span class="implicit boundvar" title="">m</span>)
-<span class="implicit boundvar" title="">a</span>) ->
-<a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit boundvar" title="">e</span>
-<span class="implicit boundvar" title="">an</span>
-<span class="implicit boundvar" title="">m</span>
-<span class="implicit boundvar" title="">a</span></span></dt><dd></dd><dt id="TParsec.Types.MkPosition"><span class="name constructor" title="TParsec.Types.MkPosition">MkPosition</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">line</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a>) ->
-(<span class="boundvar" title="">offset</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a>) ->
-<a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a></span></dt><dd></dd><dt id="TParsec.Types.MkParser"><span class="name constructor" title="TParsec.Types.MkParser">MkParser</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runParser</span> : <a class="type" title="Prelude.Nat.LTE" href="Prelude.Nat.html#Prelude.Nat.LTE">LTE</a> <span class="implicit boundvar" title="">m</span>
-<span class="implicit boundvar" title="">n</span> ->
-<a class="function" title="TParsec.Types.Parameters.Toks" href="TParsec.Types.Parameters.html#TParsec.Types.Parameters.Toks">Toks</a> <span class="implicit boundvar" title="">p</span>
+<span class="implicit boundvar" title="">m</span> <a class="type" title="Unit" href="[builtins].html#Unit">()</a></span></dt><dd><p>The action allowing us to track consumed tokens</p>
+</dd></dl></dd><dt id="TParsec.Types.MkTPT"><span class="name constructor" title="TParsec.Types.MkTPT">MkTPT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runTPT</span> : <a class="type" title="Control.Monad.State.StateT" href="Control.Monad.State.html#Control.Monad.State.StateT">StateT</a> <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit documented boundvar" title="the annotations the user can put on subparses">an</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a>
+(<a class="type" title="TParsec.Result.ResultT" href="TParsec.Result.html#TParsec.Result.ResultT">ResultT</a> <span class="implicit documented boundvar" title="the errors the parser may raise">e</span>
+<span class="implicit documented boundvar" title="the monad the transformer acts upon">m</span>)
+<span class="implicit documented boundvar" title="the type of values it returns">a</span>) ->
+<a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit documented boundvar" title="the errors the parser may raise">e</span>
+<span class="implicit documented boundvar" title="the annotations the user can put on subparses">an</span>
+<span class="implicit documented boundvar" title="the monad the transformer acts upon">m</span>
+<span class="implicit documented boundvar" title="the type of values it returns">a</span></span></dt><dd><dl><dt>e</dt><dd><p>the errors the parser may raise</p>
+</dd><dt>an</dt><dd><p>the annotations the user can put on subparses</p>
+</dd><dt>m</dt><dd><p>the monad the transformer acts upon</p>
+</dd><dt>a</dt><dd><p>the type of values it returns</p>
+</dd></dl></dd><dt id="TParsec.Types.MkPosition"><span class="name constructor" title="TParsec.Types.MkPosition">MkPosition</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="documented boundvar" title="Line number (starting from 0)">line</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a>) ->
+(<span class="documented boundvar" title="Character offset in the given line">offset</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a>) ->
+<a class="type" title="TParsec.Types.Position" href="TParsec.Types.html#TParsec.Types.Position">Position</a></span></dt><dd><dl><dt>line</dt><dd><p>Line number (starting from 0)</p>
+</dd><dt>offset</dt><dd><p>Character offset in the given line</p>
+</dd></dl></dd><dt id="TParsec.Types.MkParser"><span class="name constructor" title="TParsec.Types.MkParser">MkParser</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runParser</span> : <a class="type" title="Prelude.Nat.LTE" href="Prelude.Nat.html#Prelude.Nat.LTE">LTE</a> <span class="implicit boundvar" title="">m</span>
+<span class="implicit documented boundvar" title="an upper bound on the size of the inputs it can deal with">n</span> ->
+<a class="function" title="TParsec.Types.Parameters.Toks" href="TParsec.Types.Parameters.html#TParsec.Types.Parameters.Toks">Toks</a> <span class="implicit documented boundvar" title="the parameters">p</span>
 <span class="implicit boundvar" title="">m</span> ->
-<span class="implicit boundvar" title="">mn</span> (<a class="type" title="TParsec.Success.Success" href="TParsec.Success.html#TParsec.Success.Success">Success</a> (<a class="function" title="TParsec.Types.Parameters.Toks" href="TParsec.Types.Parameters.html#TParsec.Types.Parameters.Toks">Toks</a> <span class="implicit boundvar" title="">p</span>)
-<span class="implicit boundvar" title="">a</span>
+<span class="implicit documented boundvar" title="the monad used for parsing">mn</span> (<a class="type" title="TParsec.Success.Success" href="TParsec.Success.html#TParsec.Success.Success">Success</a> (<a class="function" title="TParsec.Types.Parameters.Toks" href="TParsec.Types.Parameters.html#TParsec.Types.Parameters.Toks">Toks</a> <span class="implicit documented boundvar" title="the parameters">p</span>)
+<span class="implicit documented boundvar" title="the type of value produced">a</span>
 <span class="implicit boundvar" title="">m</span>)) ->
-<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
-<span class="implicit boundvar" title="">p</span>
-<span class="implicit boundvar" title="">a</span>
-<span class="implicit boundvar" title="">n</span></span></dt><dd></dd><dt id="TParsec.Types.MkParameters"><span class="name constructor" title="TParsec.Types.MkParameters">MkParameters</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">Tok</span> : <span class="type" title="Type">Type</span>) ->
-(<span class="boundvar" title="">Toks</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a> ->
+<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit documented boundvar" title="the monad used for parsing">mn</span>
+<span class="implicit documented boundvar" title="the parameters">p</span>
+<span class="implicit documented boundvar" title="the type of value produced">a</span>
+<span class="implicit documented boundvar" title="an upper bound on the size of the inputs it can deal with">n</span></span></dt><dd><dl><dt>mn</dt><dd><p>the monad used for parsing</p>
+</dd><dt>p</dt><dd><p>the parameters</p>
+</dd><dt>a</dt><dd><p>the type of value produced</p>
+</dd><dt>n</dt><dd><p>an upper bound on the size of the inputs it can deal with</p>
+</dd></dl></dd><dt id="TParsec.Types.MkParameters"><span class="name constructor" title="TParsec.Types.MkParameters">MkParameters</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="documented boundvar" title="Type of tokens">Tok</span> : <span class="type" title="Type">Type</span>) ->
+(<span class="documented boundvar" title="Type of sized input (~ Vec Tok)">Toks</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a> ->
 <span class="type" title="Type">Type</span>) ->
-(<span class="boundvar" title="">recordToken</span> : <span class="boundvar" title="">Tok</span> ->
-<span class="implicit boundvar" title="">m</span> <a class="type" title="Unit" href="[builtins].html#Unit">()</a>) ->
-<a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> <span class="implicit boundvar" title="">m</span></span></dt><dd></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>
+(<span class="documented boundvar" title="The action allowing us to track consumed tokens">recordToken</span> : <span class="documented boundvar" title="Type of tokens">Tok</span> ->
+<span class="implicit documented boundvar" title="is the monad the parser uses.">m</span> <a class="type" title="Unit" href="[builtins].html#Unit">()</a>) ->
+<a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> <span class="implicit documented boundvar" title="is the monad the parser uses.">m</span></span></dt><dd><dl><dt>m</dt><dd><p>is the monad the parser uses.</p>
+</dd><dt>Tok</dt><dd><p>Type of tokens</p>
+</dd><dt>Toks</dt><dd><p>Type of sized input (~ Vec Tok)</p>
+</dd><dt>recordToken</dt><dd><p>The action allowing us to track consumed tokens</p>
+</dd></dl></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>
