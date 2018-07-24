@@ -11,6 +11,9 @@ record NEList (a : Type) where
 toList : NEList a -> List a
 toList xxs = head xxs :: tail xxs
 
+length : NEList a -> Nat
+length = S . length . tail  
+
 Show a => Show (NEList a) where
   show = show . toList
 
