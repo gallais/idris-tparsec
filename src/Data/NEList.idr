@@ -1,5 +1,7 @@
 module Data.NEList
 
+import Data.Vect
+
 %default total
 %access public export
 
@@ -13,6 +15,9 @@ toList xxs = head xxs :: tail xxs
 
 length : NEList a -> Nat
 length = S . length . tail  
+
+toVect : (nel : NEList a) -> Vect (length nel) a
+toVect (MkNEList h t) = h :: fromList t
 
 Show a => Show (NEList a) where
   show = show . toList
