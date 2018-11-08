@@ -1,7 +1,7 @@
 [package]
 name = "gallais/idris-tparsec"
 version = "0.1.0"
-authors = ["G. Allais"]
+authors = ["G. Allais", "Alex Gryzlov"]
 license = "GPLv3.0"
 
 [targets.lib]
