@@ -1,7 +1,6 @@
 module Examples.STLCpos
 
 import Control.Monad.State
-import Data.Vect
 import Data.NEList
 import TParsec
 import TParsec.Running

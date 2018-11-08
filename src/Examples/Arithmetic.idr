@@ -106,7 +106,7 @@ language {p} {mn} =
   -- `hchainl base step arg` parses left-nested lists of the form
   -- `((base step arg) step arg) step ...`
 
-  -- Remembering the part of the grammar grammar `T := F | T * F | T / F`
+  -- Remembering the part of the grammar `T := F | T * F | T / F`
   -- we write the parser for `Term` as:
   -- * a left-nested list of `mulop` (i.e. * and /) and `factor`
   -- * starting with a `factor`.
@@ -114,7 +114,7 @@ language {p} {mn} =
 
   -- Similarly from `E := T | E + T | E - T` we derive that `Expr` is
   -- * a left-nested list of `addop` (i.e. + and -) and `term`
-  -- * start with a `term`
+  -- * starting with a `term`
     expr   = hchainl (map EEmb term) addop term 
 
   -- Going back to the very beginning: we are building a `Language toks mn n`
