@@ -1,54 +1,5 @@
 <!DOCTYPE HTML>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: Prelude.Foldable</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: Prelude.Foldable<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>Prelude.Foldable</h1><dl class="decls"><dt id="Prelude.Foldable.sum"><span class="name function" title="Prelude.Foldable.sum">sum</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
-<a class="type" title="Prelude.Interfaces.Num" href="Prelude.Interfaces.html#Prelude.Interfaces.Num">Num</a> <span class="implicit boundvar" title="">a</span> =>
-<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
-<span class="implicit boundvar" title="">a</span></span></dt><dd><p>Add together all the elements of a structure</p>
-</dd><dt id="Prelude.Foldable.product"><span class="name function" title="Prelude.Foldable.product">product</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
-<a class="type" title="Prelude.Interfaces.Num" href="Prelude.Interfaces.html#Prelude.Interfaces.Num">Num</a> <span class="implicit boundvar" title="">a</span> =>
-<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
-<span class="implicit boundvar" title="">a</span></span></dt><dd><p>Multiply together all elements of a structure</p>
-</dd><dt id="Prelude.Foldable.or"><span class="name function" title="Prelude.Foldable.or">or</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
-<span class="implicit boundvar" title="">t</span> (<a class="function" title="Lazy" href="[builtins].html#Lazy">Lazy</a> <a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a>) ->
-<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd><p>The disjunction of all elements of a structure containing<br />
-lazy boolean values. <code>or</code> short-circuits from left to right, evaluating<br />
-either until an element is <code>True</code> or no elements remain.</p>
-</dd><dt id="Prelude.Foldable.default#foldl"><span class="name function" title="Prelude.Foldable.default#foldl">default#foldl</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
-(<span class="boundvar" title="">func</span> : <span class="implicit boundvar" title="">acc</span> ->
-<span class="implicit boundvar" title="">elem</span> ->
-<span class="implicit boundvar" title="">acc</span>) ->
-(<span class="boundvar" title="">init</span> : <span class="implicit boundvar" title="">acc</span>) ->
-(<span class="boundvar" title="">input</span> : <span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">elem</span>) ->
-<span class="implicit boundvar" title="">acc</span></span></dt><dd></dd><dt id="Prelude.Foldable.concatMap"><span class="name function" title="Prelude.Foldable.concatMap">concatMap</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
-<a class="type" title="Prelude.Algebra.Monoid" href="Prelude.Algebra.html#Prelude.Algebra.Monoid">Monoid</a> <span class="implicit boundvar" title="">m</span> =>
-(<span class="implicit boundvar" title="">a</span> ->
-<span class="implicit boundvar" title="">m</span>) ->
-<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
-<span class="implicit boundvar" title="">m</span></span></dt><dd><p>Combine into a monoid the collective results of applying a function<br />
-to each element of a structure</p>
-</dd><dt id="Prelude.Foldable.concat"><span class="name function" title="Prelude.Foldable.concat">concat</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
-<a class="type" title="Prelude.Algebra.Monoid" href="Prelude.Algebra.html#Prelude.Algebra.Monoid">Monoid</a> <span class="implicit boundvar" title="">a</span> =>
-<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
-<span class="implicit boundvar" title="">a</span></span></dt><dd><p>Combine each element of a structure into a monoid</p>
-</dd><dt id="Prelude.Foldable.any"><span class="name function" title="Prelude.Foldable.any">any</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
-(<span class="implicit boundvar" title="">a</span> ->
-<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a>) ->
-<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
-<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd><p>The disjunction of the collective results of applying a<br />
-predicate to all elements of a structure. <code>any</code> short-circuits<br />
-from left to right.</p>
-</dd><dt id="Prelude.Foldable.and"><span class="name function" title="Prelude.Foldable.and">and</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
-<span class="implicit boundvar" title="">t</span> (<a class="function" title="Lazy" href="[builtins].html#Lazy">Lazy</a> <a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a>) ->
-<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd><p>The conjunction of all elements of a structure containing<br />
-lazy boolean values. <code>and</code> short-circuits from left to right,<br />
-evaluating until either an element is <code>False</code> or no elements remain.</p>
-</dd><dt id="Prelude.Foldable.all"><span class="name function" title="Prelude.Foldable.all">all</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
-(<span class="implicit boundvar" title="">a</span> ->
-<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a>) ->
-<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
-<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd><p>The disjunction of the collective results of applying a<br />
-predicate to all elements of a structure. <code>all</code> short-circuits<br />
-from left to right.</p>
-</dd><dt id="Prelude.Foldable.Foldable"><span class="word">interface&nbsp;</span><span class="name type" title="Prelude.Foldable.Foldable">Foldable</span><span class="signature">&nbsp;</span></dt><dd><p>The <code>Foldable</code> interface describes how you can iterate over the<br />
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: Prelude.Foldable</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: Prelude.Foldable<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>Prelude.Foldable</h1><dl class="decls"><dt id="Prelude.Foldable.Foldable"><span class="word">interface&nbsp;</span><span class="name type" title="Prelude.Foldable.Foldable">Foldable</span><span class="signature">&nbsp;</span></dt><dd><p>The <code>Foldable</code> interface describes how you can iterate over the<br />
 elements in a parameterised type and combine the elements<br />
 together, using a provided function, into a single result.</p>
 <dl class="decls"><dt id="Prelude.Foldable.foldr"><span class="name function" title="Prelude.Foldable.foldr">foldr</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
@@ -69,4 +20,53 @@ final position i.e. the right-most position.</p>
 <span class="implicit boundvar" title="">acc</span></span></dt><dd><p>The same as <code>foldr</code> but begins the folding from the element at<br />
 the initial position in the data structure i.e. the left-most<br />
 position.</p>
-</dd></dl></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>
+</dd></dl></dd><dt id="Prelude.Foldable.all"><span class="name function" title="Prelude.Foldable.all">all</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
+(<span class="implicit boundvar" title="">a</span> ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a>) ->
+<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd><p>The disjunction of the collective results of applying a<br />
+predicate to all elements of a structure. <code>all</code> short-circuits<br />
+from left to right.</p>
+</dd><dt id="Prelude.Foldable.and"><span class="name function" title="Prelude.Foldable.and">and</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
+<span class="implicit boundvar" title="">t</span> (<a class="function" title="Lazy" href="[builtins].html#Lazy">Lazy</a> <a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a>) ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd><p>The conjunction of all elements of a structure containing<br />
+lazy boolean values. <code>and</code> short-circuits from left to right,<br />
+evaluating until either an element is <code>False</code> or no elements remain.</p>
+</dd><dt id="Prelude.Foldable.any"><span class="name function" title="Prelude.Foldable.any">any</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
+(<span class="implicit boundvar" title="">a</span> ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a>) ->
+<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd><p>The disjunction of the collective results of applying a<br />
+predicate to all elements of a structure. <code>any</code> short-circuits<br />
+from left to right.</p>
+</dd><dt id="Prelude.Foldable.concat"><span class="name function" title="Prelude.Foldable.concat">concat</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
+<a class="type" title="Prelude.Algebra.Monoid" href="Prelude.Algebra.html#Prelude.Algebra.Monoid">Monoid</a> <span class="implicit boundvar" title="">a</span> =>
+<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">a</span></span></dt><dd><p>Combine each element of a structure into a monoid</p>
+</dd><dt id="Prelude.Foldable.concatMap"><span class="name function" title="Prelude.Foldable.concatMap">concatMap</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
+<a class="type" title="Prelude.Algebra.Monoid" href="Prelude.Algebra.html#Prelude.Algebra.Monoid">Monoid</a> <span class="implicit boundvar" title="">m</span> =>
+(<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">m</span>) ->
+<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">m</span></span></dt><dd><p>Combine into a monoid the collective results of applying a function<br />
+to each element of a structure</p>
+</dd><dt id="Prelude.Foldable.default#foldl"><span class="name function" title="Prelude.Foldable.default#foldl">default#foldl</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
+(<span class="boundvar" title="">func</span> : <span class="implicit boundvar" title="">acc</span> ->
+<span class="implicit boundvar" title="">elem</span> ->
+<span class="implicit boundvar" title="">acc</span>) ->
+(<span class="boundvar" title="">init</span> : <span class="implicit boundvar" title="">acc</span>) ->
+(<span class="boundvar" title="">input</span> : <span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">elem</span>) ->
+<span class="implicit boundvar" title="">acc</span></span></dt><dd></dd><dt id="Prelude.Foldable.or"><span class="name function" title="Prelude.Foldable.or">or</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
+<span class="implicit boundvar" title="">t</span> (<a class="function" title="Lazy" href="[builtins].html#Lazy">Lazy</a> <a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a>) ->
+<a class="type" title="Prelude.Bool.Bool" href="Prelude.Bool.html#Prelude.Bool.Bool">Bool</a></span></dt><dd><p>The disjunction of all elements of a structure containing<br />
+lazy boolean values. <code>or</code> short-circuits from left to right, evaluating<br />
+either until an element is <code>True</code> or no elements remain.</p>
+</dd><dt id="Prelude.Foldable.product"><span class="name function" title="Prelude.Foldable.product">product</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
+<a class="type" title="Prelude.Interfaces.Num" href="Prelude.Interfaces.html#Prelude.Interfaces.Num">Num</a> <span class="implicit boundvar" title="">a</span> =>
+<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">a</span></span></dt><dd><p>Multiply together all elements of a structure</p>
+</dd><dt id="Prelude.Foldable.sum"><span class="name function" title="Prelude.Foldable.sum">sum</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
+<a class="type" title="Prelude.Interfaces.Num" href="Prelude.Interfaces.html#Prelude.Interfaces.Num">Num</a> <span class="implicit boundvar" title="">a</span> =>
+<span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">a</span></span></dt><dd><p>Add together all the elements of a structure</p>
+</dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>

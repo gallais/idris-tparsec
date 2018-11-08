@@ -1,10 +1,20 @@
 <!DOCTYPE HTML>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: Prelude.Monad</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: Prelude.Monad<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>Prelude.Monad</h1><p>Monads and Functors</p>
-<dl class="decls"><dt id="Prelude.Monad.return"><span class="name function" title="Prelude.Monad.return">return</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
-<span class="implicit boundvar" title="">a</span> ->
-<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span></span></dt><dd><p>For compatibility with Haskell. Note that monads are <strong>not</strong> free to<br />
-define <code>return</code> and <code>pure</code> differently!</p>
-</dd><dt id="Prelude.Monad.foldlM"><span class="name function" title="Prelude.Monad.foldlM">foldlM</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
+<dl class="decls"><dt id="Prelude.Monad.Monad"><span class="word">interface&nbsp;</span><span class="name type" title="Prelude.Monad.Monad">Monad</span><span class="signature">&nbsp;</span></dt><dd><dl class="decls"><dt id="Prelude.Monad.&gt;&gt;="><span class="name function" title="Prelude.Monad.&gt;&gt;=">(&gt;&gt;=)</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span> ->
+(<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">b</span>) ->
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">b</span></span></dt><dd><p>Also called <code>bind</code>.</p>
+<dl><dt class="fixity">Fixity</dt><dd class="fixity" title="infixl 1">Left associative, precedence 1</dd></dl></dd><dt id="Prelude.Monad.join"><span class="name function" title="Prelude.Monad.join">join</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
+<span class="implicit boundvar" title="">m</span> (<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span></span></dt><dd><p>Also called <code>flatten</code> or mu</p>
+</dd></dl></dd><dt id="Prelude.Monad.default#&gt;&gt;="><span class="name function" title="Prelude.Monad.default#&gt;&gt;=">default#&gt;&gt;=</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span> ->
+(<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">b</span>) ->
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Prelude.Monad.default#join"><span class="name function" title="Prelude.Monad.default#join">default#join</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
+<span class="implicit boundvar" title="">m</span> (<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span></span></dt><dd></dd><dt id="Prelude.Monad.foldlM"><span class="name function" title="Prelude.Monad.foldlM">foldlM</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Foldable.Foldable" href="Prelude.Foldable.html#Prelude.Foldable.Foldable">Foldable</a> <span class="implicit boundvar" title="">t</span> =>
 <a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
 (<span class="boundvar" title="">funcM</span> : <span class="implicit boundvar" title="">a</span> ->
 <span class="implicit boundvar" title="">b</span> ->
@@ -13,18 +23,8 @@ define <code>return</code> and <code>pure</code> differently!</p>
 (<span class="boundvar" title="">input</span> : <span class="implicit boundvar" title="">t</span> <span class="implicit boundvar" title="">b</span>) ->
 <span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span></span></dt><dd><p>Similar to <code>foldl</code>, but uses a function wrapping its result in a <code>Monad</code>.<br />
 Consequently, the final value is wrapped in the same <code>Monad</code>.</p>
-</dd><dt id="Prelude.Monad.default#join"><span class="name function" title="Prelude.Monad.default#join">default#join</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
-<span class="implicit boundvar" title="">m</span> (<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span>) ->
-<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span></span></dt><dd></dd><dt id="Prelude.Monad.default#&gt;&gt;="><span class="name function" title="Prelude.Monad.default#&gt;&gt;=">default#&gt;&gt;=</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
-<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span> ->
-(<span class="implicit boundvar" title="">a</span> ->
-<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">b</span>) ->
-<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Prelude.Monad.Monad"><span class="word">interface&nbsp;</span><span class="name type" title="Prelude.Monad.Monad">Monad</span><span class="signature">&nbsp;</span></dt><dd><dl class="decls"><dt id="Prelude.Monad.&gt;&gt;="><span class="name function" title="Prelude.Monad.&gt;&gt;=">(&gt;&gt;=)</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
-<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span> ->
-(<span class="implicit boundvar" title="">a</span> ->
-<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">b</span>) ->
-<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">b</span></span></dt><dd><p>Also called <code>bind</code>.</p>
-<dl><dt class="fixity">Fixity</dt><dd class="fixity" title="infixl 1">Left associative, precedence 1</dd></dl></dd><dt id="Prelude.Monad.join"><span class="name function" title="Prelude.Monad.join">join</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
-<span class="implicit boundvar" title="">m</span> (<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span>) ->
-<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span></span></dt><dd><p>Also called <code>flatten</code> or mu</p>
-</dd></dl></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>
+</dd><dt id="Prelude.Monad.return"><span class="name function" title="Prelude.Monad.return">return</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
+<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">a</span></span></dt><dd><p>For compatibility with Haskell. Note that monads are <strong>not</strong> free to<br />
+define <code>return</code> and <code>pure</code> differently!</p>
+</dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>

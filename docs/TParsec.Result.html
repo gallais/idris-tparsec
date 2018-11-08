@@ -1,24 +1,9 @@
 <!DOCTYPE HTML>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: TParsec.Result</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: TParsec.Result<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>TParsec.Result</h1><dl class="decls"><dt id="TParsec.Result.result"><span class="name function" title="TParsec.Result.result">result</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">h</span> : <span class="implicit boundvar" title="">e</span> ->
-<span class="implicit boundvar" title="">b</span>) ->
-(<span class="boundvar" title="">s</span> : <span class="implicit boundvar" title="">e</span> ->
-<span class="implicit boundvar" title="">b</span>) ->
-(<span class="boundvar" title="">v</span> : <span class="implicit boundvar" title="">a</span> ->
-<span class="implicit boundvar" title="">b</span>) ->
-<a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
-<span class="implicit boundvar" title="">a</span> ->
-<span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="TParsec.Result.fromMaybe"><span class="name function" title="TParsec.Result.fromMaybe">fromMaybe</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="implicit boundvar" title="">e</span> ->
-<a class="type" title="Prelude.Maybe.Maybe" href="Prelude.Maybe.html#Prelude.Maybe.Maybe">Maybe</a> <span class="implicit boundvar" title="">a</span> ->
-<a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
-<span class="implicit boundvar" title="">a</span></span></dt><dd></dd><dt id="TParsec.Result.ResultT"><span class="word">record&nbsp;</span><span class="name type" title="TParsec.Result.ResultT">ResultT</span><span class="type">&nbsp;e m a</span></dt><dd><dl><dt>e</dt><dd>&nbsp;</dd><dt>m</dt><dd>&nbsp;</dd><dt>a</dt><dd>&nbsp;</dd></dl><dl class="decls"><dt id="TParsec.Result.MkRT"><span class="name constructor" title="TParsec.Result.MkRT">MkRT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runResultT</span> : <span class="implicit boundvar" title="">m</span> (<a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: TParsec.Result</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: TParsec.Result<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>TParsec.Result</h1><dl class="decls"><dt id="TParsec.Result.MkRT"><span class="name constructor" title="TParsec.Result.MkRT">MkRT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runResultT</span> : <span class="implicit boundvar" title="">m</span> (<a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
 <span class="implicit boundvar" title="">a</span>)) ->
 <a class="type" title="TParsec.Result.ResultT" href="TParsec.Result.html#TParsec.Result.ResultT">ResultT</a> <span class="implicit boundvar" title="">e</span>
 <span class="implicit boundvar" title="">m</span>
-<span class="implicit boundvar" title="">a</span></span></dt><dd></dd></dl><dl class="decls"><dt id="TParsec.Result.ResultT.runResultT"><span class="name function" title="TParsec.Result.ResultT.runResultT">runResultT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Result.ResultT" href="TParsec.Result.html#TParsec.Result.ResultT">ResultT</a> <span class="implicit boundvar" title="">e</span>
-<span class="implicit boundvar" title="">m</span>
-<span class="implicit boundvar" title="">a</span>) ->
-<span class="implicit boundvar" title="">m</span> (<a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
-<span class="implicit boundvar" title="">a</span>)</span></dt><dd></dd></dl></dd><dt id="TParsec.Result.Result"><span class="word">data&nbsp;</span><span class="name type" title="TParsec.Result.Result">Result</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="Type">Type</span> ->
+<span class="implicit boundvar" title="">a</span></span></dt><dd></dd><dt id="TParsec.Result.Result"><span class="word">data&nbsp;</span><span class="name type" title="TParsec.Result.Result">Result</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="Type">Type</span> ->
 <span class="type" title="Type">Type</span> ->
 <span class="type" title="Type">Type</span></span></dt><dd><dl class="decls"><dt id="TParsec.Result.HardFail"><span class="name constructor" title="TParsec.Result.HardFail">HardFail</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="implicit boundvar" title="">e</span> ->
 <a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
@@ -26,8 +11,23 @@
 <a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
 <span class="implicit boundvar" title="">a</span></span></dt><dd></dd><dt id="TParsec.Result.Value"><span class="name constructor" title="TParsec.Result.Value">Value</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="implicit boundvar" title="">a</span> ->
 <a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
-<span class="implicit boundvar" title="">a</span></span></dt><dd></dd></dl></dd><dt id="TParsec.Result.MkRT"><span class="name constructor" title="TParsec.Result.MkRT">MkRT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runResultT</span> : <span class="implicit boundvar" title="">m</span> (<a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
+<span class="implicit boundvar" title="">a</span></span></dt><dd></dd></dl></dd><dt id="TParsec.Result.ResultT"><span class="word">record&nbsp;</span><span class="name type" title="TParsec.Result.ResultT">ResultT</span><span class="type">&nbsp;e m a</span></dt><dd><dl><dt>e</dt><dd>&nbsp;</dd><dt>m</dt><dd>&nbsp;</dd><dt>a</dt><dd>&nbsp;</dd></dl><dl class="decls"><dt id="TParsec.Result.MkRT"><span class="name constructor" title="TParsec.Result.MkRT">MkRT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">runResultT</span> : <span class="implicit boundvar" title="">m</span> (<a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
 <span class="implicit boundvar" title="">a</span>)) ->
 <a class="type" title="TParsec.Result.ResultT" href="TParsec.Result.html#TParsec.Result.ResultT">ResultT</a> <span class="implicit boundvar" title="">e</span>
 <span class="implicit boundvar" title="">m</span>
-<span class="implicit boundvar" title="">a</span></span></dt><dd></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>
+<span class="implicit boundvar" title="">a</span></span></dt><dd></dd></dl><dl class="decls"><dt id="TParsec.Result.ResultT.runResultT"><span class="name function" title="TParsec.Result.ResultT.runResultT">runResultT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="TParsec.Result.ResultT" href="TParsec.Result.html#TParsec.Result.ResultT">ResultT</a> <span class="implicit boundvar" title="">e</span>
+<span class="implicit boundvar" title="">m</span>
+<span class="implicit boundvar" title="">a</span>) ->
+<span class="implicit boundvar" title="">m</span> (<a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
+<span class="implicit boundvar" title="">a</span>)</span></dt><dd></dd></dl></dd><dt id="TParsec.Result.fromMaybe"><span class="name function" title="TParsec.Result.fromMaybe">fromMaybe</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="implicit boundvar" title="">e</span> ->
+<a class="type" title="Prelude.Maybe.Maybe" href="Prelude.Maybe.html#Prelude.Maybe.Maybe">Maybe</a> <span class="implicit boundvar" title="">a</span> ->
+<a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
+<span class="implicit boundvar" title="">a</span></span></dt><dd></dd><dt id="TParsec.Result.result"><span class="name function" title="TParsec.Result.result">result</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">h</span> : <span class="implicit boundvar" title="">e</span> ->
+<span class="implicit boundvar" title="">b</span>) ->
+(<span class="boundvar" title="">s</span> : <span class="implicit boundvar" title="">e</span> ->
+<span class="implicit boundvar" title="">b</span>) ->
+(<span class="boundvar" title="">v</span> : <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span>) ->
+<a class="type" title="TParsec.Result.Result" href="TParsec.Result.html#TParsec.Result.Result">Result</a> <span class="implicit boundvar" title="">e</span>
+<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>
