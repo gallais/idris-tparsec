@@ -1,0 +1,29 @@
+[package]
+name = "gallais/idris-tparsec"
+version = "0.1.0"
+authors = ["G. Allais", "Alex Gryzlov"]
+license = "GPLv3.0"
+
+[targets.lib]
+path = "src"
+mods = ["Relation.Indexed"
+       ,"Relation.Subset"
+       ,"Induction.Nat"
+        
+       ,"Data.Inspect"
+       ,"Data.DList"
+       ,"Data.NEList"
+       ,"Data.SizedDict"
+
+       ,"TParsec"
+       ,"TParsec.Success"
+       ,"TParsec.Result"
+       ,"TParsec.Types"
+       ,"TParsec.Combinators"
+       ,"TParsec.Combinators.Chars"
+       ,"TParsec.Combinators.Numbers"
+       ,"TParsec.Running"
+       ]
+
+opts = ["--total"]
+
