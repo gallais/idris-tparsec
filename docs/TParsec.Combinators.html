@@ -42,6 +42,15 @@
 <a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
 <span class="implicit boundvar" title="">p</span>
 <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><span class="implicit boundvar" title="">a</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
+<span class="implicit boundvar" title="">b</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a>)</span></dt><dd></dd><dt id="TParsec.Combinators.andbindm"><span class="name function" title="TParsec.Combinators.andbindm">andbindm</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">mn</span> =>
+<a class="function" title="Relation.Indexed.All" href="Relation.Indexed.html#Relation.Indexed.All">All</a> (<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
+<span class="implicit boundvar" title="">p</span>
+<span class="implicit boundvar" title="">a</span> <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
+<a class="function" title="Relation.Indexed.Cst" href="Relation.Indexed.html#Relation.Indexed.Cst">Cst</a> (<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">mn</span> <span class="implicit boundvar" title="">b</span>) <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
+<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
+<span class="implicit boundvar" title="">p</span>
+<a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><span class="implicit boundvar" title="">a</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
 <span class="implicit boundvar" title="">b</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a>)</span></dt><dd></dd><dt id="TParsec.Combinators.andm"><span class="name function" title="TParsec.Combinators.andm">andm</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">mn</span> =>
 <a class="function" title="Relation.Indexed.All" href="Relation.Indexed.html#Relation.Indexed.All">All</a> (<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
 <span class="implicit boundvar" title="">p</span>
@@ -276,6 +285,14 @@
 <span class="implicit boundvar" title="">b</span>) <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
 <a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
 <span class="implicit boundvar" title="">p</span>
+<span class="implicit boundvar" title="">a</span>)</span></dt><dd></dd><dt id="TParsec.Combinators.landbindm"><span class="name function" title="TParsec.Combinators.landbindm">landbindm</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">mn</span> =>
+<a class="function" title="Relation.Indexed.All" href="Relation.Indexed.html#Relation.Indexed.All">All</a> (<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
+<span class="implicit boundvar" title="">p</span>
+<span class="implicit boundvar" title="">a</span> <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
+<a class="function" title="Relation.Indexed.Cst" href="Relation.Indexed.html#Relation.Indexed.Cst">Cst</a> (<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">mn</span> <span class="implicit boundvar" title="">b</span>) <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
+<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
+<span class="implicit boundvar" title="">p</span>
 <span class="implicit boundvar" title="">a</span>)</span></dt><dd></dd><dt id="TParsec.Combinators.landm"><span class="name function" title="TParsec.Combinators.landm">landm</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">mn</span> =>
 <a class="function" title="Relation.Indexed.All" href="Relation.Indexed.html#Relation.Indexed.All">All</a> (<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
 <span class="implicit boundvar" title="">p</span>
@@ -378,6 +395,14 @@
 <a class="type" title="Induction.Nat.Box" href="Induction.Nat.html#Induction.Nat.Box">Box</a> (<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
 <span class="implicit boundvar" title="">p</span>
 <span class="implicit boundvar" title="">b</span>) <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
+<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
+<span class="implicit boundvar" title="">p</span>
+<span class="implicit boundvar" title="">b</span>)</span></dt><dd></dd><dt id="TParsec.Combinators.randbindm"><span class="name function" title="TParsec.Combinators.randbindm">randbindm</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">mn</span> =>
+<a class="function" title="Relation.Indexed.All" href="Relation.Indexed.html#Relation.Indexed.All">All</a> (<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
+<span class="implicit boundvar" title="">p</span>
+<span class="implicit boundvar" title="">a</span> <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
+<a class="function" title="Relation.Indexed.Cst" href="Relation.Indexed.html#Relation.Indexed.Cst">Cst</a> (<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">mn</span> <span class="implicit boundvar" title="">b</span>) <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
 <a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
 <span class="implicit boundvar" title="">p</span>
 <span class="implicit boundvar" title="">b</span>)</span></dt><dd></dd><dt id="TParsec.Combinators.randm"><span class="name function" title="TParsec.Combinators.randm">randm</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">mn</span> =>
