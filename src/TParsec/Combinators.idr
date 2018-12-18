@@ -76,6 +76,20 @@ andbind p q = MkParser $ \mlen, ts =>
                    let adjust = Functor.map (Success.and sa)
                    adjust (runParser (call (q (Value sa)) salen) lteRefl (Leftovers sa))
 
+andbindm : Monad mn =>
+  All (Parser mn p a :-> Cst (a -> mn b) :-> Parser mn p (a, b))
+andbindm p f = MkParser $ \mlen, ts => do ra <- runParser p mlen ts
+                                          b <- f (Value ra)
+                                          pure $ map (flip MkPair b) ra
+
+landbindm : Monad mn =>
+  All (Parser mn p a :-> Cst (a -> mn b) :-> Parser mn p a)
+landbindm p f = map fst (andbindm p f)
+
+randbindm : Monad mn =>
+  All (Parser mn p a :-> Cst (a -> mn b) :-> Parser mn p b)
+randbindm p f = map snd (andbindm p f)
+
 and : Monad mn =>
       All (Parser mn p a :-> Box (Parser mn p b) :-> Parser mn p (a, b))
 and p q = andbind p (\ _ => q)

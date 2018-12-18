@@ -1,5 +1,7 @@
 module TParsec.Result
 
+import public Control.Monad.Trans
+
 %default total
 %access public export
 
@@ -28,7 +30,7 @@ result h _ _ (HardFail e) = h e
 result _ s _ (SoftFail e) = s e
 result _ _ v (Value a)    = v a
 
-fromMaybe : e -> Maybe a -> Result e a 
+fromMaybe : e -> Maybe a -> Result e a
 fromMaybe e = maybe (SoftFail e) Value
 
 record ResultT (e : Type) (m : Type -> Type) (a : Type) where
@@ -40,9 +42,12 @@ Functor m => Functor (ResultT e m) where
 
 Monad m => Applicative (ResultT e m) where
   pure a = MkRT $ pure $ Value a
-  (MkRT mf) <*> (MkRT ma) = MkRT $ do rf <- mf 
+  (MkRT mf) <*> (MkRT ma) = MkRT $ do rf <- mf
                                       ra <- ma
                                       pure (rf <*> ra)
 
 Monad m => Monad (ResultT e m) where
-  (MkRT ma) >>= f = MkRT $ ma >>= result (pure . HardFail) (pure . SoftFail) (runResultT . f)  
+  (MkRT ma) >>= f = MkRT $ ma >>= result (pure . HardFail) (pure . SoftFail) (runResultT . f)
+
+MonadTrans (ResultT e) where
+  lift = MkRT . map Value
