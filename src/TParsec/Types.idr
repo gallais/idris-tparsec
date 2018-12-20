@@ -1,6 +1,7 @@
 module TParsec.Types
 
 import public Control.Monad.State
+import public Control.Monad.Trans
 import Relation.Subset
 import Relation.Indexed
 import Data.Inspect
@@ -35,8 +36,8 @@ start = MkPosition 0 0
 
 ||| Every `Char` induces an action on `Position`s
 next : Char -> Position -> Position
-next c p = if c == '\n' 
-           then MkPosition (S (line p)) 0 
+next c p = if c == '\n'
+           then MkPosition (S (line p)) 0
            else record { offset = S (offset p) } p
 
 ||| A parser is parametrised by some types and type constructors.
@@ -62,7 +63,7 @@ record Parser (mn : Type -> Type)
               (a : Type)
               (n : Nat) where
   constructor MkParser
-  runParser : {m : Nat} -> LTE m n -> (Toks p) m -> mn (Success (Toks p) a m)  
+  runParser : {m : Nat} -> LTE m n -> (Toks p) m -> mn (Success (Toks p) a m)
 
 ||| `TParsecT` is the monad transformer one would typically use when defining
 ||| an instrumented parser
@@ -71,7 +72,7 @@ record Parser (mn : Type -> Type)
 ||| @ m the monad the transformer acts upon
 ||| @ a the type of values it returns
 record TParsecT (e : Type) (an : Type) (m : Type -> Type) (a : Type) where
-  constructor MkTPT 
+  constructor MkTPT
   runTPT : StateT (Position, List an) (ResultT e m) a
 
 Functor m => Functor (TParsecT e a m) where
@@ -84,12 +85,15 @@ Monad m => Applicative (TParsecT e a m) where
 Monad m => Monad (TParsecT e a m) where
   (MkTPT a) >>= f = MkTPT $ a >>= (runTPT . f)
 
+MonadTrans (TParsecT e a) where
+  lift = MkTPT . lift . lift
+
 ||| The `Alternative` instance recovers from "soft" failures in the left branch
 ||| by exploring the right one. "hard" failures are final.
 (Monad m, Subset (Position, List a) e) => Alternative (TParsecT e a m) where
   empty = MkTPT $ ST $ MkRT . pure . SoftFail . into
-  (MkTPT a) <|> (MkTPT b) = MkTPT $ ST $ \pos => 
-    MkRT $ (runResultT $ runStateT a pos) >>= (\r => case r of 
+  (MkTPT a) <|> (MkTPT b) = MkTPT $ ST $ \pos =>
+    MkRT $ (runResultT $ runStateT a pos) >>= (\r => case r of
       SoftFail _ => runResultT $ runStateT b pos
       _ => pure r)
 
@@ -101,7 +105,7 @@ getAnnotations = MkTPT $ map Basics.snd get
 
 withAnnotation : Monad m => a -> TParsecT e a m x -> TParsecT e a m x
 withAnnotation a (MkTPT ms) = MkTPT $ do modify (mapSnd (List.(::) a))
-                                         s <- ms  
+                                         s <- ms
                                          modify (mapSnd (List.drop 1))
                                          pure s
 
@@ -129,7 +133,7 @@ TParsecU : Type -> Type
 TParsecU = TParsecM () Void
 
 sizedtok : (tok : Type) -> Parameters TParsecU
-sizedtok tok = MkParameters tok (SizedList tok) (const $ pure ())  
+sizedtok tok = MkParameters tok (SizedList tok) (const $ pure ())
 
 Subset (Position, List Void) () where
   into = const ()
