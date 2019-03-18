@@ -94,7 +94,7 @@ type =
   chainr1 lt arr
 
 -- An example: We check that the parser succeeds on "'a -> ('b -> 'c) -> 'd"
--- `parse str p` is defined in `TParsec.Running`. It runs the parser `p` on
+-- `parseType str p` is defined in `TParsec.Running`. It runs the parser `p` on
 -- the String `str` and if that succeeds with value `v`, it demands that the
 -- user gives a proof of `Singleton v`. The only such proof is `MkSingleton v`.
 
@@ -102,7 +102,7 @@ Test : Type
 Test = parseType "'a -> ('b -> 'c) -> 'd" type
 
 test : Test
-test = MkSingleton (ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d")))
+test = MkSingleton $ ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d"))
 
 -- Parsing STLC
 -------------------------------------------------------------------------------
@@ -150,8 +150,11 @@ record Language (n : Nat) where
 
 -- Variables are nothing but non-empty strings.
 
-var : All (Parser' String)
-var = alphas
+ident : All (Parser' String)
+ident = alphas
+
+var : All (Parser' Neu)
+var = map Var ident
 
 -- Remember that `Cut` corresponds to the `(I : T)` case in the grammar
 -- The easy bits first: we use `rand (withSpaces (char ':')) type` to
@@ -182,6 +185,9 @@ cut rec = parens (adjust rec (rand (withSpaces (char ':')) type)) where
   adjust p q =
     Nat.map2 {a=Parser' _} {b=Parser' _} (\p, q => Combinators.and p q) p q
 
+app : All (Box (Parser' Val) :-> Parser' Val)
+app rec = alt (map Emb var) (parens rec)
+
 -- We now know how to parse variables and cuts. We can explain how to parse
 -- neutral terms. Remember that `E := x | E I | (I : T)`. We can see that the
 -- only recursive call to `E` is in the application case. That is to say that
@@ -195,8 +201,15 @@ cut rec = parens (adjust rec (rand (withSpaces (char ':')) type)) where
 
 -- Hence the following definition of `neu`:
 
-neu : All (Box (Parser' Val) :-> Parser' Neu)
-neu rec = hchainl (alt (map Var var) (map (uncurry Cut) (cut rec))) (cmap App spaces) rec
+neu : All (Box (Parser' Val) :-> Box (Parser' Neu) :-> Parser' Neu)
+neu recv recn = 
+  hchainl 
+    (alts [ var
+          , map (uncurry Cut) (cut recv)
+          , parens recn
+          ]) 
+    (cmap App spaces) 
+    (app recv)
 
 -- We can now move on to values. Lambda-abstraction in particular.
 -- Remember that lambda-abstractions are of the shape `\ x . I`.
@@ -206,30 +219,72 @@ neu rec = hchainl (alt (map Var var) (map (uncurry Cut) (cut rec))) (cmap App sp
 -- * `andopt p q` (and maybe) runs `p` then `q` but `q` is allowed to fail
 
 lam : All (Box (Parser' Val) :-> Parser' (String, Val))
-lam rec = rand (char '\\') (and (withSpaces var) (rand (andopt (char '.') spaces) rec))
+lam rec = rand (char '\\') (and (withSpaces ident) (rand (andopt (char '.') spaces) rec))
 
 -- Given that parsing `Emb` is trivial (neutrals silently embed into values so we
 -- don't have to match anything), the parser for values is the simple union of the
 -- one for lambda-abstraction and the one for neutrals:
 
-val : All (Box (Parser' Val) :-> Parser' Val)
-val rec = alt (map (uncurry Lam) (lam rec)) (map Emb (neu rec))
+val : All (Box (Parser' Val) :-> Box (Parser' Neu) :-> Parser' Val)
+val recv recn = 
+  alts [ map (uncurry Lam) (lam recv)
+       , map Emb (neu recv recn)
+       , parens recv
+       ]
 
 -- Finally we can put it all together. We use `Nat.map` to extract from
--- `Box Language` the `Box (Parser' Val)` we are interested in and use `val`
--- and `neu` defined above.
+-- `Box Language` both `Box (Parser' Val)` and ``Box (Parser' Neu)` we are
+-- interested in and use `val` and `neu` defined above.
 
 language : All Language
 language = fix _ $ \rec =>
-  let ihv = Nat.map {a=Language} val rec in
-  MkLanguage (val ihv) (neu ihv)
+  let 
+    ihv = Nat.map {a=Language} val rec 
+    ihn = Nat.map {a=Language} neu rec 
+   in
+  MkLanguage (val ihv ihn) (neu ihv ihn)
 
--- We can once more write a test by using `parse` and check that our parser indeed
+-- We can once more write tests by using `parseType` and check that our parser indeed
 -- produces the right output.
 
 Test2 : Type
-Test2 = parseType "\\ x . (\\ y . y : 'a -> 'a) x" (val language)
+Test2 = parseType "\\x.(\\y.y:'a ->'a) x" (val language)
 
 test2 : Test2
-test2 = MkSingleton (Lam "x" (Emb (App (Cut (Lam "y" (Emb (Var "y"))) (ARR (K "a") (K "a")))
-                                       (Emb (Var "x")))))
+test2 = MkSingleton $ Lam "x" $ 
+          Emb $ App (Cut (Lam "y" $ Emb $ Var "y") (ARR (K "a") (K "a")))
+                    (Emb $ Var "x")
+
+Test3 : Type
+Test3 = parseType "\\g.\\f.\\a.g a (f a)" (val language)
+
+test3 : Test3
+test3 = MkSingleton $ Lam "g" $ Lam "f" $ Lam "a" $ 
+          Emb $ App (App (Var "g") 
+                         (Emb $ Var "a"))
+                    (Emb $ App (Var "f") 
+                               (Emb $ Var "a"))
+{-
+-- typechecks but takes a while
+
+Test4 : Type
+Test4 = parseType "\\g.\\f.\\a.(g a) (f a)" (val language)
+
+test4 : Test4
+test4 = MkSingleton $ Lam "g" $ Lam "f" $ Lam "a" $ 
+          Emb $ App (App (Var "g") 
+                         (Emb $ Var "a"))
+                    (Emb $ App (Var "f") 
+                               (Emb $ Var "a"))
+
+Test5 : Type
+Test5 = parseType "(\\g.(\\f.\\a.(g) (a) ((f) a)))" (val language)
+
+test5 : Test5
+test5 = MkSingleton $ Lam "g" $ Lam "f" $ Lam "a" $ 
+          Emb $ App (App (Var "g") 
+                         (Emb $ Var "a"))
+                    (Emb $ App (Var "f") 
+                               (Emb $ Var "a"))
+
+-}
