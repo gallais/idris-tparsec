@@ -16,6 +16,10 @@ char : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks
        Char -> All (Parser mn p (Tok p))
 char = exact . into
 
+anyCharBut : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
+          Char -> All (Parser mn p (Tok p))
+anyCharBut = anyTokenBut . into
+
 string : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
          (t : String) -> {auto pr : NonEmpty (unpack t)} ->
          All (Parser mn p String)

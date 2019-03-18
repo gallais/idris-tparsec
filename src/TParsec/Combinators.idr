@@ -177,6 +177,14 @@ exacts : (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p)) =>
          NEList (Tok p) -> All (Parser mn p (NEList (Tok p)))
 exacts ts = ands (map (\t => exact t) ts)
 
+anyTokenBut : (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p)) =>
+              Tok p -> All (Parser mn p (Tok p))
+anyTokenBut t = guard (\t' => (t /= t')) anyTok
+
+noneOf : (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p)) =>
+         List (Tok p) -> All (Parser mn p (Tok p))
+noneOf ts = guard (\t' => any (== t') ts) anyTok
+
 anyOf : (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p)) =>
         List (Tok p) -> All (Parser mn p (Tok p))
 anyOf ts = alts (map (\t => exact t) ts)
