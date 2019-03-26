@@ -35,10 +35,17 @@ start : Position
 start = MkPosition 0 0
 
 ||| Every `Char` induces an action on `Position`s
+update : Char -> Position -> Position
+update c p = if c == '\n'
+               then MkPosition (S (line p)) 0
+               else record { offset = S (offset p) } p
+
+updates : String -> Position -> Position
+updates str p = foldl (flip update) p (unpack str)
+
 next : Char -> Position -> Position
-next c p = if c == '\n'
-           then MkPosition (S (line p)) 0
-           else record { offset = S (offset p) } p
+next = update 
+%deprecate next "Please use `update` instead"
 
 ||| A parser is parametrised by some types and type constructors.
 ||| They are grouped in a `Parameters` record.
