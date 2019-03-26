@@ -185,6 +185,8 @@ cut rec = parens (adjust rec (rand (withSpaces (char ':')) type)) where
   adjust p q =
     Nat.map2 {a=Parser' _} {b=Parser' _} (\p, q => Combinators.and p q) p q
 
+-- Each argument is either a variable or a whole checkable term in parentheses.
+
 app : All (Box (Parser' Val) :-> Parser' Val)
 app rec = alt (map Emb var) (parens rec)
 
@@ -193,7 +195,7 @@ app rec = alt (map Emb var) (parens rec)
 -- only recursive call to `E` is in the application case. That is to say that
 -- this grammar is equivalent to `E := B | E I` where `B := x | (I : T)`.
 -- In other words: we have a left-nested list of applications ending with either
--- a variable or a cut.
+-- a variable or a cut. We also account for recursive neutrals under brackets.
 
 -- * `hchainl base cons arg` parses left-nested lists of the shape:
 --   `((base cons arg) cons arg) cons arg`
@@ -222,8 +224,8 @@ lam : All (Box (Parser' Val) :-> Parser' (String, Val))
 lam rec = rand (char '\\') (and (withSpaces ident) (rand (andopt (char '.') spaces) rec))
 
 -- Given that parsing `Emb` is trivial (neutrals silently embed into values so we
--- don't have to match anything), the parser for values is the simple union of the
--- one for lambda-abstraction and the one for neutrals:
+-- don't have to match anything), the parser for values is the simple union of one 
+-- for lambda-abstraction, one for neutrals and a recursive parser looking under brackets:
 
 val : All (Box (Parser' Val) :-> Box (Parser' Neu) :-> Parser' Val)
 val recv recn = 
