@@ -183,7 +183,7 @@ anyTokenBut t = guard (\t' => (t /= t')) anyTok
 
 noneOf : (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p)) =>
          List (Tok p) -> All (Parser mn p (Tok p))
-noneOf ts = guard (\t' => any (== t') ts) anyTok
+noneOf ts = guard (\t' => all (/= t') ts) anyTok
 
 anyOf : (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p)) =>
         List (Tok p) -> All (Parser mn p (Tok p))
