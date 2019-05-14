@@ -37,6 +37,9 @@ MonadRun Maybe where
 MonadRun Identity where
   runMonad (Id a) = pure a
 
+Monoid s => MonadRun (StateT s Identity) where
+  runMonad st = pure $ evalState st neutral
+
 MonadRun m => MonadRun (ResultT e m) where
   runMonad (MkRT r) = runMonad r >>= result (const []) (const []) pure
 
@@ -66,3 +69,13 @@ parseResult {p} str par =
     res = runIdentity $ runResultT $ runStateT (runTPT st) (start, []) 
     in 
   map (Success.Value . fst) res
+
+parseResults : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) => 
+              String -> All (Parser (TParsecT e an mn) p a) -> Result e (List a)
+parseResults {p} str par =  
+  let 
+    input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str 
+    st = runParser par lteRefl input
+    res = sequence $ runMonad $ runResultT $ runStateT (runTPT st) (start, []) 
+    in 
+  map (map $ Success.Value . fst) res
