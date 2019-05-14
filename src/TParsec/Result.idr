@@ -13,17 +13,22 @@ data Result : Type -> Type -> Type where
   Value : a -> Result e a
 
 Functor (Result e) where
-  map _ (HardFail e) = HardFail e
   map _ (SoftFail e) = SoftFail e
+  map _ (HardFail e) = HardFail e
   map f (Value a)    = Value (f a)
 
 Applicative (Result e) where
   pure = Value
   (HardFail e) <*> _ = HardFail e
-  (SoftFail e) <*> _ = SoftFail e
   _ <*> (HardFail e) = HardFail e
+  (SoftFail e) <*> _ = SoftFail e
   _ <*> (SoftFail e) = SoftFail e
   (Value f) <*> (Value a) = Value (f a)
+
+Monad (Result e) where
+  (HardFail e) >>= f = HardFail e
+  (SoftFail e) >>= f = SoftFail e
+  (Value a)    >>= f = f a
 
 result : (h, s : e -> b) -> (v : a -> b) -> Result e a -> b
 result h _ _ (HardFail e) = h e

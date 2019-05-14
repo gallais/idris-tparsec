@@ -117,7 +117,7 @@ withAnnotation a (MkTPT ms) = MkTPT $ do modify (mapSnd (List.(::) a))
                                          pure s
 
 recordChar : Monad m => Char -> TParsecT e a m ()
-recordChar c = MkTPT $ ignore (modify (mapFst (next c)))
+recordChar c = MkTPT $ ignore (modify (mapFst (update c)))
 
 ||| Commiting to a branch makes all the failures in that branch hard failures
 ||| that we cannot recover from
