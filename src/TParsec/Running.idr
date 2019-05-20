@@ -37,8 +37,11 @@ MonadRun Maybe where
 MonadRun Identity where
   runMonad (Id a) = pure a
 
-Monoid s => MonadRun (StateT s Identity) where
-  runMonad st = pure $ evalState st neutral
+interface Pointed (a : Type) where
+  point : a
+
+Pointed s => MonadRun (StateT s Identity) where
+  runMonad st = pure $ evalState st point
 
 MonadRun m => MonadRun (ResultT e m) where
   runMonad (MkRT r) = runMonad r >>= result (const []) (const []) pure
