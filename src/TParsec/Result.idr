@@ -20,8 +20,8 @@ Functor (Result e) where
 Applicative (Result e) where
   pure = Value
   (HardFail e) <*> _ = HardFail e
-  _ <*> (HardFail e) = HardFail e
   (SoftFail e) <*> _ = SoftFail e
+  _ <*> (HardFail e) = HardFail e
   _ <*> (SoftFail e) = SoftFail e
   (Value f) <*> (Value a) = Value (f a)
 
