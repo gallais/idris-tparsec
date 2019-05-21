@@ -13,8 +13,8 @@ data Result : Type -> Type -> Type where
   Value : a -> Result e a
 
 Functor (Result e) where
-  map _ (SoftFail e) = SoftFail e
   map _ (HardFail e) = HardFail e
+  map _ (SoftFail e) = SoftFail e
   map f (Value a)    = Value (f a)
 
 Applicative (Result e) where
