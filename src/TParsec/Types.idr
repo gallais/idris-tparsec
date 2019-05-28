@@ -125,6 +125,9 @@ commitT : Functor m => TParsecT e a m x -> TParsecT e a m x
 commitT (MkTPT m) = MkTPT $ ST $ \pos =>
    MkRT $ map (result HardFail HardFail Value) (runResultT $ runStateT m pos)
 
+commit : Functor mn => All (Parser (TParsecT e an mn) p a :-> Parser (TParsecT e an mn) p a)
+commit p = MkParser $ \mlen, ts => commitT $ runParser p mlen ts
+
 ||| Specialized versions of `Parameters` and `TParsecT` for common use cases
 
 chars : Monad m => Parameters (TParsecT e a m)
@@ -132,9 +135,6 @@ chars = MkParameters Char (SizedList Char) recordChar
 
 TParsecM : (e : Type) -> (an : Type) -> Type -> Type
 TParsecM e an = TParsecT e an Identity
-
-commit : All (Parser (TParsecM e an) p a :-> Parser (TParsecM e an) p a)
-commit p = MkParser $ \mlen, ts => commitT $ runParser p mlen ts
 
 TParsecU : Type -> Type
 TParsecU = TParsecM () Void
