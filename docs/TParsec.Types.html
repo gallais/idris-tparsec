@@ -131,12 +131,15 @@ an instrumented parser</p>
 <a class="type" title="TParsec.Types.Parameters" href="TParsec.Types.html#TParsec.Types.Parameters">Parameters</a> (<a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit boundvar" title="">e</span>
 <span class="implicit boundvar" title="">a</span>
 <span class="implicit boundvar" title="">m</span>)</span></dt><dd><p>Specialized versions of <code>Parameters</code> and <code>TParsecT</code> for common use cases</p>
-</dd><dt id="TParsec.Types.commit"><span class="name function" title="TParsec.Types.commit">commit</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="function" title="Relation.Indexed.All" href="Relation.Indexed.html#Relation.Indexed.All">All</a> (<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> (<a class="function" title="TParsec.Types.TParsecM" href="TParsec.Types.html#TParsec.Types.TParsecM">TParsecM</a> <span class="implicit boundvar" title="">e</span>
-<span class="implicit boundvar" title="">an</span>)
+</dd><dt id="TParsec.Types.commit"><span class="name function" title="TParsec.Types.commit">commit</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Functor.Functor" href="Prelude.Functor.html#Prelude.Functor.Functor">Functor</a> <span class="implicit boundvar" title="">mn</span> =>
+<a class="function" title="Relation.Indexed.All" href="Relation.Indexed.html#Relation.Indexed.All">All</a> (<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> (<a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit boundvar" title="">e</span>
+<span class="implicit boundvar" title="">an</span>
+<span class="implicit boundvar" title="">mn</span>)
 <span class="implicit boundvar" title="">p</span>
 <span class="implicit boundvar" title="">a</span> <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
-<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> (<a class="function" title="TParsec.Types.TParsecM" href="TParsec.Types.html#TParsec.Types.TParsecM">TParsecM</a> <span class="implicit boundvar" title="">e</span>
-<span class="implicit boundvar" title="">an</span>)
+<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> (<a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit boundvar" title="">e</span>
+<span class="implicit boundvar" title="">an</span>
+<span class="implicit boundvar" title="">mn</span>)
 <span class="implicit boundvar" title="">p</span>
 <span class="implicit boundvar" title="">a</span>)</span></dt><dd></dd><dt id="TParsec.Types.commitT"><span class="name function" title="TParsec.Types.commitT">commitT</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Functor.Functor" href="Prelude.Functor.html#Prelude.Functor.Functor">Functor</a> <span class="implicit boundvar" title="">m</span> =>
 <a class="type" title="TParsec.Types.TParsecT" href="TParsec.Types.html#TParsec.Types.TParsecT">TParsecT</a> <span class="implicit boundvar" title="">e</span>
