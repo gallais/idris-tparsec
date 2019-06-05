@@ -40,8 +40,8 @@ MonadRun Identity where
 interface Pointed (a : Type) where
   point : a
 
-Pointed s => MonadRun (StateT s Identity) where
-  runMonad st = pure $ evalState st point
+(MonadRun m, Pointed s) => MonadRun (StateT s m) where
+  runMonad st = map fst $ runMonad $ runStateT st point
 
 MonadRun m => MonadRun (ResultT e m) where
   runMonad (MkRT r) = runMonad r >>= result (const []) (const []) pure
