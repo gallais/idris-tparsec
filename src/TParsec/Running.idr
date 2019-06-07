@@ -55,9 +55,8 @@ parseMaybe {p} str par =
   let 
     input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str 
     result = runParser par lteRefl input
-    valid  = \s => toMaybe (Size s == Z) (Value s)
-    in
-  traverse valid (runMonad result) >>= head'
+   in
+  head' $ mapMaybe complete $ runMonad result
 
 parseType : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
         String -> (All (Parser mn p a)) -> Type
@@ -70,7 +69,7 @@ parseResult {p} str par =
     input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str 
     st = runParser par lteRefl input
     res = runIdentity $ runResultT $ runStateT (runTPT st) (start, []) 
-    in 
+   in 
   map (Success.Value . fst) res
 
 parseResults : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) => 
@@ -80,5 +79,5 @@ parseResults {p} str par =
     input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str 
     st = runParser par lteRefl input
     res = sequence $ runMonad $ runResultT $ runStateT (runTPT st) (start, []) 
-    in 
-  map (map $ Success.Value . fst) res
+   in
+  map (mapMaybe $ complete . fst) res
