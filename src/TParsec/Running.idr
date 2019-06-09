@@ -59,21 +59,11 @@ parseMaybe {p} str par =
   head' $ mapMaybe complete $ runMonad result
 
 parseType : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
-        String -> (All (Parser mn p a)) -> Type
+            String -> (All (Parser mn p a)) -> Type
 parseType str par = maybe Void Singleton $ parseMaybe str par
 
-parseResult : (Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) => 
-              String -> All (Parser (TParsecM e an) p a) -> Result e a
-parseResult {p} str par =  
-  let 
-    input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str 
-    st = runParser par lteRefl input
-    res = runIdentity $ runResultT $ runStateT (runTPT st) (start, []) 
-   in 
-  map (Success.Value . fst) res
-
 parseResults : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) => 
-              String -> All (Parser (TParsecT e an mn) p a) -> Result e (List a)
+               String -> All (Parser (TParsecT e an mn) p a) -> Result e (List a)
 parseResults {p} str par =  
   let 
     input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str 
@@ -81,3 +71,7 @@ parseResults {p} str par =
     res = sequence $ runMonad $ runResultT $ runStateT (runTPT st) (start, []) 
    in
   map (mapMaybe $ complete . fst) res
+
+parseResult : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) => 
+              String -> All (Parser (TParsecT e an mn) p a) -> Result e (Maybe a)
+parseResult str par = map head' $ parseResults str par
