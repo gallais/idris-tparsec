@@ -16,6 +16,9 @@ record Success (toks : Nat -> Type) (a : Type) (n : Nat) where
   Small     : LT Size n
   Leftovers : toks Size
 
+complete : Success toks a n -> Maybe a
+complete s = toMaybe (Size s == Z) (Value s)
+
 map : (f : a -> b) -> All (Success toks a :-> Success toks b)
 map f (MkSuccess v lt ts) = MkSuccess (f v) lt ts
 

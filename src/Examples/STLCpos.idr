@@ -33,7 +33,7 @@ type =
   chainr1 lt arr
 
 Test : Type
-Test = parseResult "'a -> ('b -> 'c) -> 'd" type = Value (ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d")))
+Test = parseResult "'a -> ('b -> 'c) -> 'd" type = Value $ Just $ ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d"))
 
 test : Test
 test = Refl
@@ -110,14 +110,15 @@ stlc = fix _ $ \rec =>
 
 
 Test2 : Type
-Test2 = parseResult "\\x.(\\y.y:'a->'a) x" (val stlc) = Value $ Lam (MkPosition 0 1) "x" $
-                                                                  Emb (MkPosition 0 3) $
-                                                                    App (MkPosition 0 17)
-                                                                        (Cut (MkPosition 0 8)
-                                                                             (Lam (MkPosition 0 5) "y" $
-                                                                               Emb (MkPosition 0 7) (Var "y"))
-                                                                             (ARR (K "a") (K "a")))
-                                                                        (Emb (MkPosition 0 17) (Var "x"))
+Test2 = parseResult "\\x.(\\y.y:'a->'a) x" (val stlc) = Value $ Just $ 
+                                                        Lam (MkPosition 0 1) "x" $
+                                                          Emb (MkPosition 0 3) $
+                                                            App (MkPosition 0 17)
+                                                                (Cut (MkPosition 0 8)
+                                                                     (Lam (MkPosition 0 5) "y" $
+                                                                       Emb (MkPosition 0 7) (Var "y"))
+                                                                     (ARR (K "a") (K "a")))
+                                                                (Emb (MkPosition 0 17) (Var "x"))
 
 test2 : Test2
 test2 = Refl
@@ -129,33 +130,35 @@ test3 : Test3
 test3 = Refl
 
 Test4 : Type
-Test4 = parseResult "\\g.\\f.\\a.g a (f a)" (val stlc) = Value $ Lam (MkPosition 0 1) "g" $
-                                                                   Lam (MkPosition 0 4) "f" $
-                                                                     Lam (MkPosition 0 7) "a" $
-                                                                       Emb (MkPosition 0 9) $ 
-                                                                         App (MkPosition 0 13)
-                                                                             (App (MkPosition 0 11) 
-                                                                                  (Var "g") 
-                                                                                  (Emb (MkPosition 0 11) (Var "a")))
-                                                                             (Emb (MkPosition 0 14) $ App (MkPosition 0 16) 
-                                                                                                          (Var "f") 
-                                                                                                          (Emb (MkPosition 0 16) (Var "a")))
+Test4 = parseResult "\\g.\\f.\\a.g a (f a)" (val stlc) = Value $ Just $
+                                                         Lam (MkPosition 0 1) "g" $
+                                                           Lam (MkPosition 0 4) "f" $
+                                                             Lam (MkPosition 0 7) "a" $
+                                                               Emb (MkPosition 0 9) $ 
+                                                                 App (MkPosition 0 13)
+                                                                     (App (MkPosition 0 11) 
+                                                                          (Var "g") 
+                                                                          (Emb (MkPosition 0 11) (Var "a")))
+                                                                     (Emb (MkPosition 0 14) $ App (MkPosition 0 16) 
+                                                                                                  (Var "f") 
+                                                                                                  (Emb (MkPosition 0 16) (Var "a")))
 
 test4 : Test4
 test4 = Refl
 
 Test5 : Type
-Test5 = parseResult "\\g.\\f.\\a.(g a) (f a)" (val stlc) = Value $ Lam (MkPosition 0 1) "g" $
-                                                                     Lam (MkPosition 0 4) "f" $
-                                                                       Lam (MkPosition 0 7) "a" $
-                                                                         Emb (MkPosition 0 9) $ 
-                                                                           App (MkPosition 0 15)
-                                                                               (App (MkPosition 0 12)
-                                                                                    (Var "g") 
-                                                                                    (Emb (MkPosition 0 12) (Var "a")))
-                                                                               (Emb (MkPosition 0 16) $ App (MkPosition 0 18) 
-                                                                                                            (Var "f") 
-                                                                                                            (Emb (MkPosition 0 18) (Var "a")))
+Test5 = parseResult "\\g.\\f.\\a.(g a) (f a)" (val stlc) = Value $ Just $ 
+                                                           Lam (MkPosition 0 1) "g" $
+                                                             Lam (MkPosition 0 4) "f" $
+                                                               Lam (MkPosition 0 7) "a" $
+                                                                 Emb (MkPosition 0 9) $ 
+                                                                   App (MkPosition 0 15)
+                                                                       (App (MkPosition 0 12)
+                                                                            (Var "g") 
+                                                                            (Emb (MkPosition 0 12) (Var "a")))
+                                                                       (Emb (MkPosition 0 16) $ App (MkPosition 0 18) 
+                                                                                                    (Var "f") 
+                                                                                                    (Emb (MkPosition 0 18) (Var "a")))
 
 test5 : Test5
 test5 = Refl

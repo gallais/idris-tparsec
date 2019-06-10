@@ -12,7 +12,7 @@ record PosOr (a : Type) where
   runPO : StateT Position (Either Position) a
 
 Parser' : Type -> Nat -> Type
-Parser' = Parser PosOr (MkParameters Char (SizedList Char) (\c => MkPO $ ST $ \pos => Right ((), next c pos)))
+Parser' = Parser PosOr (MkParameters Char (SizedList Char) (\c => MkPO $ ST $ \pos => Right ((), update c pos)))
 
 Functor PosOr where
   map f (MkPO a) = MkPO $ map f a

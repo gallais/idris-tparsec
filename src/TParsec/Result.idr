@@ -25,6 +25,16 @@ Applicative (Result e) where
   _ <*> (SoftFail e) = SoftFail e
   (Value f) <*> (Value a) = Value (f a)
 
+Monad (Result e) where
+  (HardFail e) >>= f = HardFail e
+  (SoftFail e) >>= f = SoftFail e
+  (Value a)    >>= f = f a
+
+(Show a, Show b) => Show (Result a b) where
+  show (HardFail e) = "hard fail: " ++ show e
+  show (SoftFail e) = "soft fail: " ++ show e
+  show (Value a)    = show a
+
 result : (h, s : e -> b) -> (v : a -> b) -> Result e a -> b
 result h _ _ (HardFail e) = h e
 result _ s _ (SoftFail e) = s e

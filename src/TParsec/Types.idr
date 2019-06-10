@@ -117,13 +117,16 @@ withAnnotation a (MkTPT ms) = MkTPT $ do modify (mapSnd (List.(::) a))
                                          pure s
 
 recordChar : Monad m => Char -> TParsecT e a m ()
-recordChar c = MkTPT $ ignore (modify (mapFst (next c)))
+recordChar c = MkTPT $ ignore (modify (mapFst (update c)))
 
 ||| Commiting to a branch makes all the failures in that branch hard failures
 ||| that we cannot recover from
 commitT : Functor m => TParsecT e a m x -> TParsecT e a m x
 commitT (MkTPT m) = MkTPT $ ST $ \pos =>
    MkRT $ map (result HardFail HardFail Value) (runResultT $ runStateT m pos)
+
+commit : Functor mn => All (Parser (TParsecT e an mn) p a :-> Parser (TParsecT e an mn) p a)
+commit p = MkParser $ \mlen, ts => commitT $ runParser p mlen ts
 
 ||| Specialized versions of `Parameters` and `TParsecT` for common use cases
 
@@ -132,9 +135,6 @@ chars = MkParameters Char (SizedList Char) recordChar
 
 TParsecM : (e : Type) -> (an : Type) -> Type -> Type
 TParsecM e an = TParsecT e an Identity
-
-commit : All (Parser (TParsecM e an) p a :-> Parser (TParsecM e an) p a)
-commit p = MkParser $ \mlen, ts => commitT $ runParser p mlen ts
 
 TParsecU : Type -> Type
 TParsecU = TParsecM () Void
