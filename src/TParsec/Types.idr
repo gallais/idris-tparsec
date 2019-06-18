@@ -31,6 +31,9 @@ record Position where
 Show Position where
   show (MkPosition line offset) = show line ++ ":" ++ show offset
 
+Eq Position where
+  (MkPosition l1 o1) == (MkPosition l2 o2) = l1 == l2 && o1 == o2
+
 start : Position
 start = MkPosition 0 0
 

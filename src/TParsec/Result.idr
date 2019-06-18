@@ -35,6 +35,12 @@ Monad (Result e) where
   show (SoftFail e) = "soft fail: " ++ show e
   show (Value a)    = show a
 
+(Eq a, Eq b) => Eq (Result a b) where
+  (HardFail e1) == (HardFail e2) = e1 == e2
+  (SoftFail e1) == (SoftFail e2) = e1 == e2
+  (Value x)     == (Value y)     = x == y
+  _             == _             = False  
+
 result : (h, s : e -> b) -> (v : a -> b) -> Result e a -> b
 result h _ _ (HardFail e) = h e
 result _ s _ (SoftFail e) = s e
