@@ -1,2 +1,7 @@
 *.ibc
+*.ttm
+*.ttc
 *.o
+build/
+target/
+elba.lock

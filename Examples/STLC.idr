@@ -4,8 +4,6 @@ import Data.NEList
 import TParsec
 import TParsec.Running
 
-%default total
-
 -- Introduction
 -------------------------------------------------------------------------------
 

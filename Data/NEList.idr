@@ -2,61 +2,74 @@ module Data.NEList
 
 import Data.Vect
 
-%default total
-%access public export
-
+public export
 record NEList (a : Type) where
   constructor MkNEList
   head : a
   tail : List a
 
+public export
 toList : NEList a -> List a
 toList xxs = head xxs :: tail xxs
 
+public export
 length : NEList a -> Nat
 length = S . length . tail  
 
+public export
 toVect : (nel : NEList a) -> Vect (length nel) a
 toVect (MkNEList h t) = h :: fromList t
 
+public export
 Show a => Show (NEList a) where
-  show = show . toList
+  show = show . NEList.toList
 
+public export
 fromList : List a -> Maybe (NEList a)
 fromList []        = Nothing
 fromList (x :: xs) = Just (MkNEList x xs)
 
+public export
 consopt : a -> Maybe (NEList a) -> NEList a
-consopt x mxs = MkNEList x (lowerMaybe (map toList mxs))
+consopt x mxs = MkNEList x (lowerMaybe (map NEList.toList mxs))
 
+public export
 cons : a -> NEList a -> NEList a
-cons x xxs = MkNEList x (toList xxs)
+cons x xxs = MkNEList x (NEList.toList xxs)
 
+public export
 singleton : a -> NEList a
 singleton x = MkNEList x []
 
+public export
 Foldable NEList where
   foldl c n xxs = foldl c n (NEList.toList xxs)
   foldr c n xxs = foldr c n (NEList.toList xxs)
 
+public export
 foldl1 : (a -> a -> a) -> NEList a -> a
 foldl1 c (MkNEList x xs) = foldl c x xs
 
+public export
 foldr1 : (a -> a -> a) -> NEList a -> a
-foldr1 c (MkNEList x xs) = go x xs where
-
+foldr1 c (MkNEList x xs) = go x xs 
+  where
   go : a -> List a -> a
   go x []        = x
   go x (y :: ys) = c x (go y ys)
 
+public export
 foldrf : (a -> b -> b) -> (a -> b) -> NEList a -> b
 foldrf c s (MkNEList x xs) = go x xs 
   where
+  go : a -> List a -> b
   go x [] = s x
   go x (y :: ys) = c x (go y ys)
 
+public export
 Functor NEList where
-  map f (MkNEList x xs) = MkNEList (f x) (Functor.map f xs)
+  map f (MkNEList x xs) = MkNEList (f x) (map f xs)
 
+public export
 Semigroup (NEList a) where
   (MkNEList x xs) <+> ys = MkNEList x (xs ++ NEList.toList ys)

@@ -3,8 +3,6 @@ module Examples.Parentheses
 import TParsec
 import TParsec.Running
 
-%default total
-
 -- Well-parenthesised string
 data PAR = LPAR | RPAR | LCUR | RCUR | LSQU | RSQU
 

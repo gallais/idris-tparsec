@@ -1,14 +1,14 @@
 package TParsec
 
-sourcedir = src
-modules = Relation.Indexed
+modules = Util
+
+        , Relation.Indexed
         , Relation.Subset
         , Induction.Nat
         
         , Data.Inspect
         , Data.DList
         , Data.NEList
-        , Data.SizedDict
 
         , TParsec
         , TParsec.Success
@@ -18,5 +18,3 @@ modules = Relation.Indexed
         , TParsec.Combinators.Chars
         , TParsec.Combinators.Numbers
         , TParsec.Running
-
-opts = "--total"

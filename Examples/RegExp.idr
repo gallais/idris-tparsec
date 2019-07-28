@@ -3,8 +3,6 @@ module Examples.RegExp
 import Data.NEList
 import TParsec
 import TParsec.Running
-
-%default total
     
 data Range : Type where
   Single : Char -> Range

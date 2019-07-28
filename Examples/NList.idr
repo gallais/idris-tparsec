@@ -4,8 +4,6 @@ import Data.DList
 import TParsec
 import TParsec.Running
 
-%default total
-
 NList : Type -> Nat -> Type
 NList a  Z    = a
 NList a (S n) = List (NList a n)

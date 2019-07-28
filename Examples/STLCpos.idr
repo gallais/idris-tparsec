@@ -5,8 +5,6 @@ import Data.NEList
 import TParsec
 import TParsec.Running
 
-%default total
-
 data TYPE : Type where
   K   : String -> TYPE
   ARR : TYPE -> TYPE -> TYPE

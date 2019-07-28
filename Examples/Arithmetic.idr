@@ -16,8 +16,6 @@ module Examples.Arithmetic
 import TParsec
 import TParsec.Running
 
-%default total
-
 -- Here we start by introducing a datatype which makes it painfully
 -- clear that we have left-nested expressions and that they are
 -- stratified into Expr, Term, and Factor.
@@ -58,9 +56,9 @@ mutual
 
 record Language (mn : Type -> Type) (p : Parameters mn) (n : Nat) where
   constructor MkLanguage
-  _expr   : Parser mn p Expr n
-  _term   : Parser mn p Term n
-  _factor : Parser mn p Factor n
+  lexpr   : Parser mn p Expr n
+  lterm   : Parser mn p Term n
+  lfactor : Parser mn p Factor n
 
 -- We are now ready to build a `Language toks mn n` for all `n` by recursion.
 -- We have a few constraints which arise directly from the combinators we are
@@ -71,7 +69,7 @@ record Language (mn : Type -> Type) (p : Parameters mn) (n : Nat) where
 -- of the input string is a specific `Char` e.g. '+'.
 
 language : (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p), Subset Char (Tok p)) => All (Language mn p)
-language {p} {mn} =
+language =
 
   -- The value of type `Language` is build as a fixpoint.
   -- We can use the variable `rec` bound here to perform a recursive call.
@@ -97,7 +95,7 @@ language {p} {mn} =
   -- * `decimalNat` is a parser for decimal numbers defined in `TParsec.Combinators.Numbers`
 
   -- `factor` recognizes either an `Expr` in between parentheses or a natural number
-    factor = map FEmb (parens (Nat.map {a = Language _ _} _expr rec))
+    factor = map FEmb (parens (Nat.map {a = Language mn p} lexpr rec))
              `alt`
              map FLit decimalNat
 
@@ -110,12 +108,12 @@ language {p} {mn} =
   -- we write the parser for `Term` as:
   -- * a left-nested list of `mulop` (i.e. * and /) and `factor`
   -- * starting with a `factor`.
-    term   = hchainl (map TEmb factor) mulop factor
+    term   = hchainl (map TEmb factor) (box mulop) (box factor)
 
   -- Similarly from `E := T | E + T | E - T` we derive that `Expr` is
   -- * a left-nested list of `addop` (i.e. + and -) and `term`
   -- * starting with a `term`
-    expr   = hchainl (map EEmb term) addop term 
+    expr   = hchainl (map EEmb term) (box addop) (box term)
 
   -- Going back to the very beginning: we are building a `Language toks mn n`
   -- by recursion. Which means we need to return such a `Language` as a result.
@@ -135,5 +133,5 @@ language {p} {mn} =
 -- `_expr Arithmetic.language` on `"1+3"` produces the abstract syntax tree
 -- `EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3))`. Which it does.
 
-test : parseType {mn=TParsecU} {p=Types.chars} "1+3" (_expr Arithmetic.language)
-test = MkSingleton (EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3)))
+--test : parseType {mn=TParsecU} {p=Types.chars} "1+3" (lexpr Arithmetic.language)
+--test = MkSingleton (EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3)))
