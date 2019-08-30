@@ -18,12 +18,12 @@ toks = [ ("let", LET)
 
 -- Breaking characters: spaces (thrown away) and parentheses (kept)
 
-breaking : Char -> (b ** if b then Maybe TOK else ())
-breaking c = if isSpace c then (True ** Nothing) else parens c where
-  parens : Char -> (b ** if b then Maybe TOK else ())
-  parens '(' = (True ** Just LPAR)
-  parens ')' = (True ** Just RPAR)
-  parens _   = (False ** ())
+breaking : Char -> Maybe (Maybe TOK)
+breaking c = if isSpace c then Just Nothing else parens c where
+  parens : Char -> Maybe (Maybe TOK)
+  parens '(' = Just (Just LPAR)
+  parens ')' = Just (Just RPAR)
+  parens _   = Nothing
 
 Params : LexParameters
 Params = MkLexParameters TOK toks breaking ID

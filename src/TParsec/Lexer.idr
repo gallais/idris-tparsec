@@ -18,7 +18,7 @@ record LexParameters where
 -- Some characters are special: they are separators, breaking a string into
 -- a list of tokens. Some are associated to a token value (e.g. parentheses)
 -- others are not (e.g. space)
-  breaking : Char -> (b ** if b then Maybe Tok else ())
+  breaking : Char -> Maybe (Maybe Tok)
 -- Finally, strings which are not decoded as keywords are coerced using a
 -- function to token values.
   default  : String -> Tok
@@ -68,17 +68,17 @@ mutual
   -- At least one character
   loop {p} acc toks pos (c :: cs) = case breaking p c of
     -- if we are supposed to break on this character, we do
-    (True ** m)  => push acc $ break pos m $ assert_total $ start (Position.update c pos) cs
+    Just m  => push acc $ break pos m $ assert_total $ start (Position.update c pos) cs
     -- otherwise we see whether it leads to a recognized keyword
-    (False ** _) => let toks' = read c toks in
-                    case value toks' of
+    Nothing => let toks' = read c toks in
+               case value toks' of
     -- if so we can forget about the current accumulator and restart
     -- the tokenizer on the rest of the input
-                      Just tok => (fst acc, tok) :: (assert_total $ start (Position.update c pos) cs)
+                 Just tok => (fst acc, tok) :: (assert_total $ start (Position.update c pos) cs)
     -- otherwise we record the character we read in the accumulator,
     -- compute the derivative of the map of keyword candidates and keep
     -- going with the rest of the input
-                      Nothing  => loop (mapSnd (c::) acc) toks' (Position.update c pos) cs
+                 Nothing  => loop (mapSnd (c::) acc) toks' (Position.update c pos) cs
 
 tokenize : String -> LexResult p
 tokenize = start Position.start . unpack
