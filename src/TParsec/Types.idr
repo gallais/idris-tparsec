@@ -77,13 +77,16 @@ getAnnotations : Monad m => TParsecT e a m (List a)
 getAnnotations = MkTPT $ map Basics.snd get
 
 withAnnotation : Monad m => a -> TParsecT e a m x -> TParsecT e a m x
-withAnnotation a (MkTPT ms) = MkTPT $ do modify (mapSnd (List.(::) a))
+withAnnotation a (MkTPT ms) = MkTPT $ do modify $ Functor.map (a ::)
                                          s <- ms
-                                         modify (mapSnd (List.drop 1))
+                                         modify $ Functor.map (List.drop 1)
                                          pure s
 
 recordChar : Monad m => Char -> TParsecT e a m ()
 recordChar c = MkTPT $ ignore (modify (mapFst (update c)))
+  where
+  mapFst : (x -> y) -> (x, z) -> (y, z)
+  mapFst f (x, z) = (f x, z)
 
 ||| Commiting to a branch makes all the failures in that branch hard failures
 ||| that we cannot recover from
