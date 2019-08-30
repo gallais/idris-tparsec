@@ -1,20 +1,20 @@
 module Examples.Lexing
 
-import Data.NEList
 import TParsec.Lexer
 
 %default total
+%access public export
 
 -- A small set of keywords for a language with expressions of the form
 -- `let x = e in b`.
 
 data TOK = LET | EQ | IN | LPAR | RPAR | ID String
 
-toks : NEList (String, TOK)
-toks = MkNEList ("let", LET)
-              [ ("="  , EQ)
-              , ("in" , IN)
-              ]
+toks : List (String, TOK)
+toks = [ ("let", LET)
+       , ("="  , EQ)
+       , ("in" , IN)
+       ]
 
 -- Breaking characters: spaces (thrown away) and parentheses (kept)
 
@@ -25,8 +25,8 @@ breaking c = if isSpace c then (True ** Nothing) else parens c where
   parens ')' = (True ** Just RPAR)
   parens _   = (False ** ())
 
-Params : LexerParameters
-Params = MkLexerParameters TOK toks breaking ID
+Params : LexParameters
+Params = MkLexParameters TOK toks breaking ID
 
 TestTy : Type
 TestTy = tokenize {p=Params} "fix f x = let b = fix f in (f b) x" =
