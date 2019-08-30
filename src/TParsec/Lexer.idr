@@ -84,4 +84,3 @@ mutual
 
 tokenize : {p : LexerParameters} -> String -> LexResult {p}
 tokenize = start Position.start . unpack    
-  
