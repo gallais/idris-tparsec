@@ -9,14 +9,18 @@ modules = Relation.Indexed
         , Data.DList
         , Data.NEList
         , Data.SizedDict
+        , Data.These
+        , Data.Trie
 
         , TParsec
         , TParsec.Success
         , TParsec.Result
+        , TParsec.Position
+        , TParsec.Lexer
         , TParsec.Types
         , TParsec.Combinators
         , TParsec.Combinators.Chars
         , TParsec.Combinators.Numbers
         , TParsec.Running
 
-opts = "--total"
+opts = "--total -p contrib"
