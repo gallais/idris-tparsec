@@ -18,14 +18,14 @@ toks = MkNEList ("let", LET)
 
 -- Breaking characters: spaces (thrown away) and parentheses (kept)
 
-breaking : Char -> (b **  if b then Maybe TOK else ())
+breaking : Char -> (b ** if b then Maybe TOK else ())
 breaking c = if isSpace c then (True ** Nothing) else parens c where
-  parens : Char -> (b **  if b then Maybe TOK else ())
+  parens : Char -> (b ** if b then Maybe TOK else ())
   parens '(' = (True ** Just LPAR)
   parens ')' = (True ** Just RPAR)
   parens _   = (False ** ())
 
-Params : LexerParameters 
+Params : LexerParameters
 Params = MkLexerParameters TOK toks breaking ID
 
 TestTy : Type
