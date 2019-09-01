@@ -7,6 +7,11 @@ import TParsec.Position
 %default total
 %access public export
 
+-- Some characters are special: they are separators, breaking a string into
+-- a list of tokens. Furthermore, some of the separators are associated to a
+-- token value (e.g. parentheses), while others are not (e.g. spaces).
+data MaybeBreaking tok = Breaking (Maybe tok) | NotBreaking
+
 record LexParameters where
   constructor MkLexParameters
 -- Our lexer is parametrised over the type of tokens
@@ -15,10 +20,8 @@ record LexParameters where
 -- * keywords (as Strings)
 -- * keywords (as token values)
   keywords : List (String, Tok)
--- Some characters are special: they are separators, breaking a string into
--- a list of tokens. Some are associated to a token value (e.g. parentheses)
--- others are not (e.g. space)
-  breaking : Char -> Maybe (Maybe Tok)
+-- We also need to be able to determine which characters are breaking.
+  breaking : Char -> MaybeBreaking Tok
 -- Finally, strings which are not decoded as keywords are coerced using a
 -- function to token values.
   default  : String -> Tok
@@ -68,9 +71,9 @@ mutual
   -- At least one character
   loop {p} acc toks pos (c :: cs) = case breaking p c of
     -- if we are supposed to break on this character, we do
-    Just m  => push acc $ break pos m $ assert_total $ start (Position.update c pos) cs
+    Breaking m  => push acc $ break pos m $ assert_total $ start (Position.update c pos) cs
     -- otherwise we see whether it leads to a recognized keyword
-    Nothing => let toks' = read c toks in
+    NotBreaking => let toks' = read c toks in
                case value toks' of
     -- if so we can forget about the current accumulator and restart
     -- the tokenizer on the rest of the input
