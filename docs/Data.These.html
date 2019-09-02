@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: Data.These</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: Data.These<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>Data.These</h1><dl class="decls"><dt id="Data.These.These"><span class="word">data&nbsp;</span><span class="name type" title="Data.These.These">These</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="Type">Type</span> ->
+<span class="type" title="Type">Type</span> ->
+<span class="type" title="Type">Type</span></span></dt><dd><dl class="decls"><dt id="Data.These.This"><span class="name constructor" title="Data.These.This">This</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="implicit boundvar" title="">a</span> ->
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Data.These.That"><span class="name constructor" title="Data.These.That">That</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Data.These.Both"><span class="name constructor" title="Data.These.Both">Both</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd></dl></dd><dt id="Data.These.bifold"><span class="name function" title="Data.These.bifold">bifold</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Algebra.Monoid" href="Prelude.Algebra.html#Prelude.Algebra.Monoid">Monoid</a> <span class="implicit boundvar" title="">m</span> =>
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">m</span>
+<span class="implicit boundvar" title="">m</span> ->
+<span class="implicit boundvar" title="">m</span></span></dt><dd></dd><dt id="Data.These.bimap"><span class="name function" title="Data.These.bimap">bimap</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">f</span> : <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span>) ->
+(<span class="boundvar" title="">g</span> : <span class="implicit boundvar" title="">c</span> ->
+<span class="implicit boundvar" title="">d</span>) ->
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">c</span> ->
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">b</span>
+<span class="implicit boundvar" title="">d</span></span></dt><dd></dd><dt id="Data.These.bitraverse"><span class="name function" title="Data.These.bitraverse">bitraverse</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Applicative.Applicative" href="Prelude.Applicative.html#Prelude.Applicative.Applicative">Applicative</a> <span class="implicit boundvar" title="">f</span> =>
+(<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">f</span> <span class="implicit boundvar" title="">c</span>) ->
+(<span class="implicit boundvar" title="">b</span> ->
+<span class="implicit boundvar" title="">f</span> <span class="implicit boundvar" title="">d</span>) ->
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<span class="implicit boundvar" title="">f</span> (<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">c</span>
+<span class="implicit boundvar" title="">d</span>)</span></dt><dd></dd><dt id="Data.These.fromEither"><span class="name function" title="Data.These.fromEither">fromEither</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Either.Either" href="Prelude.Either.html#Prelude.Either.Either">Either</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Data.These.fromThat"><span class="name function" title="Data.These.fromThat">fromThat</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Prelude.Maybe.Maybe" href="Prelude.Maybe.html#Prelude.Maybe.Maybe">Maybe</a> <span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Data.These.fromThis"><span class="name function" title="Data.These.fromThis">fromThis</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Prelude.Maybe.Maybe" href="Prelude.Maybe.html#Prelude.Maybe.Maybe">Maybe</a> <span class="implicit boundvar" title="">a</span></span></dt><dd></dd><dt id="Data.These.mapFst"><span class="name function" title="Data.These.mapFst">mapFst</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">f</span> : <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span>) ->
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">c</span> ->
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">b</span>
+<span class="implicit boundvar" title="">c</span></span></dt><dd></dd><dt id="Data.These.these"><span class="name function" title="Data.These.these">these</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">c</span>) ->
+(<span class="implicit boundvar" title="">b</span> ->
+<span class="implicit boundvar" title="">c</span>) ->
+(<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span> ->
+<span class="implicit boundvar" title="">c</span>) ->
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<span class="implicit boundvar" title="">c</span></span></dt><dd></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>

@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>IdrisDoc: Data.Trie</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: Data.Trie<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>Data.Trie</h1><dl class="decls"><dt id="Data.Trie.MkTrie"><span class="name constructor" title="Data.Trie.MkTrie">MkTrie</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">node</span> : <a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">b</span>
+(<a class="type" title="Data.SortedMap.SortedMap" href="Data.SortedMap.html#Data.SortedMap.SortedMap">SortedMap</a> <span class="implicit boundvar" title="">a</span>
+(<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span>))) ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Data.Trie.Trie"><span class="word">record&nbsp;</span><span class="name type" title="Data.Trie.Trie">Trie</span><span class="type">&nbsp;a b</span></dt><dd><dl><dt>a</dt><dd>&nbsp;</dd><dt>b</dt><dd>&nbsp;</dd></dl><dl class="decls"><dt id="Data.Trie.MkTrie"><span class="name constructor" title="Data.Trie.MkTrie">MkTrie</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">node</span> : <a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">b</span>
+(<a class="type" title="Data.SortedMap.SortedMap" href="Data.SortedMap.html#Data.SortedMap.SortedMap">SortedMap</a> <span class="implicit boundvar" title="">a</span>
+(<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span>))) ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd></dl><dl class="decls"><dt id="Data.Trie.Trie.node"><span class="name function" title="Data.Trie.Trie.node">node</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span>) ->
+<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">b</span>
+(<a class="type" title="Data.SortedMap.SortedMap" href="Data.SortedMap.html#Data.SortedMap.SortedMap">SortedMap</a> <span class="implicit boundvar" title="">a</span>
+(<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span>))</span></dt><dd></dd></dl></dd><dt id="Data.Trie.empty"><span class="name function" title="Data.Trie.empty">empty</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Interfaces.Ord" href="Prelude.Interfaces.html#Prelude.Interfaces.Ord">Ord</a> <span class="implicit boundvar" title="">a</span> =>
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Data.Trie.foldWithKeysM"><span class="name function" title="Data.Trie.foldWithKeysM">foldWithKeysM</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Interfaces.Ord" href="Prelude.Interfaces.html#Prelude.Interfaces.Ord">Ord</a> <span class="implicit boundvar" title="">a</span> =>
+<a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">m</span> =>
+<a class="type" title="Prelude.Algebra.Monoid" href="Prelude.Algebra.html#Prelude.Algebra.Monoid">Monoid</a> <span class="implicit boundvar" title="">c</span> =>
+(<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">c</span>) ->
+(<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span> ->
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">c</span>) ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<span class="implicit boundvar" title="">m</span> <span class="implicit boundvar" title="">c</span></span></dt><dd></dd><dt id="Data.Trie.fromList"><span class="name function" title="Data.Trie.fromList">fromList</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Interfaces.Ord" href="Prelude.Interfaces.html#Prelude.Interfaces.Ord">Ord</a> <span class="implicit boundvar" title="">a</span> =>
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">(</a><a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">a</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">,</a>
+<span class="implicit boundvar" title="">b</span><a class="type" title="Builtins.Pair" href="Builtins.html#Builtins.Pair">)</a> ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Data.Trie.insert"><span class="name function" title="Data.Trie.insert">insert</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Interfaces.Ord" href="Prelude.Interfaces.html#Prelude.Interfaces.Ord">Ord</a> <span class="implicit boundvar" title="">a</span> =>
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Data.Trie.insertWith"><span class="name function" title="Data.Trie.insertWith">insertWith</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Interfaces.Ord" href="Prelude.Interfaces.html#Prelude.Interfaces.Ord">Ord</a> <span class="implicit boundvar" title="">a</span> =>
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">a</span> ->
+(<a class="type" title="Prelude.Maybe.Maybe" href="Prelude.Maybe.html#Prelude.Maybe.Maybe">Maybe</a> <span class="implicit boundvar" title="">b</span> ->
+<span class="implicit boundvar" title="">b</span>) ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Data.Trie.lookup"><span class="name function" title="Data.Trie.lookup">lookup</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Interfaces.Ord" href="Prelude.Interfaces.html#Prelude.Interfaces.Ord">Ord</a> <span class="implicit boundvar" title="">a</span> =>
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">a</span> ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Prelude.Maybe.Maybe" href="Prelude.Maybe.html#Prelude.Maybe.Maybe">Maybe</a> (<a class="type" title="Data.These.These" href="Data.These.html#Data.These.These">These</a> <span class="implicit boundvar" title="">b</span>
+(<a class="type" title="Data.SortedMap.SortedMap" href="Data.SortedMap.html#Data.SortedMap.SortedMap">SortedMap</a> <span class="implicit boundvar" title="">a</span>
+(<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span>)))</span></dt><dd></dd><dt id="Data.Trie.lookupTrie"><span class="name function" title="Data.Trie.lookupTrie">lookupTrie</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Interfaces.Ord" href="Prelude.Interfaces.html#Prelude.Interfaces.Ord">Ord</a> <span class="implicit boundvar" title="">a</span> =>
+<span class="implicit boundvar" title="">a</span> ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Prelude.Maybe.Maybe" href="Prelude.Maybe.html#Prelude.Maybe.Maybe">Maybe</a> (<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span>)</span></dt><dd></dd><dt id="Data.Trie.lookupTries"><span class="name function" title="Data.Trie.lookupTries">lookupTries</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Interfaces.Ord" href="Prelude.Interfaces.html#Prelude.Interfaces.Ord">Ord</a> <span class="implicit boundvar" title="">a</span> =>
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">a</span> ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Prelude.Maybe.Maybe" href="Prelude.Maybe.html#Prelude.Maybe.Maybe">Maybe</a> (<a class="type" title="Data.SortedMap.SortedMap" href="Data.SortedMap.html#Data.SortedMap.SortedMap">SortedMap</a> <span class="implicit boundvar" title="">a</span>
+(<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span>))</span></dt><dd></dd><dt id="Data.Trie.lookupValue"><span class="name function" title="Data.Trie.lookupValue">lookupValue</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Interfaces.Ord" href="Prelude.Interfaces.html#Prelude.Interfaces.Ord">Ord</a> <span class="implicit boundvar" title="">a</span> =>
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">a</span> ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Prelude.Maybe.Maybe" href="Prelude.Maybe.html#Prelude.Maybe.Maybe">Maybe</a> <span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Data.Trie.mapSingleton"><span class="name function" title="Data.Trie.mapSingleton">mapSingleton</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Interfaces.Ord" href="Prelude.Interfaces.html#Prelude.Interfaces.Ord">Ord</a> <span class="implicit boundvar" title="">a</span> =>
+<span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Data.SortedMap.SortedMap" href="Data.SortedMap.html#Data.SortedMap.SortedMap">SortedMap</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd><dt id="Data.Trie.singleton"><span class="name function" title="Data.Trie.singleton">singleton</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Interfaces.Ord" href="Prelude.Interfaces.html#Prelude.Interfaces.Ord">Ord</a> <span class="implicit boundvar" title="">a</span> =>
+<a class="type" title="Prelude.List.List" href="Prelude.List.html#Prelude.List.List">List</a> <span class="implicit boundvar" title="">a</span> ->
+<span class="implicit boundvar" title="">b</span> ->
+<a class="type" title="Data.Trie.Trie" href="Data.Trie.html#Data.Trie.Trie">Trie</a> <span class="implicit boundvar" title="">a</span>
+<span class="implicit boundvar" title="">b</span></span></dt><dd></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>
