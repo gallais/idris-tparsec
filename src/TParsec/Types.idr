@@ -12,6 +12,7 @@ import TParsec.Position
 
 %default total
 %access public export
+%hide Stream.(::)
 
 ||| A parser is parametrised by some types and type constructors.
 ||| They are grouped in a `Parameters` record.
