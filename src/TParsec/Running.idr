@@ -2,6 +2,7 @@ module TParsec.Running
 
 import Relation.Indexed
 import Data.Inspect
+import TParsec.Position
 import TParsec.Success
 import TParsec.Result
 import TParsec.Types
