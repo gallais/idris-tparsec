@@ -25,5 +25,5 @@ mods = ["Relation.Indexed"
        ,"TParsec.Running"
        ]
 
-opts = ["--total"]
+idris_opts = ["--total"]
 
