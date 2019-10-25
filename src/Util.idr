@@ -18,10 +18,6 @@ Functor (Pair a) where
   map f (x, y) = (x, f y)
 
 public export
-mapFst : (p -> r) -> (p, q) -> (r, q)
-mapFst f (x, y) = (f x, y)
-
-public export
 choice : (Foldable t, Alternative f) => t (f a) -> f a
 choice = foldr (<|>) empty
 

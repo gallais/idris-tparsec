@@ -1,5 +1,7 @@
 package TParsec
 
+sourcedir = "src"
+
 modules = Util
 
         , Relation.Indexed
@@ -9,14 +11,17 @@ modules = Util
         , Data.Inspect
         , Data.DList
         , Data.NEList
+        , Data.These
+--        , Data.Trie
+        , Data.Tuple
 
         , TParsec
         , TParsec.Success
         , TParsec.Result
+        , TParsec.Position
+--        , TParsec.Lexer
         , TParsec.Types
         , TParsec.Combinators
         , TParsec.Combinators.Chars
         , TParsec.Combinators.Numbers
         , TParsec.Running
-
-sourcedir = "src"
