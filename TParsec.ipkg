@@ -5,7 +5,7 @@ modules = Util
         , Relation.Indexed
         , Relation.Subset
         , Induction.Nat
-        
+
         , Data.Inspect
         , Data.DList
         , Data.NEList
@@ -18,3 +18,5 @@ modules = Util
         , TParsec.Combinators.Chars
         , TParsec.Combinators.Numbers
         , TParsec.Running
+
+sourcedir = "src"
