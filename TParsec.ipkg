@@ -4,13 +4,14 @@ sourcedir = src
 modules = Relation.Indexed
         , Relation.Subset
         , Induction.Nat
-        
+
         , Data.Inspect
         , Data.DList
         , Data.NEList
         , Data.SizedDict
         , Data.These
         , Data.Trie
+        , Data.Tuple
 
         , TParsec
         , TParsec.Success
