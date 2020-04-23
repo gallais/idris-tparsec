@@ -16,9 +16,15 @@ char : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks
        Char -> All (Parser mn p (Tok p))
 char = exact . into
 
-anyCharBut : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
-          Char -> All (Parser mn p (Tok p))
+anyCharBut : ( Alternative mn, Monad mn
+             , Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)
+             ) => Char -> All (Parser mn p (Tok p))
 anyCharBut = anyTokenBut . into
+
+noneOfChars : ( Alternative mn, Monad mn
+              , Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)
+              ) => List Char -> All (Parser mn p (Tok p))
+noneOfChars = noneOf . map into
 
 string : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
          (t : String) -> {auto pr : NonEmpty (unpack t)} ->
