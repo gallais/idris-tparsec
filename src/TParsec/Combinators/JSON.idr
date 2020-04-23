@@ -38,7 +38,9 @@ jsonArray
 jsonArray rec
   = flip alt (cmap [] $ string "[]")
   $ map (NEList.toList . uncurry consopt)
-  $ andopt (rand (char '[') rec) (box $ nelist (rand (char ',') rec))
+  $ andopt (rand (char '[') rec) $ box
+  $ land (nelist (rand (char ',') rec)) $ box
+  $ char ']'
 -- NB: it is theoretically possible to parse the opening bracket first
 -- and then optionally parse a non-empty list of JSON values before
 -- parsing the closing bracket.
@@ -63,6 +65,5 @@ json = fix (Parser _ _ JSON) $ \ rec => roptand spaces $ alts
 
 {-
    | JNumber Double
-   | JArray (List JSON)
    | JObject (List (String, JSON))
 -}
