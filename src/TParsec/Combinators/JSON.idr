@@ -8,6 +8,7 @@ import Induction.Nat as Box
 import TParsec.Types
 import TParsec.Combinators
 import TParsec.Combinators.Chars
+import TParsec.Combinators.Numbers
 import Language.JSON.Data
 
 %default total
@@ -75,11 +76,11 @@ json
     , Inspect (Toks p) (Tok p), Eq (Tok p)
     , Subset Char (Tok p), Subset (Tok p) Char
     ) => All (Parser mn p JSON)
-json = fix (Parser _ _ JSON) $ \ rec => roptand spaces $ alts
+json {mn} {p} = fix (Parser mn p JSON) $ \ rec => roptand spaces $ alts
   [ cmap JNull            (string "null")
   , cmap (JBoolean True)  (string "true")
   , cmap (JBoolean False) (string "false")
-  , ?number
+  , map  JNumber          decimalDouble
   , map  JString          stringLiteral
   , map  JArray           (jsonArray rec)
   , ?object

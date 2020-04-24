@@ -10,21 +10,46 @@ import TParsec.Combinators
 %default total
 %access public export
 
-decimalDigit : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
-               All (Parser mn p Nat)
+decimalDigit
+  : ( Alternative mn, Monad mn
+    , Subset Char (Tok p)
+    , Eq (Tok p), Inspect (Toks p) (Tok p)
+    ) => All (Parser mn p Nat)
 decimalDigit =
   alts $ map (uncurry (\ v, c => cmap v $ exact $ into c))
        [ (0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4')
        , (5, '5'), (6, '6'), (7, '7'), (8, '8'), (9, '9') ]
 
-decimalNat : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
-             All (Parser mn p Nat)
-decimalNat =
-  let convert = foldl (\ih, d => 10 * ih + d) 0 in
-  Combinators.map convert (nelist decimalDigit)
+natFromDigits : NEList Nat -> Nat
+natFromDigits = foldl (\ih, d => 10 * ih + d) 0
 
-decimalInteger : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
-                 All (Parser mn p Integer)
+decimalNat
+  : ( Alternative mn, Monad mn
+    , Subset Char (Tok p)
+    , Eq (Tok p), Inspect (Toks p) (Tok p)
+    ) => All (Parser mn p Nat)
+decimalNat = map natFromDigits (nelist decimalDigit)
+
+decimalInteger
+  : ( Alternative mn, Monad mn
+    , Subset Char (Tok p)
+    , Eq (Tok p), Inspect (Toks p) (Tok p)
+    ) => All (Parser mn p Integer)
 decimalInteger {p} =
   let convert = \s, v => maybe {a=Tok p} id (\ _ => negate) s (toIntegerNat v) in
   Combinators.map (uncurry convert) (optand (exact $ into '-') decimalNat)
+
+decimalDouble
+  : ( Alternative mn, Monad mn
+    , Subset Char (Tok p)
+    , Eq (Tok p), Inspect (Toks p) (Tok p)
+    ) => All (Parser mn p Double)
+decimalDouble =
+  let fromNat    = the (Nat -> Double) (fromInteger . cast) in
+  let fractional = rand (exact $ into '.') (box $ nelist decimalDigit) in
+  let fromFrac   = \ ds => fromNat (natFromDigits ds) / pow 10 (length ds) in
+  let enotation  = rand (exact $ into 'E') (box $ decimalNat) in
+  let rawdouble  = andopt (andopt decimalInteger fractional) enotation in
+  let convert    = \ ((int, mfrac), men) => (fromInteger int + maybe 0 fromFrac mfrac)
+                                            * maybe 1 (pow 10) men
+  in map convert rawdouble

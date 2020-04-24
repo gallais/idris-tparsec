@@ -66,14 +66,22 @@ alpha : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Tok
 alpha = lowerAlpha `alt` upperAlpha
 
 -- TODO define Bijection?
-alphas : (Alternative mn, Monad mn, Subset Char (Tok p), Subset (Tok p) Char, Eq (Tok p), Inspect (Toks p) (Tok p)) =>  
-         All (Parser mn p String)
+alphas
+  : ( Alternative mn, Monad mn
+    , Subset Char (Tok p), Subset (Tok p) Char
+    , Eq (Tok p), Inspect (Toks p) (Tok p)
+    ) => All (Parser mn p String)
 alphas = map (pack . map into . NEList.toList) (nelist alpha)
 
-num : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
-      All (Parser mn p Nat)
+num : ( Alternative mn, Monad mn
+      , Subset Char (Tok p)
+      , Eq (Tok p), Inspect (Toks p) (Tok p)
+      ) => All (Parser mn p Nat)
 num = decimalDigit
 
-alphanum : (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
-           All (Parser mn p (Either (Tok p) Nat))
+alphanum
+   : ( Alternative mn, Monad mn
+     , Subset Char (Tok p)
+     , Eq (Tok p), Inspect (Toks p) (Tok p)
+     ) => All (Parser mn p (Either (Tok p) Nat))
 alphanum = sum alpha num
