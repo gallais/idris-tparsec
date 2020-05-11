@@ -20,6 +20,19 @@ implicit
 box : Parser mn p a n -> Box (Parser mn p a) n
 box = lteClose lteLower
 
+
+lift2 : All (Parser mn p a :-> Parser mn p b :-> Parser mn p c) ->
+        All (Box (Parser mn p a) :-> Box (Parser mn p b) :-> Box (Parser mn p c))
+lift2 = map2
+
+lift2l : All (Parser mn p a :-> Parser mn p b :-> Parser mn p c) ->
+         All (Box (Parser mn p a) :-> Parser mn p b :-> Box (Parser mn p c))
+lift2l f a b = lift2 f a (box b)
+
+lift2r : All (Parser mn p a :-> Parser mn p b :-> Parser mn p c) ->
+         All (Parser mn p a :-> Box (Parser mn p b) :-> Box (Parser mn p c))
+lift2r f a b = lift2 f (box a) b
+
 ||| Parses any token.
 |||
 ||| Assuming the token we are trying to parse consumes a non-empty prefix

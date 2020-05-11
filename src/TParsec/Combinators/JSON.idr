@@ -13,6 +13,56 @@ import Language.JSON.Data
 
 %default total
 
+--- We follow the following RFC:
+-- https://tools.ietf.org/html/rfc7158
+
+-- In this parser we assume that when we call a subparser all of the whitespace
+-- before the potential token has been consumed already. That means that we should
+-- systematically consume spaces after the tokens we have happily recognised.
+
+-- Structural characters
+
+beginArray
+  : ( Monad mn, Alternative mn
+    , Inspect (Toks p) (Tok p), Eq (Tok p)
+    , Subset Char (Tok p)
+    ) => All (Parser mn p ())
+beginArray = cmap () $ andopt (char '[') spaces
+
+beginObject
+  : ( Monad mn, Alternative mn
+    , Inspect (Toks p) (Tok p), Eq (Tok p)
+    , Subset Char (Tok p)
+    ) => All (Parser mn p ())
+beginObject = cmap () $ andopt (char '{') spaces
+
+endArray
+  : ( Monad mn, Alternative mn
+    , Inspect (Toks p) (Tok p), Eq (Tok p)
+    , Subset Char (Tok p)
+    ) => All (Parser mn p ())
+endArray = cmap () $ andopt (char ']') spaces
+
+endObject
+  : ( Monad mn, Alternative mn
+    , Inspect (Toks p) (Tok p), Eq (Tok p)
+    , Subset Char (Tok p)
+    ) => All (Parser mn p ())
+endObject = cmap () $ andopt (char '}') spaces
+
+nameSeparator
+  : ( Monad mn, Alternative mn
+    , Inspect (Toks p) (Tok p), Eq (Tok p)
+    , Subset Char (Tok p)
+    ) => All (Parser mn p ())
+nameSeparator = cmap () $ andopt (char ':') spaces
+
+valueSeparator
+  : ( Monad mn, Alternative mn
+    , Inspect (Toks p) (Tok p), Eq (Tok p)
+    , Subset Char (Tok p)
+    ) => All (Parser mn p ())
+valueSeparator = cmap () $ andopt (char ',') spaces
 
 ||| A string literal is an opening and a closing double quote with
 ||| a chain of non-empty lists of characters that are neither a
@@ -53,47 +103,53 @@ stringLiteral {mn} {p}
                 $ andopt (chainr1 unescaped (box escapees))
                 $ box escaped
 
-jsonArray
+member
   : ( Monad mn, Alternative mn
     , Inspect (Toks p) (Tok p), Eq (Tok p)
-    , Subset Char (Tok p)
-    ) => All (Box (Parser mn p JSON) :-> Parser mn p (List JSON))
-jsonArray rec
-  = flip alt (cmap [] $ string "[]")
-  $ map (NEList.toList . uncurry consopt)
-  $ andopt (rand (char '[') rec) $ box
-  $ land (nelist (rand (char ',') rec)) $ box
-  $ char ']'
--- NB: it is theoretically possible to parse the opening bracket first
--- and then optionally parse a non-empty list of JSON values before
--- parsing the closing bracket.
--- This is however much more simple to write.
+    , Subset Char (Tok p), Subset (Tok p) Char
+    ) => All (Box (Parser mn p JSON) :-> Parser mn p (String, JSON))
+member rec
+  = and (landopt stringLiteral spaces)
+  $ rand nameSeparator
+  $ rec
 
-jsonObject
+object
   : ( Monad mn, Alternative mn
     , Inspect (Toks p) (Tok p), Eq (Tok p)
     , Subset Char (Tok p), Subset (Tok p) Char
     ) => All (Box (Parser mn p JSON) :-> Parser mn p (List (String, JSON)))
-jsonObject rec
-  = rand (andopt (char '{') spaces)
-  $ Combinators.map (maybe [] NEList.toList)
-  $ flip loptand (optand spaces (char '}'))
-  $ nelist $ and stringLiteral
-           $ rand (withSpaces (char ':'))
-           $ rec
+object rec
+  = map (maybe [] (\ (a, as) => NEList.toList (consopt a as)))
+  $ flip loptand endObject
+  $ rand beginObject
+  $ box $ andopt (member rec)
+  $ nelist (rand valueSeparator (member rec))
 
-||| Parsing JSON
-json
+
+array
+  : ( Monad mn, Alternative mn
+    , Inspect (Toks p) (Tok p), Eq (Tok p)
+    , Subset Char (Tok p)
+    ) => All (Box (Parser mn p JSON) :-> Parser mn p (List JSON))
+array rec
+  = map (maybe [] (\ (a, as) => NEList.toList (consopt a as)))
+  $ flip loptand endArray
+  $ rand beginArray
+  $ lift2l (\ p, q => andopt p (box q)) rec
+  $ nelist (rand valueSeparator rec)
+
+||| Parsing JSON values
+value
   : ( Monad mn, Alternative mn
     , Inspect (Toks p) (Tok p), Eq (Tok p)
     , Subset Char (Tok p), Subset (Tok p) Char
     ) => All (Parser mn p JSON)
-json {mn} {p} = fix (Parser mn p JSON) $ \ rec => roptand spaces $ alts
-  [ cmap JNull            (string "null")
-  , cmap (JBoolean True)  (string "true")
-  , cmap (JBoolean False) (string "false")
-  , map  JNumber          decimalDouble
-  , map  JString          stringLiteral
-  , map  JArray           (jsonArray rec)
-  , map  JObject          (jsonObject rec)
+value {mn} {p} = fix (Parser mn p JSON) $ \ rec => alts
+  [ cmap JNull            (landopt (string "null") spaces)
+  , cmap (JBoolean True)  (landopt (string "true") spaces)
+  , cmap (JBoolean False) (landopt (string "false") spaces)
+  , map  JNumber          (landopt decimalDouble spaces)
+  , map  JString          (landopt stringLiteral spaces)
+  , map  JArray           (array rec)
+  , map  JObject          (object rec)
   ]
