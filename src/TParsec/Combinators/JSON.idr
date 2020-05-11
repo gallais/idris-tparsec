@@ -69,6 +69,18 @@ jsonArray rec
 -- parsing the closing bracket.
 -- This is however much more simple to write.
 
+jsonObject
+  : ( Monad mn, Alternative mn
+    , Inspect (Toks p) (Tok p), Eq (Tok p)
+    , Subset Char (Tok p), Subset (Tok p) Char
+    ) => All (Box (Parser mn p JSON) :-> Parser mn p (List (String, JSON)))
+jsonObject rec
+  = rand (andopt (char '{') spaces)
+  $ Combinators.map (maybe [] NEList.toList)
+  $ flip loptand (optand spaces (char '}'))
+  $ nelist $ and stringLiteral
+           $ rand (withSpaces (char ':'))
+           $ rec
 
 ||| Parsing JSON
 json
@@ -83,10 +95,5 @@ json {mn} {p} = fix (Parser mn p JSON) $ \ rec => roptand spaces $ alts
   , map  JNumber          decimalDouble
   , map  JString          stringLiteral
   , map  JArray           (jsonArray rec)
-  , ?object
+  , map  JObject          (jsonObject rec)
   ]
-
-{-
-   | JNumber Double
-   | JObject (List (String, JSON))
--}
