@@ -6,22 +6,22 @@ import Relation.Indexed
 public export
 record Box (a : Nat -> Type) (n : Nat) where
   constructor MkBox
-  call : {m : Nat} -> LT m n -> a m
+  call : {m : Nat} -> (0 prf : LT m n) -> a m
 
 public export
-ltClose : ({0 m, n : Nat} -> LT m n -> a n -> a m) -> All (a :-> Box a)
+ltClose : ({0 m, n : Nat} -> (0 prf : LT m n) -> a n -> a m) -> All (a :-> Box a)
 ltClose down a = MkBox $ \lt => down lt a
 
 public export
-lteClose : ({0 m, n : Nat} -> LTE m n -> a n -> a m) -> All (a :-> Box a)
+lteClose : ({0 m, n : Nat} -> (0 prf : LTE m n) -> a n -> a m) -> All (a :-> Box a)
 lteClose down = ltClose $ \lt => down (lteSuccLeft lt)
 
 public export
-map : (f : All (a :-> b)) -> All (Box a :-> Box b)
+map : All (a :-> b) -> All (Box a :-> Box b)
 map f a = MkBox $ \lt => f (call a lt)
 
 public export
-map2 : (f : All (a :-> b :-> c)) -> All (Box a :-> Box b :-> Box c)
+map2 : All (a :-> b :-> c) -> All (Box a :-> Box b :-> Box c)
 map2 f a b = MkBox $ \lt => f (call a lt) (call b lt)
 
 public export
@@ -38,16 +38,16 @@ duplicate a = MkBox $ \mltn => MkBox $ \pltm =>
               call a (lteTransitive pltm (lteSuccLeft mltn))
 
 public export
-lteLower : LTE m n -> Box a n -> Box a m
+lteLower : (0 prf : LTE m n) -> Box a n -> Box a m
 lteLower mlen b = MkBox $ \pltm => call b (lteTransitive pltm mlen)
 
 public export
-ltLower : LT m n -> Box a n -> Box a m
-ltLower = lteLower . lteSuccLeft
+ltLower : (0 prf : LT m n) -> Box a n -> Box a m
+ltLower prf = lteLower (lteSuccLeft prf)
 
 public export
 fixBox : All (Box a :-> a) -> All (Box a)
-fixBox alg = go _ 
+fixBox alg = go _
   where
   go : (n : Nat) -> Box a n
   go  Z    = MkBox absurd

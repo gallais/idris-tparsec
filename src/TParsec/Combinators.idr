@@ -11,15 +11,15 @@ import TParsec.Success
 import TParsec.Types
 
 public export
-lteLower : LTE m n -> Parser mn p a n -> Parser mn p a m
+lteLower : (0 prf : LTE m n) -> Parser mn p a n -> Parser mn p a m
 lteLower mlen p = MkParser (\plem => runParser p (lteTransitive plem mlen))
 
 public export
-ltLower : LT m n -> Parser mn p a n -> Parser mn p a m
-ltLower = lteLower . lteSuccLeft
+ltLower : (0 prf : LT m n) -> Parser mn p a n -> Parser mn p a m
+ltLower prf = lteLower (lteSuccLeft prf)
 
 public export
-box : {n : Nat} -> Parser mn p a n -> Box (Parser mn p a) n
+box : All (Parser mn p a :-> Box (Parser mn p a))
 box = lteClose lteLower
 
 ||| Parses any token.

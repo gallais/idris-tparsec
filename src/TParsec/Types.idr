@@ -39,7 +39,7 @@ record Parser (mn : Type -> Type)
               (a : Type)
               (n : Nat) where
   constructor MkParser
-  runParser : {m : Nat} -> LTE m n -> (Toks p) m -> mn (Success (Toks p) a m)
+  runParser : {m : Nat} -> (0 prf : LTE m n) -> (Toks p) m -> mn (Success (Toks p) a m)
 
 ||| `TParsecT` is the monad transformer one would typically use when defining
 ||| an instrumented parser

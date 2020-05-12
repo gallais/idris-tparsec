@@ -15,7 +15,7 @@ record Success (toks : Nat -> Type) (a : Type) (n : Nat) where
   constructor MkSuccess
   Value     : a
   {Size     : Nat}
-  Small     : LT Size n
+  0 Small     : LT Size n
   Leftovers : toks Size
 
 public export
@@ -23,7 +23,7 @@ complete : Success toks a n -> Maybe a
 complete s = toMaybe (Size s == Z) (Value s)
 
 public export
-map : (f : a -> b) -> All (Success toks a :-> Success toks b)
+map : (a -> b) -> All (Success toks a :-> Success toks b)
 map f (MkSuccess v lt ts) = MkSuccess (f v) lt ts
 
 public export
@@ -31,12 +31,12 @@ guardM : (a -> Maybe b) -> All (Success toks a :-> Maybe :. Success toks b)
 guardM p (MkSuccess v lt ts) = map (\v => MkSuccess v lt ts) (p v)
 
 public export
-lteLift : LTE m n -> Success toks a m -> Success toks a n
+lteLift : (0 prf : LTE m n) -> Success toks a m -> Success toks a n
 lteLift mlen (MkSuccess v sltm ts) = MkSuccess v (lteTransitive sltm mlen) ts
 
 public export
-ltLift : LT m n -> Success toks a m -> Success toks a n
-ltLift = lteLift . lteSuccLeft
+ltLift : (0 prf : LT m n) -> Success toks a m -> Success toks a n
+ltLift prf = lteLift (lteSuccLeft prf)
 
 public export
 and : (p : Success toks a n) -> Success toks b (Size p) ->
