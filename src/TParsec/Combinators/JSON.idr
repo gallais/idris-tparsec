@@ -14,8 +14,7 @@ import Language.JSON.Data
 %default total
 %access public export
 
---- We follow the following RFC:
--- https://tools.ietf.org/html/rfc7158
+--- We follow the following RFC: https://tools.ietf.org/html/rfc7158
 
 -- In this parser we assume that when we call a subparser all of the whitespace
 -- before the potential token has been consumed already. That means that we should
@@ -65,6 +64,10 @@ valueSeparator
     ) => All (Parser mn p ())
 valueSeparator = cmap () $ andopt (char ',') spaces
 
+||| Subparser for members, provided a subparser for smaller JSON objects
+||| According to the RFC:
+||| member = string name-separator value
+
 member
   : ( Monad mn, Alternative mn
     , Inspect (Toks p) (Tok p), Eq (Tok p)
@@ -74,6 +77,10 @@ member rec
   = and (landopt stringLiteral spaces)
   $ rand nameSeparator
   $ rec
+
+||| Subparser for JSON objects, provided a subparser for smaller JSON objects
+||| According to the RFC:
+||| object = begin-object [ member *( value-separator member ) ] end-object
 
 object
   : ( Monad mn, Alternative mn
@@ -87,6 +94,9 @@ object rec
   $ box $ andopt (member rec)
   $ nelist (rand valueSeparator (member rec))
 
+||| Subparser for JSON arrays, provided a subparser for smaller JSON objects
+||| According to the RFC:
+||| array = begin-array [ value *( value-separator value ) ] end-array
 
 array
   : ( Monad mn, Alternative mn
