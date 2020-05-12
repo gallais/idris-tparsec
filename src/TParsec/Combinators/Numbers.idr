@@ -46,10 +46,11 @@ decimalDouble
     ) => All (Parser mn p Double)
 decimalDouble =
   let fromNat    = the (Nat -> Double) (fromInteger . cast) in
+  let toNat      = the (Integer -> Nat) cast in
   let fractional = rand (exact $ into '.') (box $ nelist decimalDigit) in
   let fromFrac   = \ ds => fromNat (natFromDigits ds) / pow 10 (length ds) in
-  let enotation  = rand (exact $ into 'E') (box $ decimalNat) in
+  let enotation  = rand (alt (exact $ into 'E') (exact $ into 'e')) (box $ decimalInteger) in
+  let fromE      = \ e => if e < 0 then (/ pow 10.0 (toNat $ negate e)) else (* pow 10 (toNat e)) in
   let rawdouble  = andopt (andopt decimalInteger fractional) enotation in
-  let convert    = \ ((int, mfrac), men) => (fromInteger int + maybe 0 fromFrac mfrac)
-                                            * maybe 1 (pow 10) men
+  let convert    = \ ((int, mfrac), men) => maybe id fromE men (fromInteger int + maybe 0 fromFrac mfrac)
   in map convert rawdouble

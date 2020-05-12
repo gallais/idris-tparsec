@@ -20,7 +20,7 @@ empties = MkSingleton $
           ]
 
 Numbers : Type
-Numbers = json "[1  ,2.4,   5E2,0.0] "
+Numbers = json "[1  ,2.4,   5E2,0.0  ,  1.0e-1 ] "
 
 
 numbers : Numbers
@@ -29,6 +29,7 @@ numbers = MkSingleton $
          , JNumber 2.4
          , JNumber 500
          , JNumber 0
+         , JNumber 0.1
          ]
 
 Booleans : Type
