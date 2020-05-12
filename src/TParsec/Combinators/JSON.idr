@@ -12,6 +12,7 @@ import TParsec.Combinators.Numbers
 import Language.JSON.Data
 
 %default total
+%access public export
 
 --- We follow the following RFC:
 -- https://tools.ietf.org/html/rfc7158
@@ -120,8 +121,8 @@ object
     ) => All (Box (Parser mn p JSON) :-> Parser mn p (List (String, JSON)))
 object rec
   = map (maybe [] (\ (a, as) => NEList.toList (consopt a as)))
-  $ flip loptand endObject
-  $ rand beginObject
+  $ flip land endObject
+  $ randopt beginObject
   $ box $ andopt (member rec)
   $ nelist (rand valueSeparator (member rec))
 
@@ -133,8 +134,8 @@ array
     ) => All (Box (Parser mn p JSON) :-> Parser mn p (List JSON))
 array rec
   = map (maybe [] (\ (a, as) => NEList.toList (consopt a as)))
-  $ flip loptand endArray
-  $ rand beginArray
+  $ flip land endArray
+  $ randopt beginArray
   $ lift2l (\ p, q => andopt p (box q)) rec
   $ nelist (rand valueSeparator rec)
 
@@ -144,7 +145,7 @@ value
     , Inspect (Toks p) (Tok p), Eq (Tok p)
     , Subset Char (Tok p), Subset (Tok p) Char
     ) => All (Parser mn p JSON)
-value {mn} {p} = fix (Parser mn p JSON) $ \ rec => alts
+value {mn} {p} = roptand spaces $ fix (Parser mn p JSON) $ \ rec => alts
   [ cmap JNull            (landopt (string "null") spaces)
   , cmap (JBoolean True)  (landopt (string "true") spaces)
   , cmap (JBoolean False) (landopt (string "false") spaces)
