@@ -9,7 +9,7 @@ path = "src"
 mods = ["Relation.Indexed"
        ,"Relation.Subset"
        ,"Induction.Nat"
-        
+
        ,"Data.Inspect"
        ,"Data.DList"
        ,"Data.NEList"
@@ -22,6 +22,7 @@ mods = ["Relation.Indexed"
        ,"TParsec.Combinators"
        ,"TParsec.Combinators.Chars"
        ,"TParsec.Combinators.Numbers"
+       ,"TParsec.Combinators.JSON"
        ,"TParsec.Running"
        ]
 
