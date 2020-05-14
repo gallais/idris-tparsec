@@ -44,13 +44,16 @@ decimalDouble
     , Subset Char (Tok p)
     , Eq (Tok p), Inspect (Toks p) (Tok p)
     ) => All (Parser mn p Double)
-decimalDouble =
-  let fromNat    = the (Nat -> Double) (fromInteger . cast) in
-  let toNat      = the (Integer -> Nat) cast in
-  let fractional = rand (exact $ into '.') (box $ nelist decimalDigit) in
-  let fromFrac   = \ ds => fromNat (natFromDigits ds) / pow 10 (length ds) in
-  let enotation  = rand (alt (exact $ into 'E') (exact $ into 'e')) (box $ decimalInteger) in
-  let fromE      = \ e => if e < 0 then (/ pow 10.0 (toNat $ negate e)) else (* pow 10 (toNat e)) in
-  let rawdouble  = andopt (andopt decimalInteger fractional) enotation in
-  let convert    = \ ((int, mfrac), men) => maybe id fromE men (fromInteger int + maybe 0 fromFrac mfrac)
-  in map convert rawdouble
+decimalDouble {p} =
+  let
+    fromNat    = the (Nat -> Double) (fromInteger . cast)
+    fractional = rand (exact $ into '.') (box $ nelist decimalDigit)
+    fromFrac   = \ ds => fromNat (natFromDigits ds) / pow 10 (length ds)
+    enotation  = rand (alt (exact $ into 'E') (exact $ into 'e'))
+                      (optand (alt (exact $ into '+') (exact $ into '-')) decimalNat)
+    fromE      = the ((Maybe (Tok p), Nat) -> Double -> Double) $
+                 \ (ms, e) => if maybe False (== into '-') ms then (/ pow 10.0 e) else (* pow 10.0 e)
+    rawdouble  = andopt (andopt decimalInteger fractional) enotation
+    convert    = \ ((int, mfrac), men) => maybe id fromE men (fromInteger int + maybe 0 fromFrac mfrac)
+   in
+  map convert rawdouble
