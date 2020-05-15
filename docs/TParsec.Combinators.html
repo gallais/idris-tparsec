@@ -682,6 +682,18 @@ long as the first parser succeeds. The value parsed by the first<br />
 parser is discarded. If the second parser fails the value<br />
 <code>Nothing</code> is returned.</p>
 <p>Unindexed signature: <code>Parser a -&gt; Parser b -&gt; Parser (Maybe b)</code></p>
+</dd><dt id="TParsec.Combinators.replicate"><span class="name function" title="TParsec.Combinators.replicate">replicate</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">mn</span> =>
+<a class="type" title="Prelude.Applicative.Alternative" href="Prelude.Applicative.html#Prelude.Applicative.Alternative">Alternative</a> <span class="implicit boundvar" title="">mn</span> =>
+(<span class="boundvar" title="">n</span> : <a class="type" title="Prelude.Nat.Nat" href="Prelude.Nat.html#Prelude.Nat.Nat">Nat</a>) ->
+<a class="function" title="Relation.Indexed.All" href="Relation.Indexed.html#Relation.Indexed.All">All</a> (<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
+<span class="implicit boundvar" title="">p</span>
+<span class="implicit boundvar" title="">a</span> <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
+<a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
+<span class="implicit boundvar" title="">p</span>
+(<a class="type" title="Data.Vect.Vect" href="Data.Vect.html#Data.Vect.Vect">Vect</a> <span class="boundvar" title="">n</span>
+<span class="implicit boundvar" title="">a</span>))</span></dt><dd><p>Runs the same parser n times.</p>
+<p>The number n needs to be non-zero. Otherwise the parser simply fails.</p>
+<p>Unindexed signature: <code>(n : Nat) -&gt; Parser a -&gt; Parser (Vect n a)</code></p>
 </dd><dt id="TParsec.Combinators.rmand"><span class="name function" title="TParsec.Combinators.rmand">rmand</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="Prelude.Monad.Monad" href="Prelude.Monad.html#Prelude.Monad.Monad">Monad</a> <span class="implicit boundvar" title="">mn</span> =>
 <a class="function" title="Relation.Indexed.All" href="Relation.Indexed.html#Relation.Indexed.All">All</a> (<a class="function" title="Relation.Indexed.Cst" href="Relation.Indexed.html#Relation.Indexed.Cst">Cst</a> (<span class="implicit boundvar" title="">mn</span> <span class="implicit boundvar" title="">a</span>) <a class="function" title="Relation.Indexed.:-&gt;" href="Relation.Indexed.html#Relation.Indexed.:-&gt;">:-&gt;</a>
 <a class="type" title="TParsec.Types.Parser" href="TParsec.Types.html#TParsec.Types.Parser">Parser</a> <span class="implicit boundvar" title="">mn</span>
