@@ -50,3 +50,11 @@ strings = MkSingleton $
                                , JString "Another string"
                                ])
           ]
+
+Unicode : Type
+Unicode = json "[\"П\"]"
+
+unicode : Unicode
+unicode = MkSingleton $
+  JArray [ JString "П"
+         ]

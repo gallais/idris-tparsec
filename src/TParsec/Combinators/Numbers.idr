@@ -2,7 +2,9 @@ module TParsec.Combinators.Numbers
 
 import Relation.Indexed
 import Relation.Subset
+import Data.Digit
 import Data.Inspect
+import Data.So
 import Data.NEList
 import TParsec.Types
 import TParsec.Combinators
@@ -10,18 +12,45 @@ import TParsec.Combinators
 %default total
 %access public export
 
+------------------------------------------------------------------------
+-- Digits
+------------------------------------------------------------------------
+
+binaryDigit
+  : ( Alternative mn, Monad mn
+    , Subset Char (Tok p)
+    , Eq (Tok p), Inspect (Toks p) (Tok p)
+    ) => All (Parser mn p Bool)
+binaryDigit = alts $ map (\ (v, c) => cmap v $ exact (into c))
+              [ (False, '0'), (True, '1') ]
+
 decimalDigit
   : ( Alternative mn, Monad mn
     , Subset Char (Tok p)
     , Eq (Tok p), Inspect (Toks p) (Tok p)
-    ) => All (Parser mn p Nat)
+    ) => All (Parser mn p Dec)
 decimalDigit =
   alts $ map (uncurry (\ v, c => cmap v $ exact $ into c))
-       [ (0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4')
-       , (5, '5'), (6, '6'), (7, '7'), (8, '8'), (9, '9') ]
+       [ (mkDec 0, '0'), (mkDec 1, '1'), (mkDec 2, '2'), (mkDec 3, '3')
+       , (mkDec 4, '4'), (mkDec 5, '5'), (mkDec 6, '6'), (mkDec 7, '7')
+       , (mkDec 8, '8'), (mkDec 9, '9') ]
 
-natFromDigits : NEList Nat -> Nat
-natFromDigits = foldl (\ih, d => 10 * ih + d) 0
+hexadecimalDigit
+  : ( Alternative mn, Monad mn
+    , Subset Char (Tok p)
+    , Eq (Tok p), Inspect (Toks p) (Tok p)
+    ) => All (Parser mn p Hex)
+hexadecimalDigit
+  = alt (map L decimalDigit) $ alts $ map (uncurry (\ v, c => cmap v $ exact (into c)))
+    [ (A, 'a'), (B, 'b'), (C, 'c'), (D, 'd'), (E, 'e'), (F, 'f')
+    , (A, 'A'), (B, 'B'), (C, 'C'), (D, 'D'), (E, 'E'), (F, 'F')]
+
+------------------------------------------------------------------------
+-- Numbers
+------------------------------------------------------------------------
+
+natFromDigits : NEList Dec -> Nat
+natFromDigits = foldl (\ih, d => 10 * ih + toNat d) 0
 
 decimalNat
   : ( Alternative mn, Monad mn

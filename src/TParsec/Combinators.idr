@@ -4,6 +4,7 @@ import Relation.Indexed
 import Induction.Nat as Box
 import Data.Inspect
 import Data.NEList
+import Data.Vect
 import TParsec.Success
 import TParsec.Types
 
@@ -208,6 +209,17 @@ and : Monad mn =>
       All (Parser mn p a :-> Box (Parser mn p b) :-> Parser mn p (a, b))
 and p q = andbind p (\ _ => q)
 
+||| Runs the same parser n times.
+|||
+||| The number n needs to be non-zero. Otherwise the parser simply fails.
+|||
+||| Unindexed signature: `(n : Nat) -> Parser a -> Parser (Vect n a)`
+replicate : (Monad mn, Alternative mn) =>
+            (n : Nat) -> All (Parser mn p a :-> Parser mn p (Vect n a))
+replicate Z     p = Combinators.fail
+replicate (S Z) p = map (:: []) p
+replicate (S n) p = map (uncurry (::)) $ and p (box $ replicate n p)
+
 ||| Runs a list of parsers in succession.
 |||
 ||| Runs a list of parser one after the other. All parsers must
@@ -218,7 +230,8 @@ and p q = andbind p (\ _ => q)
 ||| Unindexed signature: `NEList (Parser a) -> Parser (NEList a)`
 ands : Monad mn =>
        All (NEList :. Parser mn p a :-> Parser mn p (NEList a))
-ands ps = NEList.foldr1 (\ p, ps => map (uncurry (<+>)) (and p ps)) (Functor.map (map singleton) ps)
+ands ps = NEList.foldr1 (\ p, ps => map (uncurry (<+>)) (and p ps))
+                        (Functor.map (map singleton) ps)
 
 ||| Runs a parser and a monadic computation in succession.
 |||

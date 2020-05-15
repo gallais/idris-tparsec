@@ -14,7 +14,7 @@ import Language.JSON.Data
 %default total
 %access public export
 
---- We follow the following RFC: https://tools.ietf.org/html/rfc7158
+--- We follow RFC 8259: https://tools.ietf.org/html/rfc8259
 
 -- In this parser we assume that when we call a subparser all of the whitespace
 -- before the potential token has been consumed already. That means that we should

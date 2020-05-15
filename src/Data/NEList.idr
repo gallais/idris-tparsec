@@ -17,6 +17,9 @@ fromList : List a -> Maybe (NEList a)
 fromList []        = Nothing
 fromList (x :: xs) = Just (MkNEList x xs)
 
+fromVect : Vect (S n) a -> NEList a
+fromVect (hd :: tl) = MkNEList hd (toList tl)
+
 length : NEList a -> Nat
 length = S . length . tail
 
@@ -87,3 +90,6 @@ foldrf c s (MkNEList x xs) = go x xs
 
 Traversable NEList where
   traverse f (MkNEList x xs) = [| MkNEList (f x) (traverse f xs) |]
+
+concat : NEList (NEList a) -> NEList a
+concat = foldr1 (++)
