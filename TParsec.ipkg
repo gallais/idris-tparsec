@@ -5,6 +5,9 @@ modules = Relation.Indexed
         , Relation.Subset
         , Induction.Nat
 
+        , Data.Digit.Decimal
+        , Data.Digit.Hexadecimal
+        , Data.Digit
         , Data.Inspect
         , Data.DList
         , Data.NEList
