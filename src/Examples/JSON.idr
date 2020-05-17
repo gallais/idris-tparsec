@@ -52,9 +52,10 @@ strings = MkSingleton $
           ]
 
 Unicode : Type
-Unicode = json "[\"П\"]"
+Unicode = json "[\"П\", \"\\u041f\"]"
 
 unicode : Unicode
 unicode = MkSingleton $
   JArray [ JString "П"
+         , JString "\\u041F"
          ]

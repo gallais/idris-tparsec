@@ -125,15 +125,21 @@ stringLiteral
     , Subset Char (Tok p), Subset (Tok p) Char
     ) => All (Parser mn p String)
 stringLiteral {mn} {p}
-  = map (fromMaybe "")
-  $ rand (char '"') $ box $ flip loptand (char '"')
-  $ map (pack . toList . map into)
-  $ innerString
+  = map convert
+  $ and (randopt (char '"') escaped)
+  $ box $ flip loptand (char '"')
+  $ nelist (andopt unescaped (box escaped))
 
   where
 
     toks : Type
     toks = NEList (Tok p)
+
+    fromToks : toks -> List Char
+    fromToks = NEList.toList . map into
+
+    fromMToks : Maybe toks -> List Char
+    fromMToks = maybe [] fromToks
 
     unescaped : All (Parser mn p toks)
     unescaped = nelist (noneOfChars ['\\','"'])
@@ -151,12 +157,9 @@ stringLiteral {mn} {p}
        $ box $ andoptbind anyTok $ \ c =>
          if c /= into 'u' then fail else unicode
 
-    escapees : All (Parser mn p (toks -> toks -> toks))
-    escapees = map {b = toks -> toks -> toks}
-                   (\ t => \ bef, aft => bef ++ t ++ aft) escaped
-
-    innerString : All (Parser mn p toks)
-    innerString = map (\ (mpre, str, mpost) => optappend mpre (appendopt str mpost))
-                $ optand escaped
-                $ andopt (chainr1 unescaped (box escapees))
-                $ box escaped
+    convert : (Maybe toks, Maybe (NEList (toks, Maybe toks))) -> String
+    convert (mt, mts)
+      = pack
+      $ List.(++) (fromMToks mt)
+      $ maybe [] (concatMap (\ (ts, mts) => fromToks ts ++ fromMToks mts))
+      $ mts
