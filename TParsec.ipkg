@@ -5,6 +5,9 @@ modules = Relation.Indexed
         , Relation.Subset
         , Induction.Nat
 
+        , Data.Digit.Decimal
+        , Data.Digit.Hexadecimal
+        , Data.Digit
         , Data.Inspect
         , Data.DList
         , Data.NEList
@@ -22,6 +25,7 @@ modules = Relation.Indexed
         , TParsec.Combinators
         , TParsec.Combinators.Chars
         , TParsec.Combinators.Numbers
+        , TParsec.Combinators.JSON
         , TParsec.Running
 
 opts = "--total -p contrib"

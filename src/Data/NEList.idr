@@ -17,6 +17,9 @@ fromList : List a -> Maybe (NEList a)
 fromList []        = Nothing
 fromList (x :: xs) = Just (MkNEList x xs)
 
+fromVect : Vect (S n) a -> NEList a
+fromVect (hd :: tl) = MkNEList hd (toList tl)
+
 length : NEList a -> Nat
 length = S . length . tail
 
@@ -34,6 +37,12 @@ singleton x = MkNEList x []
 
 (++) : NEList a -> NEList a -> NEList a
 (++) (MkNEList x xs) ys = MkNEList x (xs ++ NEList.toList ys)
+
+optappend : Maybe (NEList a) -> NEList a -> NEList a
+optappend ml = maybe id (++) ml
+
+appendopt : NEList a -> Maybe (NEList a) -> NEList a
+appendopt l mr = maybe l (l ++) mr
 
 Show a => Show (NEList a) where
   show = show . toList
@@ -54,11 +63,11 @@ Applicative NEList where
 Monad NEList where
   (MkNEList x xs) >>= f =
     let
-      MkNEList y ys = f x 
+      MkNEList y ys = f x
       zs = xs >>= toList . f
      in
     MkNEList y (ys ++ zs)
-  
+
 Foldable NEList where
   foldl c n xxs = foldl c n (NEList.toList xxs)
   foldr c n xxs = foldr c n (NEList.toList xxs)
@@ -81,3 +90,6 @@ foldrf c s (MkNEList x xs) = go x xs
 
 Traversable NEList where
   traverse f (MkNEList x xs) = [| MkNEList (f x) (traverse f xs) |]
+
+concat : NEList (NEList a) -> NEList a
+concat = foldr1 (++)

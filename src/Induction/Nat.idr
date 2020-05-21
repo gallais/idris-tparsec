@@ -15,6 +15,9 @@ ltClose down a = MkBox (\ lt => down lt a)
 lteClose : ({m, n : Nat} -> LTE m n -> a n -> a m) -> All (a :-> Box a)
 lteClose down = ltClose (\ lt => down (lteSuccLeft lt))
 
+pure : All a -> All (Box a)
+pure a = MkBox (\ _ => a)
+
 map : (f : All (a :-> b)) -> All (Box a :-> Box b)
 map f a = MkBox (\ lt => f (call a lt))
 

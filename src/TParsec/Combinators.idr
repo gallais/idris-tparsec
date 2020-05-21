@@ -4,6 +4,7 @@ import Relation.Indexed
 import Induction.Nat as Box
 import Data.Inspect
 import Data.NEList
+import Data.Vect
 import TParsec.Success
 import TParsec.Types
 
@@ -19,6 +20,18 @@ ltLower mltn = lteLower (lteSuccLeft mltn)
 implicit
 box : Parser mn p a n -> Box (Parser mn p a) n
 box = lteClose lteLower
+
+lift2 : All (Parser mn p a :-> Parser mn p b :-> Parser mn p c) ->
+        All (Box (Parser mn p a) :-> Box (Parser mn p b) :-> Box (Parser mn p c))
+lift2 = map2
+
+lift2l : All (Parser mn p a :-> Parser mn p b :-> Parser mn p c) ->
+         All (Box (Parser mn p a) :-> Parser mn p b :-> Box (Parser mn p c))
+lift2l f a b = lift2 f a (box b)
+
+lift2r : All (Parser mn p a :-> Parser mn p b :-> Parser mn p c) ->
+         All (Parser mn p a :-> Box (Parser mn p b) :-> Box (Parser mn p c))
+lift2r f a b = lift2 f (box a) b
 
 ||| Parses any token.
 |||
@@ -63,9 +76,9 @@ maybeTok p = guardM p anyTok
 
 ||| Given a function (a -> b), transforms a `Parser a` into a `Parser b`.
 |||
-||| Map lifts a function from `a -> b` to `Parser a -> Parser b`. This 
-||| function signature does not follow the traditional `Functor` signature 
-||| (which is `(a -> b) -> F a -> F b`) due to the indexing rules that ensure 
+||| Map lifts a function from `a -> b` to `Parser a -> Parser b`. This
+||| function signature does not follow the traditional `Functor` signature
+||| (which is `(a -> b) -> F a -> F b`) due to the indexing rules that ensure
 ||| totality.
 |||
 ||| Unindexed signature: `(a -> b) -> Parser a -> Parser b`
@@ -101,7 +114,7 @@ alt p q = MkParser $ \mlen, ts => runParser p mlen ts <|> runParser q mlen ts
 
 ||| Given a list of parsers, takes the first one that succeeds, in order.
 |||
-||| Attempt parsing using each parser in the list. If all fail, then this 
+||| Attempt parsing using each parser in the list. If all fail, then this
 ||| parser will fail too. If one succeeds, then the following parsers will
 ||| not be attempted and the parser will succeed.
 |||
@@ -112,13 +125,13 @@ alts = foldr alt fail
 
 ||| Parses a value and processes it into another parser.
 |||
-||| Given a `Parser a` and a function `a -> Parser b` this function will 
+||| Given a `Parser a` and a function `a -> Parser b` this function will
 ||| attempt the first parser on the input and run the function on the
-||| parsed value. Both values are returned as a pair. As long as the first 
-||| parser is successful this parser will be successful. If the second parser 
-||| fails and the first one succeeds, this will return `Nothing` as the second 
+||| parsed value. Both values are returned as a pair. As long as the first
+||| parser is successful this parser will be successful. If the second parser
+||| fails and the first one succeeds, this will return `Nothing` as the second
 ||| element of the pair.
-||| 
+|||
 ||| Unindexed signature: `Parser a -> (a -> Parser b) -> Parser (a, Maybe b)`
 andoptbind : (Monad mn, Alternative mn) =>
              All (Parser mn p a :-> (Cst a :-> Box (Parser mn p b)) :->
@@ -131,7 +144,7 @@ andoptbind p q = MkParser $ \mlen, ts =>
 
 ||| Parses a value and processes it into another parser.
 |||
-||| Given a `Parser a` and a function `a -> Parser b` this function will 
+||| Given a `Parser a` and a function `a -> Parser b` this function will
 ||| attempt the first parser on the input, and run the function on the
 ||| parsed value. If both those steps are successful, both values are
 ||| returned as a pair.
@@ -150,7 +163,7 @@ andbind p q = MkParser $ \mlen, ts =>
 |||
 ||| Given a Monad `M`, a parser `Parser M a` that executes in this monad,
 ||| and a function `a -> M b` this function will attempt the parser
-||| on the input, and run the function on the parsed value. If the parser 
+||| on the input, and run the function on the parsed value. If the parser
 ||| is successful both values are returned as a pair.
 |||
 ||| Unindexed signature: `Parser M a -> (a -> M b) -> Parser M (a, b)`
@@ -163,8 +176,8 @@ andbindm p f = MkParser $ \mlen, ts => do ra <- runParser p mlen ts
 ||| Like `andbindm` but ignores the second argument's output.
 |||
 ||| This function takes a parser and a function that processes the
-||| output of the first parser in a monad `M`. This function only 
-||| returns the value of the first parser and not the result of the 
+||| output of the first parser in a monad `M`. This function only
+||| returns the value of the first parser and not the result of the
 ||| computation.
 |||
 ||| Unindexed signature: `Parser M a -> (a -> M b) -> Parser M a`
@@ -178,7 +191,7 @@ landbindm p f = map fst (andbindm p f)
 ||| output of the first parser in a monad `M`. This function only
 ||| returns the value of the computation and ignore the output of
 ||| the parser.
-||| 
+|||
 ||| Unindexed signature: `Parser M a -> (a -> M b) -> Parser M b)`
 randbindm : Monad mn =>
   All (Parser mn p a :-> Cst (a -> mn b) :-> Parser mn p b)
@@ -186,14 +199,25 @@ randbindm p f = map snd (andbindm p f)
 
 ||| Runs two parsers in succession.
 |||
-||| Run two parsers one after the other. If any of the two parsers 
-||| fail this fails. The result of both parsers is returned as 
+||| Run two parsers one after the other. If any of the two parsers
+||| fail this fails. The result of both parsers is returned as
 ||| a pair. This is analogous to an `and` operation.
 |||
 ||| Unindexed signature: `Parser a -> Parser b -> Parser (a, b)`
 and : Monad mn =>
       All (Parser mn p a :-> Box (Parser mn p b) :-> Parser mn p (a, b))
 and p q = andbind p (\ _ => q)
+
+||| Runs the same parser n times.
+|||
+||| The number n needs to be non-zero. Otherwise the parser simply fails.
+|||
+||| Unindexed signature: `(n : Nat) -> Parser a -> Parser (Vect n a)`
+replicate : (Monad mn, Alternative mn) =>
+            (n : Nat) -> All (Parser mn p a :-> Parser mn p (Vect n a))
+replicate Z     p = Combinators.fail
+replicate (S Z) p = map (:: []) p
+replicate (S n) p = map (uncurry (::)) $ and p (box $ replicate n p)
 
 ||| Runs a list of parsers in succession.
 |||
@@ -205,7 +229,8 @@ and p q = andbind p (\ _ => q)
 ||| Unindexed signature: `NEList (Parser a) -> Parser (NEList a)`
 ands : Monad mn =>
        All (NEList :. Parser mn p a :-> Parser mn p (NEList a))
-ands ps = NEList.foldr1 (\ p, ps => map (uncurry (<+>)) (and p ps)) (Functor.map (map singleton) ps)
+ands ps = NEList.foldr1 (\ p, ps => map (uncurry (<+>)) (and p ps))
+                        (Functor.map (map singleton) ps)
 
 ||| Runs a parser and a monadic computation in succession.
 |||
@@ -222,9 +247,9 @@ andm p q = MkParser $ \mlen, ts => do ra <- runParser p mlen ts
 
 ||| Runs a parser and a monadic computation but discards the computation's result
 |||
-||| Given a monad `M`, a parser `Parser M a` and a computation `M b` 
+||| Given a monad `M`, a parser `Parser M a` and a computation `M b`
 ||| this function will run the parser first and then run the monadic
-||| computation `M b`. The result of the monadic computation is 
+||| computation `M b`. The result of the monadic computation is
 ||| discarded.
 |||
 ||| Unindexed signature: `Parser M a -> M b -> Parser M a`
@@ -234,7 +259,7 @@ landm p q = map fst (andm p q)
 
 ||| Runs a parser and a monadic computation but discard the parser's result
 |||
-||| Given a monad `M`, a parser `Parser M a` and a computation `M b` 
+||| Given a monad `M`, a parser `Parser M a` and a computation `M b`
 ||| this function will run the parser first and then run the monadic
 ||| computation `M b`. The result of the parser is discarded.
 |||
@@ -246,7 +271,7 @@ randm p q = map snd (andm p q)
 ||| Runs a monadic computation and a parser in succession.
 |||
 ||| Given a monad `M`, a monadic computation `M a` and a parser `Parser M a`
-||| this function will run the computation `M a` first and then run the 
+||| this function will run the computation `M a` first and then run the
 ||| parser. Both results are returned as a pair.
 |||
 ||| Unindexed signature: `M a -> Parser M b -> Parser M (a, b)`
@@ -258,7 +283,7 @@ mand p q = MkParser $ \mlen, ts => do a <- p
 ||| Runs a monadic computation and a parser but discards the parser's result.
 |||
 ||| Given a monad `M`, a monadic computation `M a` and a parser `Parser M a`
-||| this function will run the computation `M a` first and then run the 
+||| this function will run the computation `M a` first and then run the
 ||| parser. The result of the parser is discarded.
 |||
 ||| Unindexed signature: `M a -> Parser M b -> Parser M a`
@@ -269,7 +294,7 @@ lmand p q = map fst (mand p q)
 ||| Runs a monadic computation and parser but discards the computation's result.
 |||
 ||| Given a monad `M`, a monadic computation `M a` and a parser `Parser M a`
-||| this function will run the computation `M a` first and then run the 
+||| this function will run the computation `M a` first and then run the
 ||| parser. The result of the computation is discarded.
 |||
 ||| Unindexed signature: `M a -> Parser M b -> Parser M b`
@@ -301,7 +326,7 @@ optand p q = alt (and (map Just p) q) (map (MkPair Nothing) q)
 
 ||| Parses a value and processes it into another parser.
 |||
-||| Given a `Parser a` and a function `a -> Parser b` this function will 
+||| Given a `Parser a` and a function `a -> Parser b` this function will
 ||| attempt the first parser on the input, and run the function on the
 ||| parsed value. The result of the first parser is discarded.
 |||
@@ -313,7 +338,7 @@ bind p q = map snd (andbind p q)
 ||| Runs two parsers in succession but discards the second value.
 |||
 ||| Runs two parsers one after the other, this parser succeeds if
-||| both parsers succeed. The parsed value of the second one is 
+||| both parsers succeed. The parsed value of the second one is
 ||| discarded.
 |||
 ||| Unindexed signature: `Parser a -> Parser b -> Parser a`
@@ -324,7 +349,7 @@ land p q = map fst (and p q)
 ||| Runs two parsers in succession but discards the first value.
 |||
 ||| Runs two parsers one after the other, this parser succeeds if
-||| both parsers succeed. The parsed value of the first one is 
+||| both parsers succeed. The parsed value of the first one is
 ||| discarded.
 |||
 ||| Unindexed signature: `Parser a -> Parser b -> Parser b`
@@ -336,7 +361,7 @@ rand p q = map snd (and p q)
 |||
 ||| Runs two parsers one after the other, this parser suceeds as
 ||| long as the first parser succeeds, the second one might fail.
-||| The value parsed by the second parser is discarded and only 
+||| The value parsed by the second parser is discarded and only
 ||| the value parsed by the first is returned.
 |||
 ||| Unindexed signature: `Parser a -> Parser b -> Parser a`
@@ -348,7 +373,7 @@ landopt p q = map fst (andopt p q)
 |||
 ||| Runs two parsers one after the other, this parser suceeds as
 ||| long as the first parser succeeds. The value parsed by the first
-||| parser is discarded. If the second parser fails the value 
+||| parser is discarded. If the second parser fails the value
 ||| `Nothing` is returned.
 |||
 ||| Unindexed signature: `Parser a -> Parser b -> Parser (Maybe b)`
@@ -360,7 +385,7 @@ randopt p q = map snd (andopt p q)
 |||
 ||| Runs two parsers one after the other, this parser suceeds as
 ||| long as the second parser succeeds. The value parsed by the second
-||| parser is discarded. If the first parser fails the value 
+||| parser is discarded. If the first parser fails the value
 ||| `Nothing` is returned.
 |||
 ||| Unindexed signature: `Parser a -> Parser b -> Parser (Maybe a)`
@@ -370,10 +395,10 @@ loptand p q = map fst (optand p q)
 
 
 ||| Runs two parsers in succession, discards the first value, first parser might fail.
-||| 
+|||
 ||| Runs two parsers one after the other, this parser suceeds as
 ||| long as the second parser succeeds, the first one might fail.
-||| The value parsed by the first parser is discarded and only 
+||| The value parsed by the first parser is discarded and only
 ||| the value parsed by the second is returned.
 |||
 ||| Unindexed signature: `Parser a -> Parser b -> Parser b`
@@ -384,8 +409,8 @@ roptand p q = map snd (optand p q)
 ||| Given two different parsers, returns the first successfully parsed value.
 |||
 ||| Given two parsers `Parser a` and `Parser b`, this will run the first
-||| parser and wrap the result in a `Left` if it is successful. Otherwise, 
-||| it will run the second parser and wrap the result in a `Right` if it is 
+||| parser and wrap the result in a `Left` if it is successful. Otherwise,
+||| it will run the second parser and wrap the result in a `Right` if it is
 ||| successful.
 |||
 ||| Unindexed signature: `Parser a -> Parser b -> Parser (Either a b)`
@@ -447,7 +472,7 @@ noneOf : (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p)) =>
 noneOf ts = guard (\t' => all (/= t') ts) anyTok
 
 ||| Given a list of token, succeeds if the input starts with one of them.
-||| 
+|||
 ||| Given a list of acceptable tokens, return a parser that will succeed only
 ||| if it encounters one of the tokens in the input.
 |||

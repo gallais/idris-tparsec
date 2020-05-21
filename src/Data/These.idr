@@ -3,7 +3,7 @@ module Data.These
 %access public export
 %default total
 
-data These a b = This a | That b | Both a b 
+data These a b = This a | That b | Both a b
 
 fromEither : Either a b -> These a b
 fromEither = either This That
@@ -32,10 +32,10 @@ mapFst f = bimap f id
 
 bifold : Monoid m => These m m -> m
 bifold (This a)   = a
-bifold (That b)   = b 
+bifold (That b)   = b
 bifold (Both a b) = a <+> b
 
 bitraverse : Applicative f => (a -> f c) -> (b -> f d) -> These a b -> f (These c d)
-bitraverse f g (This a)   = [| This (f a) |] 
+bitraverse f g (This a)   = [| This (f a) |]
 bitraverse f g (That b)   = [| That (g b) |]
 bitraverse f g (Both a b) = [| Both (f a) (g b) |]
