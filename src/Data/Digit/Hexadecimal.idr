@@ -22,7 +22,7 @@ toNat C     = 12
 toNat D     = 13
 toNat E     = 14
 toNat F     = 15
- 
+
 toChar : Hex -> Char
 toChar (L d) = toChar d
 toChar A     = 'A'

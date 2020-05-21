@@ -75,13 +75,14 @@ decimalDouble
     ) => All (Parser mn p Double)
 decimalDouble {p} =
   let
-    fromNat    = the (Nat -> Double) (fromInteger . cast)
+    fromNat    : (Nat -> Double)
+               = fromInteger . cast
     fractional = rand (exact $ into '.') (box $ nelist decimalDigit)
     fromFrac   = \ ds => fromNat (natFromDigits ds) / pow 10 (length ds)
     enotation  = rand (alt (exact $ into 'E') (exact $ into 'e'))
                       (optand (alt (exact $ into '+') (exact $ into '-')) decimalNat)
-    fromE      = the ((Maybe (Tok p), Nat) -> Double -> Double) $
-                 \ (ms, e) => if maybe False (== into '-') ms then (/ pow 10.0 e) else (* pow 10.0 e)
+    fromE      : ((Maybe (Tok p), Nat) -> Double -> Double)
+               = \ (ms, e) => if maybe False (== into '-') ms then (/ pow 10.0 e) else (* pow 10.0 e)
     rawdouble  = andopt (andopt decimalInteger fractional) enotation
     convert    = \ ((int, mfrac), men) => maybe id fromE men (fromInteger int + maybe 0 fromFrac mfrac)
    in

@@ -110,8 +110,6 @@ alphanum
      ) => All (Parser mn p (Either (Tok p) Nat))
 alphanum = sum alpha num
 
-
-
 ||| A string literal is an opening and a closing double quote with
 ||| a chain of non-empty lists of characters that are neither a
 ||| double quote nor an escaping character.

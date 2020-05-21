@@ -9,7 +9,7 @@ record Dec where
   constructor MkDec
   toNat : Nat
   bound : So (lt toNat 10)
-  
+
 mkDec : (d : Nat) -> {auto pr : So (lt d 10)} -> Dec
 mkDec d {pr} = MkDec d pr
 
