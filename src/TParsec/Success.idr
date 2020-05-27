@@ -15,7 +15,7 @@ record Success (toks : Nat -> Type) (a : Type) (n : Nat) where
   constructor MkSuccess
   Value     : a
   {Size     : Nat}
-  0 Small     : LT Size n
+  0 Small   : LT Size n
   Leftovers : toks Size
 
 public export

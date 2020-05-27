@@ -4,7 +4,7 @@ import Data.Nat
 import Data.Maybe
 import Util
 import Relation.Indexed
-import Induction.Nat as Box
+import Induction.Nat
 import Data.Inspect
 import Data.NEList
 import TParsec.Success
@@ -139,7 +139,7 @@ andoptbind : (Monad mn, Alternative mn) =>
                   Parser mn p (a, Maybe b))
 andoptbind p q = MkParser $ \mlen, ts =>
                  do sa <- runParser p mlen ts
-                    let salen   = lteTransitive (Small sa) mlen
+                    let 0 salen = lteTransitive (Small sa) mlen
                     let combine = Success.map (map Just) . (Success.and sa)
                     (map combine (runParser (call (q (Value sa)) salen) lteRefl (Leftovers sa))) <|> pure (Success.map (flip MkPair Nothing) sa)
 
@@ -157,8 +157,8 @@ andbind : Monad mn =>
                Parser mn p (a, b))
 andbind p q = MkParser $ \mlen, ts =>
                 do sa <- runParser p mlen ts
-                   let salen  = lteTransitive (Small sa) mlen
-                   let adjust = map (Success.and sa)
+                   let 0 salen = lteTransitive (Small sa) mlen
+                   let adjust  = map (Success.and sa)
                    adjust (runParser (call (q (Value sa)) salen) lteRefl (Leftovers sa))
 
 ||| Parses a values and processes it in the context of a monad.
@@ -466,7 +466,7 @@ sum p q = alt (map Left p) (map Right q)
 public export
 app : Monad mn =>
       All (Parser mn p (a -> b) :-> Box (Parser mn p a) :-> Parser mn p b)
-app p q = bind p (\ f => Box.map (Combinators.map f) q)
+app p q = bind p (\ f => Nat.map (Combinators.map f) q)
 
 ||| Parses the given token.
 |||
@@ -542,13 +542,13 @@ schainl = fix _ $ \rec, sa, op => schainlAux rec sa op <|> pure sa
   schainlAux : All (Box (LChain {mn} p a) :-> LChain {mn} p a)
   schainlAux rec sa op = do sop <- runParser (call op (Small sa)) lteRefl (Leftovers sa)
                             let sa' = Success.map (\f => f (Success.Value sa)) sop
-                            res <- call rec (Small sa) sa' (Box.ltLower (Small sa) op)
+                            res <- call rec (Small sa) sa' (Nat.ltLower (Small sa) op)
                             pure (ltLift (Small sa) res)
 public export
 iteratel : (Alternative mn, Monad mn) =>
            All (Parser mn p a :-> Box (Parser mn p (a -> a)) :-> Parser mn p a)
 iteratel val op = MkParser $ \mlen, ts => do sa <- runParser val mlen ts
-                                             schainl sa (Box.lteLower mlen op)
+                                             schainl sa (Nat.lteLower mlen op)
 public export
 RChain : Parameters mn -> Type -> Nat -> Type
 RChain p {mn} a n =
@@ -557,15 +557,14 @@ RChain p {mn} a n =
 public export
 iterater : (Alternative mn, Monad mn) =>
            All (Parser mn p (a -> a) :-> Parser mn p a :-> Parser mn p a)
-iterater = fix _ $ \rec, op, val =>
-                              alt (iteraterAux rec op val) val
+iterater = fix _ $ \rec, op, val => alt (iteraterAux rec op val) val
   where
   iteraterAux : All (Box (RChain p a) :-> RChain p a)
   iteraterAux rec op val = MkParser $ \mlen, ts =>
     do sop <- runParser op mlen ts
-       let sopltn = lteTransitive (Small sop) mlen
-       let op'    = ltLower sopltn op
-       let val'   = ltLower sopltn val
+       let 0 sopltn = lteTransitive (Small sop) mlen
+       let op'      = ltLower sopltn op
+       let val'     = ltLower sopltn val
        res <- runParser (call rec sopltn op' val') lteRefl (Leftovers sop)
        pure (ltLift (Small sop) (Success.map (Value sop) res))
 
@@ -574,7 +573,7 @@ hchainl : (Alternative mn, Monad mn) =>
           All (Parser mn p a :-> Box (Parser mn p (a -> b -> a)) :->
           Box (Parser mn p b) :-> Parser mn p a)
 hchainl seed op arg =
-  let op'  = Box.map (Combinators.map flip) op
+  let op'  = Nat.map (Combinators.map flip) op
       arg' = duplicate arg
      in
   iteratel seed (map2 app op' arg')
@@ -608,4 +607,4 @@ public export
 nelist : (Alternative mn, Monad mn) =>
          All (Parser mn p a :-> Parser mn p (NEList a))
 nelist = fix (Parser mn p a :-> Parser mn p (NEList a)) $ \rec, p =>
-  Combinators.map (uncurry consopt) (andopt p (Box.app rec (box p)))
+  Combinators.map (uncurry consopt) (andopt p (Nat.app rec (box p)))
