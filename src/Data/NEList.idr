@@ -1,5 +1,6 @@
 module Data.NEList
 
+import Data.List
 import Data.Vect
 
 public export

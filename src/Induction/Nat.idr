@@ -50,7 +50,7 @@ fixBox : All (Box a :-> a) -> All (Box a)
 fixBox alg = go _
   where
   go : (n : Nat) -> Box a n
-  go  Z    = MkBox absurd
+  go  Z    = MkBox (\ pr => void (absurd pr))
   go (S n) = MkBox $ \mltSn => alg (lteLower (fromLteSucc mltSn) (go n))
 
 public export
