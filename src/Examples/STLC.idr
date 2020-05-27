@@ -1,5 +1,7 @@
 module Examples.STLC
 
+import Data.List
+import Data.Vect
 import Data.NEList
 import TParsec
 import TParsec.Running
@@ -54,7 +56,7 @@ type =
 
   -- The value `type` is built as a fixpoint. We can use the parser `rec` bound
   -- here to perform recursive calls (i.e. to parse substructures).
-  fix _ $ \rec =>
+  fix (Parser' TYPE) $ \rec =>
 
   -- We start by writing the parser for LT. It uses various combinators from
   -- TParsec.Combinators:
@@ -69,7 +71,7 @@ type =
   -- Remembering that `K` wraps a string into a TYPE the following definition
   -- literally gives us: LT = '<alpha>+ | (T)
 
-    lt = alt (map K (rand (char '\'') alphas)) (parens rec)
+    lt = alt (map K (rand (char '\'') (box alphas))) (parens rec)
 
   -- We can then move on to matching the symbol "->" for an arrow type. Here is
   -- a description of the new combinators we use:
@@ -89,18 +91,20 @@ type =
   -- is the ideal candidate for us where `elt` is `lt` and `cons` is `arr`.
   
     in
-  chainr1 lt arr
+  chainr1 lt (box arr)
 
 -- An example: We check that the parser succeeds on "'a -> ('b -> 'c) -> 'd"
 -- `parseType str p` is defined in `TParsec.Running`. It runs the parser `p` on
 -- the String `str` and if that succeeds with value `v`, it demands that the
 -- user gives a proof of `Singleton v`. The only such proof is `MkSingleton v`.
 
+{-
 Test : Type
 Test = parseType "'a -> ('b -> 'c) -> 'd" type
 
 test : Test
 test = MkSingleton $ ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d"))
+-}
 
 -- Parsing STLC
 -------------------------------------------------------------------------------
@@ -161,7 +165,7 @@ var = map Var ident
 -- We use `adjust rec p` to run `rec` then `p` and return the pair of results
 
 cut : All (Box (Parser' Val) :-> Parser' (Val, TYPE))
-cut rec = parens (adjust rec (rand (withSpaces (char ':')) type)) where
+cut rec = parens (adjust rec (rand (withSpaces (char ':')) (box type))) where
 
   -- The definition of `adjust` needs a bit more thoughts.
   -- As we've explained, to guarantee totality the recursive type is wrapped
@@ -180,8 +184,7 @@ cut rec = parens (adjust rec (rand (withSpaces (char ':')) type)) where
   -- Hence:
 
   adjust : All (Box (Parser' s) :-> Parser' t :-> Box (Parser' (s, t)))
-  adjust p q =
-    Nat.map2 {a=Parser' _} {b=Parser' _} (\p, q => Combinators.and p q) p q
+  adjust p q = Nat.map2 (\p, q => Combinators.and p (box q)) p (box q)
 
 -- Each argument is either a variable or a whole checkable term in parentheses.
 
@@ -208,8 +211,8 @@ neu recv recn =
           , map (uncurry Cut) (cut recv)
           , parens recn
           ]) 
-    (cmap App spaces) 
-    (app recv)
+    (box $ cmap App spaces) 
+    (box $ STLC.app recv)
 
 -- We can now move on to values. Lambda-abstraction in particular.
 -- Remember that lambda-abstractions are of the shape `\ x . I`.
@@ -219,7 +222,10 @@ neu recv recn =
 -- * `andopt p q` (and maybe) runs `p` then `q` but `q` is allowed to fail
 
 lam : All (Box (Parser' Val) :-> Parser' (String, Val))
-lam rec = rand (char '\\') (and (withSpaces ident) (rand (andopt (char '.') spaces) rec))
+lam rec = rand (char '\\')
+        $ box $ and (withSpaces ident)
+        $ box $ rand (andopt (char '.') (box spaces))
+        $ rec
 
 -- Given that parsing `Emb` is trivial (neutrals silently embed into values so we
 -- don't have to match anything), the parser for values is the simple union of one 
@@ -247,6 +253,8 @@ language = fix _ $ \rec =>
 -- We can once more write tests by using `parseType` and check that our parser indeed
 -- produces the right output.
 
+
+{-
 Test2 : Type
 Test2 = parseType "\\x.(\\y.y:'a ->'a) x" (val language)
 
@@ -287,4 +295,5 @@ test5 = MkSingleton $ Lam "g" $ Lam "f" $ Lam "a" $
                     (Emb $ App (Var "f") 
                                (Emb $ Var "a"))
 
+-}
 -}
