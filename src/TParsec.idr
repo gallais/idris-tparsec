@@ -11,3 +11,5 @@ import public TParsec.Types
 import public TParsec.Combinators
 import public TParsec.Combinators.Chars
 import public TParsec.Combinators.Numbers
+
+%default total

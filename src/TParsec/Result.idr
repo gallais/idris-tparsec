@@ -2,6 +2,8 @@ module TParsec.Result
 
 import public Control.Monad.Trans
 
+%default total
+
 -- Result
 
 public export

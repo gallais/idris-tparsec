@@ -3,6 +3,8 @@ module Induction.Nat
 import Data.Nat
 import Relation.Indexed
 
+%default total
+
 public export
 record Box (a : Nat -> Type) (n : Nat) where
   constructor MkBox

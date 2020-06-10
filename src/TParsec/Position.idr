@@ -1,5 +1,7 @@
 module TParsec.Position
 
+%default total
+
 ||| Position in the input string
 public export
 record Position where

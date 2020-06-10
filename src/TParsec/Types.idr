@@ -14,6 +14,8 @@ import TParsec.Success
 import TParsec.Result
 import TParsec.Position
 
+%default total
+
 ||| A parser is parametrised by some types and type constructors.
 ||| They are grouped in a `Parameters` record.
 ||| @ m is the monad the parser uses.

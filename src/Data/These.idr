@@ -1,5 +1,7 @@
 module Data.These
 
+%default total
+
 public export
 data These a b = This a | That b | Both a b
 

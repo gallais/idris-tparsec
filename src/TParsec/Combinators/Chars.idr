@@ -10,6 +10,8 @@ import TParsec.Types
 import TParsec.Combinators
 import TParsec.Combinators.Numbers
 
+%default total
+
 public export
 char : {p : Parameters mn} ->
        (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>

@@ -3,6 +3,8 @@ module Data.Trie
 import Data.These
 import Data.SortedMap
 
+%default total
+
 -- TODO add to SortedMap
 public export
 mapSingleton : Ord a => a -> b -> SortedMap a b

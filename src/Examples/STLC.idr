@@ -6,6 +6,8 @@ import Data.NEList
 import TParsec
 import TParsec.Running
 
+%default total
+
 -- Introduction
 -------------------------------------------------------------------------------
 
@@ -98,14 +100,13 @@ type =
 -- the String `str` and if that succeeds with value `v`, it demands that the
 -- user gives a proof of `Singleton v`. The only such proof is `MkSingleton v`.
 
-{-
 Test : Type
 Test = parseType "'a -> ('b -> 'c) -> 'd" type
 
 test : Test
 test = MkSingleton $ ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d"))
--}
 
+{-
 -- Parsing STLC
 -------------------------------------------------------------------------------
 
@@ -252,8 +253,6 @@ language = fix _ $ \rec =>
 
 -- We can once more write tests by using `parseType` and check that our parser indeed
 -- produces the right output.
-
-
 {-
 Test2 : Type
 Test2 = parseType "\\x.(\\y.y:'a ->'a) x" (val language)
@@ -272,7 +271,7 @@ test3 = MkSingleton $ Lam "g" $ Lam "f" $ Lam "a" $
                          (Emb $ Var "a"))
                     (Emb $ App (Var "f") 
                                (Emb $ Var "a"))
-{-
+
 -- typechecks but takes a while
 
 Test4 : Type

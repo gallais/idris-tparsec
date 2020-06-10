@@ -2,6 +2,8 @@
 
 module Data.DList
 
+%default total
+
 public export
 record DList (a : Type) where
   constructor MkDList

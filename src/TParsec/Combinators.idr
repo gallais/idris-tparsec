@@ -10,6 +10,8 @@ import Data.NEList
 import TParsec.Success
 import TParsec.Types
 
+%default total
+
 public export
 lteLower : (0 prf : LTE m n) -> Parser mn p a n -> Parser mn p a m
 lteLower mlen p = MkParser (\plem => runParser p (lteTransitive plem mlen))

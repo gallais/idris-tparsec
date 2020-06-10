@@ -25,17 +25,18 @@ type : All (Parser' TYPE)
 type =
   fix _ $ \rec =>
   let
-    lt = alt (map K (rand (char '\'') alphas)) (parens rec)
+    lt = alt (map K (rand (char '\'') (box alphas))) (parens rec)
     arr = cmap ARR (withSpaces (string "->"))
     in
-  chainr1 lt arr
+  chainr1 lt (box arr)
 
+{-
 Test : Type
-Test = parseResult "'a -> ('b -> 'c) -> 'd" type = Value $ Just $ ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d"))
+Test = (parseResult "'a -> ('b -> 'c) -> 'd" type = Value $ Just $ ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d")))
 
 test : Test
 test = Refl
-
+-}
 mutual
   data Val : Type where
     Lam : Position -> String -> Val -> Val
@@ -106,7 +107,7 @@ stlc = fix _ $ \rec =>
    in
   MkSTLC (val ihv ihn) (neu ihv ihn)
 
-
+{-
 Test2 : Type
 Test2 = parseResult "\\x.(\\y.y:'a->'a) x" (val stlc) = Value $ Just $ 
                                                         Lam (MkPosition 0 1) "x" $
@@ -160,3 +161,4 @@ Test5 = parseResult "\\g.\\f.\\a.(g a) (f a)" (val stlc) = Value $ Just $
 
 test5 : Test5
 test5 = Refl
+-}

@@ -1,5 +1,7 @@
 module Relation.Indexed
 
+%default total
+
 infixr 1 :->
 public export
 (:->) : (a, b : i -> Type) -> (i -> Type)

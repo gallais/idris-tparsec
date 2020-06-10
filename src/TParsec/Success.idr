@@ -6,6 +6,7 @@ import Relation.Indexed
 import Data.Inspect
 import Data.Vect
 
+%default total
 
 -- A successful partial parse of an A is a value A together leftovers
 -- which are proven to be smaller than the input

@@ -3,6 +3,8 @@ module Data.NEList
 import Data.List
 import Data.Vect
 
+%default total
+
 public export
 record NEList (a : Type) where
   constructor MkNEList

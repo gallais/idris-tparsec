@@ -8,6 +8,8 @@ import Data.NEList
 import TParsec.Types
 import TParsec.Combinators
 
+%default total
+
 public export
 decimalDigit : {p : Parameters mn} ->
                (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>

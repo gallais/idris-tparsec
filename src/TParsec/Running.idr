@@ -13,6 +13,8 @@ import TParsec.Result
 import TParsec.Types
 import TParsec.Combinators
 
+%default total
+
 public export
 data Singleton : a -> Type where
   MkSingleton : (v : a) -> Singleton v
@@ -29,7 +31,7 @@ public export
 interface SizedInput (tok : Type) (toks : Nat -> Type) where
   sizedInput : (ts : List tok) -> toks (length ts)
 
-export
+public export
 SizedInput a (\n => Vect n a) where
   sizedInput = fromList
 
