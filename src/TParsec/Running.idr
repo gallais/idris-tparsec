@@ -2,7 +2,7 @@ module TParsec.Running
 
 import Util
 import Data.List
-import Data.Vect
+import public Data.Vect
 import Data.Maybe
 import Data.Nat
 import Relation.Indexed
@@ -26,7 +26,7 @@ interface Tokenizer (tok : Type) where
 public export
 Tokenizer Char where
   tokenize = unpack
-  
+
 public export
 interface SizedInput (tok : Type) (toks : Nat -> Type) where
   sizedInput : (ts : List tok) -> toks (length ts)
@@ -71,8 +71,8 @@ public export
 parseMaybe : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
              String -> (All (Parser mn p a)) -> Maybe a
 parseMaybe str par =
-  let 
-    input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str 
+  let
+    input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str
     result = runParser par lteRefl input
    in
   head' $ mapMaybe complete $ runMonad result
@@ -83,17 +83,17 @@ parseType : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
 parseType str par = maybe Void Singleton $ parseMaybe str par
 
 public export
-parseResults : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) => 
+parseResults : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
                String -> All (Parser (TParsecT e an mn) p a) -> Result e (List a)
-parseResults str par =  
-  let 
-    input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str 
+parseResults str par =
+  let
+    input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str
     st = runParser par lteRefl input
-    res = sequence $ runMonad $ runResultT $ runStateT (runTPT st) (start, []) 
+    res = sequence $ runMonad $ runResultT $ runStateT (runTPT st) (start, [])
    in
   map (mapMaybe $ complete . Builtin.fst) res
 
 public export
-parseResult : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) => 
+parseResult : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
               String -> All (Parser (TParsecT e an mn) p a) -> Result e (Maybe a)
 parseResult str par = map head' $ parseResults str par

@@ -1,4 +1,4 @@
-module Examples.Parentheses 
+module Examples.Parentheses
 
 import TParsec
 import TParsec.Running
@@ -14,7 +14,7 @@ Eq PAR where
   (==) LSQU LSQU = True
   (==) RSQU RSQU = True
   (==) _    _    = False
-    
+
 Tokenizer PAR where
   tokenize = foldr ((++) . toPAR) [] . unpack
     where
@@ -31,8 +31,8 @@ Parser' : Type -> Nat -> Type
 Parser' = Parser TParsecU (sizedtok PAR)
 
 PAR' : All (Parser' ())
-PAR' = fix _ $ \rec => 
-  let lRrR = \p, q => cmap () ((exact p `andopt` rec) `land` (exact q `andopt` rec)) in
+PAR' = fix _ $ \rec =>
+  let lRrR = \p, q => cmap () ((exact p `andopt` rec) `land` (box $ exact q `andopt` rec)) in
   alts [ lRrR LPAR RPAR
        , lRrR LCUR RCUR
        , lRrR LSQU RSQU
@@ -40,5 +40,5 @@ PAR' = fix _ $ \rec =>
 
 ---- test
 
-test : parseType "hel[{(lo({((wor))ld})wan)t}som{e()[n]o}i(s)e]?" PAR'
-test = MkSingleton ()
+--test : parseType "hel[{(lo({((wor))ld})wan)t}som{e()[n]o}i(s)e]?" PAR'
+--test = MkSingleton ()

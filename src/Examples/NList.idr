@@ -4,6 +4,8 @@ import Data.DList
 import TParsec
 import TParsec.Running
 
+%default total
+
 NList : Type -> Nat -> Type
 NList a  Z    = a
 NList a (S n) = List (NList a n)
@@ -13,7 +15,7 @@ Parser' = Parser TParsecU chars
 
 NList' : All (Parser' a) -> (n : Nat) -> All (Parser' (NList a n))
 NList' a  Z    = a
-NList' a (S n) = parens $ map DList.toList (chainl1 (map wrap (NList' a n)) (cmap (++) (char ',')))
+NList' a (S n) = parens $ box $ map DList.toList (chainl1 (map wrap (NList' a n)) (box $ cmap (++) (char ',')))
 
 ---- tests
 

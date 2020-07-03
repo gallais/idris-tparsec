@@ -2,6 +2,8 @@ module Examples.Lexing
 
 import TParsec.Lexer
 
+%default total
+
 -- A small set of keywords for a language with expressions of the form
 -- `let x = e in b`.
 

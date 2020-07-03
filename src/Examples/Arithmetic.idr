@@ -16,6 +16,8 @@ module Examples.Arithmetic
 import TParsec
 import TParsec.Running
 
+%default total
+
 -- Here we start by introducing a datatype which makes it painfully
 -- clear that we have left-nested expressions and that they are
 -- stratified into Expr, Term, and Factor.
@@ -25,18 +27,21 @@ import TParsec.Running
 mutual
 
  -- `Expr` is `E`
+ public export
  data Expr : Type where
    EEmb : Term -> Expr
    EAdd : Expr -> Term -> Expr
    ESub : Expr -> Term -> Expr
 
  -- `Term` is `T`
+ public export
  data Term : Type where
    TEmb : Factor -> Term
    TMul : Term -> Factor -> Term
    TDiv : Term -> Factor -> Term
 
  -- `Factor` is `F`
+ public export
  data Factor : Type where
    FLit : Nat -> Factor
    FEmb : Expr -> Factor
@@ -54,6 +59,7 @@ mutual
 -- `Toks p` in the monad `mn` to produce respectively values of type `Expr`,
 -- `Term`, and `Factor`.
 
+public export
 record Language (mn : Type -> Type) (p : Parameters mn) (n : Nat) where
   constructor MkLanguage
   lexpr   : Parser mn p Expr n
@@ -63,12 +69,13 @@ record Language (mn : Type -> Type) (p : Parameters mn) (n : Nat) where
 -- We are now ready to build a `Language toks mn n` for all `n` by recursion.
 -- We have a few constraints which arise directly from the combinators we are
 -- going to use.
--- ̀`Inspect (Toks p) (Tok p)` and `Subset Char (Tok p)` together mean that 
+-- `Inspect (Toks p) (Tok p)` and `Subset Char (Tok p)` together mean that
 -- `Toks` of `p` can essentially be viewed as a list of `Char`s.
 -- In particular, this means that we can make sure that the first character
 -- of the input string is a specific `Char` e.g. '+'.
 
-language : (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p), Subset Char (Tok p)) => All (Language mn p)
+public export
+language : {p : Parameters mn} -> (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p), Subset Char (Tok p)) => All (Language mn p)
 language =
 
   -- The value of type `Language` is build as a fixpoint.
@@ -81,9 +88,9 @@ language =
   -- * `cmap v p` is used to return `v` whenever `p` is a successful parse
 
   -- From these we can see that:
-  let 
+  let
   -- `addop` parses either `+` or `-` and returns the right `Expr` constructor
-    addop  = cmap EAdd (char '+') `alt` cmap ESub (char '-') 
+    addop  = cmap EAdd (char '+') `alt` cmap ESub (char '-')
   -- `mulop` parses either `*` or `/` and returns the right `Term` constructor
     mulop  = cmap TMul (char '*') `alt` cmap TDiv (char '/')
 
@@ -133,5 +140,6 @@ language =
 -- `_expr Arithmetic.language` on `"1+3"` produces the abstract syntax tree
 -- `EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3))`. Which it does.
 
---test : parseType {mn=TParsecU} {p=Types.chars} "1+3" (lexpr Arithmetic.language)
---test = MkSingleton (EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3)))
+public export
+test : parseType {mn=TParsecU} {p=Types.chars} "1+3" (lexpr Arithmetic.language)
+test = MkSingleton (EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3)))

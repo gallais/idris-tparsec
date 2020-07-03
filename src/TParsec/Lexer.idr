@@ -1,8 +1,12 @@
 module TParsec.Lexer
 
+import Data.List
+import Data.Maybe
 import Data.Tuple
 import Data.Trie
-import TParsec.Position
+import public TParsec.Position
+
+%default total
 
 -- Some characters are special: they are separators, breaking a string into
 -- a list of tokens. Furthermore, some of the separators are associated to a
@@ -23,7 +27,7 @@ record LexParameters where
   breaking : Char -> MaybeBreaking Tok
 -- Finally, strings which are not decoded as keywords are coerced using a
 -- function to token values.
-  default  : String -> Tok
+  def : String -> Tok
 
 public export
 LexResult : LexParameters -> Type
@@ -36,15 +40,15 @@ Keywords : LexParameters -> Type
 Keywords p = Trie Char (Tok p)
 
 public export
-init : Keywords p
-init {p} = Trie.fromList $ map (mapFst unpack) (keywords p)
+init : {p : LexParameters} -> Keywords p
+init = Trie.fromList $ map (mapFst unpack) (keywords p)
 
 -- Grab the accumulator and, unless it is empty, push it on top of the
 -- decoded list of tokens
 public export
-push : (Position, List Char) -> LexResult p -> LexResult p
-push     (pos, []) ts = ts
-push {p} (pos, cs) ts = (pos, default p (pack (reverse cs))) :: ts
+push : {p : LexParameters} -> (Position, List Char) -> LexResult p -> LexResult p
+push (pos, []) ts = ts
+push (pos, cs) ts = (pos, def p (pack (reverse cs))) :: ts
 
 -- The action corresponding to a breaking character: we only push something
 -- if the breaking character is associated to a token
@@ -54,7 +58,7 @@ break pos (Just tok) rs = (pos, tok) :: rs
 break pos  Nothing   rs = rs
 
 public export
-read : Char -> Keywords p -> Keywords p
+read : {p : LexParameters} -> Char -> Keywords p -> Keywords p
 read t ks = fromMaybe empty $ lookupTrie t ks
 
 public export
@@ -64,12 +68,13 @@ value = lookupValue []
 mutual
   -- Kickstart the tokeniser with an empty accumulator and the initial trie.
   public export
-  start : Position -> List Char -> LexResult p
+  start : {p : LexParameters} -> Position -> List Char -> LexResult p
   start pos = loop (pos, []) init pos
 
   -- The main loop
   public export
-  loop : (acc  : (Position, List Char)) -> -- start position & chars read so far in this token
+  loop : {p : LexParameters} ->
+         (acc  : (Position, List Char)) -> -- start position & chars read so far in this token
          (toks : Keywords p)            -> -- keyword candidates left at this point
          (pos : Position)               -> -- current position in the input string
          (input : List Char)            -> -- list of chars to tokenize
@@ -92,5 +97,5 @@ mutual
                  Nothing  => loop (mapSnd (c::) acc) toks' (Position.update c pos) cs
 
 public export
-tokenize : String -> LexResult p
+tokenize : {p : LexParameters} -> String -> LexResult p
 tokenize = start Position.start . unpack

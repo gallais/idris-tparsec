@@ -91,7 +91,7 @@ type =
   -- least one `elt`.
   -- Remembering the part of the grammar `T := LT | LT -> T`, we see that this
   -- is the ideal candidate for us where `elt` is `lt` and `cons` is `arr`.
-  
+
     in
   chainr1 lt (box arr)
 
@@ -100,13 +100,13 @@ type =
 -- the String `str` and if that succeeds with value `v`, it demands that the
 -- user gives a proof of `Singleton v`. The only such proof is `MkSingleton v`.
 
-Test : Type
-Test = parseType "'a -> ('b -> 'c) -> 'd" type
+--Test : Type
+--Test = parseType "'a -> ('b -> 'c) -> 'd" type
+--
+--test : Test
+--test = MkSingleton $ ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d"))
 
-test : Test
-test = MkSingleton $ ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d"))
 
-{-
 -- Parsing STLC
 -------------------------------------------------------------------------------
 
@@ -206,13 +206,13 @@ app rec = alt (map Emb var) (parens rec)
 -- Hence the following definition of `neu`:
 
 neu : All (Box (Parser' Val) :-> Box (Parser' Neu) :-> Parser' Neu)
-neu recv recn = 
-  hchainl 
+neu recv recn =
+  hchainl
     (alts [ var
           , map (uncurry Cut) (cut recv)
           , parens recn
-          ]) 
-    (box $ cmap App spaces) 
+          ])
+    (box $ cmap App spaces)
     (box $ STLC.app recv)
 
 -- We can now move on to values. Lambda-abstraction in particular.
@@ -229,11 +229,11 @@ lam rec = rand (char '\\')
         $ rec
 
 -- Given that parsing `Emb` is trivial (neutrals silently embed into values so we
--- don't have to match anything), the parser for values is the simple union of one 
+-- don't have to match anything), the parser for values is the simple union of one
 -- for lambda-abstraction, one for neutrals and a recursive parser looking under brackets:
 
 val : All (Box (Parser' Val) :-> Box (Parser' Neu) :-> Parser' Val)
-val recv recn = 
+val recv recn =
   alts [ map (uncurry Lam) (lam recv)
        , map Emb (neu recv recn)
        , parens recv
@@ -245,9 +245,9 @@ val recv recn =
 
 language : All Language
 language = fix _ $ \rec =>
-  let 
-    ihv = Nat.map {a=Language} val rec 
-    ihn = Nat.map {a=Language} neu rec 
+  let
+    ihv = Nat.map {a=Language} val rec
+    ihn = Nat.map {a=Language} neu rec
    in
   MkLanguage (val ihv ihn) (neu ihv ihn)
 
@@ -258,7 +258,7 @@ Test2 : Type
 Test2 = parseType "\\x.(\\y.y:'a ->'a) x" (val language)
 
 test2 : Test2
-test2 = MkSingleton $ Lam "x" $ 
+test2 = MkSingleton $ Lam "x" $
           Emb $ App (Cut (Lam "y" $ Emb $ Var "y") (ARR (K "a") (K "a")))
                     (Emb $ Var "x")
 
@@ -266,10 +266,10 @@ Test3 : Type
 Test3 = parseType "\\g.\\f.\\a.g a (f a)" (val language)
 
 test3 : Test3
-test3 = MkSingleton $ Lam "g" $ Lam "f" $ Lam "a" $ 
-          Emb $ App (App (Var "g") 
+test3 = MkSingleton $ Lam "g" $ Lam "f" $ Lam "a" $
+          Emb $ App (App (Var "g")
                          (Emb $ Var "a"))
-                    (Emb $ App (Var "f") 
+                    (Emb $ App (Var "f")
                                (Emb $ Var "a"))
 
 -- typechecks but takes a while
@@ -278,21 +278,20 @@ Test4 : Type
 Test4 = parseType "\\g.\\f.\\a.(g a) (f a)" (val language)
 
 test4 : Test4
-test4 = MkSingleton $ Lam "g" $ Lam "f" $ Lam "a" $ 
-          Emb $ App (App (Var "g") 
+test4 = MkSingleton $ Lam "g" $ Lam "f" $ Lam "a" $
+          Emb $ App (App (Var "g")
                          (Emb $ Var "a"))
-                    (Emb $ App (Var "f") 
+                    (Emb $ App (Var "f")
                                (Emb $ Var "a"))
 
 Test5 : Type
 Test5 = parseType "(\\g.(\\f.\\a.(g) (a) ((f) a)))" (val language)
 
 test5 : Test5
-test5 = MkSingleton $ Lam "g" $ Lam "f" $ Lam "a" $ 
-          Emb $ App (App (Var "g") 
+test5 = MkSingleton $ Lam "g" $ Lam "f" $ Lam "a" $
+          Emb $ App (App (Var "g")
                          (Emb $ Var "a"))
-                    (Emb $ App (Var "f") 
+                    (Emb $ App (Var "f")
                                (Emb $ Var "a"))
 
--}
 -}
