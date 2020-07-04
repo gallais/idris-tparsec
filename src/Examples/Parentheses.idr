@@ -31,8 +31,9 @@ Parser' : Type -> Nat -> Type
 Parser' = Parser TParsecU (sizedtok PAR)
 
 PAR' : All (Parser' ())
-PAR' = fix _ $ \rec =>
-  let lRrR = \p, q => cmap () ((exact p `andopt` rec) `land` (box $ exact q `andopt` rec)) in
+PAR' = fix (Parser' ()) $ \rec =>
+  let lRrR = \p, q => cmap () ((exact p `andopt` rec) `land` (box $ exact q `andopt` rec))
+   in
   alts [ lRrR LPAR RPAR
        , lRrR LCUR RCUR
        , lRrR LSQU RSQU
@@ -40,5 +41,5 @@ PAR' = fix _ $ \rec =>
 
 ---- test
 
---test : parseType "hel[{(lo({((wor))ld})wan)t}som{e()[n]o}i(s)e]?" PAR'
---test = MkSingleton ()
+test : parseType "hel[{(lo({((wor))ld})wan)t}som{e()[n]o}i(s)e]?" PAR'
+test = MkSingleton ()
