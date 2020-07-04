@@ -46,5 +46,5 @@ TestTy = tokenize {p=Params} "fix f x = let b = fix f in (f b) x" =
            , (MkPosition 0 33, ID "x")
            ]
 
-test : TestTy
-test = Refl
+--test : TestTy
+--test = Refl

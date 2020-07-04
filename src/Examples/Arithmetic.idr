@@ -140,6 +140,6 @@ language =
 -- `_expr Arithmetic.language` on `"1+3"` produces the abstract syntax tree
 -- `EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3))`. Which it does.
 
-public export
-test : parseType {mn=TParsecU} {p=Types.chars} "1+3" (lexpr Arithmetic.language)
-test = MkSingleton (EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3)))
+--public export
+--test : parseType {mn=TParsecU} {p=Types.chars} "1+3" (lexpr Arithmetic.language)
+--test = MkSingleton (EAdd (EEmb (TEmb (FLit 1))) (TEmb (FLit 3)))
