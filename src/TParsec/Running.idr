@@ -57,7 +57,7 @@ interface Pointed (a : Type) where
 
 public export
 (MonadRun m, Pointed s) => MonadRun (StateT s m) where
-  runMonad st = map fst $ runMonad $ runStateT st point
+  runMonad st = map snd $ runMonad $ runStateT point st
 
 public export
 MonadRun m => MonadRun (ResultT e m) where
@@ -65,7 +65,7 @@ MonadRun m => MonadRun (ResultT e m) where
 
 public export
 MonadRun m => MonadRun (TParsecT e a m) where
-  runMonad (MkTPT r) = map fst $ runMonad $ runStateT r (start, [])
+  runMonad (MkTPT r) = map snd $ runMonad $ runStateT (start, []) r
 
 public export
 parseMaybe : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
@@ -89,9 +89,9 @@ parseResults str par =
   let
     input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str
     st = runParser par lteRefl input
-    res = sequence $ runMonad $ runResultT $ runStateT (runTPT st) (start, [])
+    res = sequence $ runMonad $ runResultT $ runStateT (start, []) (runTPT st)
    in
-  map (mapMaybe $ complete . Builtin.fst) res
+  map (mapMaybe $ complete . Builtin.snd) res
 
 public export
 parseResult : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>

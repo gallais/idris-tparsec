@@ -77,8 +77,8 @@ public export
 (Monad m, Subset (Position, List a) e) => Alternative (TParsecT e a m) where
   empty = MkTPT $ ST $ MkRT . pure . SoftFail . into
   (MkTPT a) <|> (MkTPT b) = MkTPT $ ST $ \pos =>
-    MkRT $ (runResultT $ runStateT a pos) >>= (\r => case r of
-      SoftFail _ => runResultT $ runStateT b pos
+    MkRT $ (runResultT $ runStateT pos a) >>= (\r => case r of
+      SoftFail _ => runResultT $ runStateT pos b
       _ => pure r)
 
 public export
@@ -105,7 +105,7 @@ recordChar c = MkTPT $ ignore (modify (mapFst (update c)))
 public export
 commitT : Functor m => TParsecT e a m x -> TParsecT e a m x
 commitT (MkTPT m) = MkTPT $ ST $ \pos =>
-   MkRT $ map (result HardFail HardFail Value) (runResultT $ runStateT m pos)
+   MkRT $ map (result HardFail HardFail Value) (runResultT $ runStateT pos m)
 
 public export
 commit : Functor mn => All (Parser (TParsecT e an mn) p a :-> Parser (TParsecT e an mn) p a)
