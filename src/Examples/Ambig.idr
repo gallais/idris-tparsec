@@ -18,7 +18,7 @@ Parser' : Type -> Nat -> Type
 Parser' = Parser PosOr
                 (MkParameters Char
                               (\n => Vect n Char)
-                              (\c => MkPO $ ST $ \pos => Right ((), update c pos)))
+                              (\c => MkPO $ ST $ \pos => Right (update c pos, ())))
 
 Functor PosOr where
   map f (MkPO a) = MkPO $ map f a
@@ -49,7 +49,7 @@ Monad PosOr where
 
 parse' : String -> All (Parser' a) -> Either Position a
 parse' str p = let st = runParser p lteRefl $ sizedInput {toks= \n=>Vect n Char} $ tokenize {tok=Char} str in
-               map (Success.Value . fst) $ runStateT (runPO st) start
+               map (Success.Value . snd) $ runStateT start (runPO st)
 
 Amb : All (Parser' Unit)
 Amb = cmap () $ string "abracadabra" `alt` string "abraham"
