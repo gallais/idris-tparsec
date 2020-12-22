@@ -11,7 +11,7 @@ View as a  Z    = Void
 View as a (S n) = (a, as n)
 
 public export
-interface Inspect (as : Nat -> Type) (a : Type) where
+interface Inspect (0 as : Nat -> Type) (0 a : Type) where
   inspect : All (as :-> Maybe :. View as a)
 
 public export

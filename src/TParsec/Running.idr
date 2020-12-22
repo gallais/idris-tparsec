@@ -20,7 +20,7 @@ data Singleton : a -> Type where
   MkSingleton : (v : a) -> Singleton v
 
 public export
-interface Tokenizer (tok : Type) where
+interface Tokenizer (0 tok : Type) where
   tokenize : String -> List tok
 
 public export
@@ -28,7 +28,7 @@ Tokenizer Char where
   tokenize = unpack
 
 public export
-interface SizedInput (tok : Type) (toks : Nat -> Type) where
+interface SizedInput (0 tok : Type) (0 toks : Nat -> Type) where
   sizedInput : (ts : List tok) -> toks (length ts)
 
 public export
@@ -36,7 +36,7 @@ SizedInput a (\n => Vect n a) where
   sizedInput = fromList
 
 public export
-interface MonadRun (mn : Type -> Type) where
+interface MonadRun (0 mn : Type -> Type) where
   runMonad : mn a -> List a
 
 public export
@@ -52,7 +52,7 @@ MonadRun Identity where
   runMonad (Id a) = pure a
 
 public export
-interface Pointed (a : Type) where
+interface Pointed (0 a : Type) where
   point : a
 
 public export
