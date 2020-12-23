@@ -5,7 +5,7 @@ import Util
 %default total
 
 public export
-interface Subset (a : Type) (b : Type) where
+interface Subset (0 a : Type) (0 b : Type) where
   into : a -> b
 
 public export
