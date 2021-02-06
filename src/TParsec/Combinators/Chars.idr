@@ -5,7 +5,7 @@ import Relation.Indexed
 import Relation.Subset
 import Induction.Nat
 import Data.Inspect
-import Data.NEList
+import Data.List1
 import TParsec.Types
 import TParsec.Combinators
 import TParsec.Combinators.Numbers
@@ -29,10 +29,10 @@ string : {p : Parameters mn} ->
          (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
          (t : String) -> {auto pr : NonEmpty (unpack t)} ->
          All (Parser mn p String)
-string @{cstr} @{pr} t with (unpack t) 
+string @{cstr} @{pr} t with (unpack t)
   string @{cstr} @{pr} t | [] = absurd pr
-  string @{cstr} @{pr} t | (x :: xs) = 
-    cmap t $ ands $ map (\c => char c) (MkNEList x xs) 
+  string @{cstr} @{pr} t | (x :: xs) =
+    cmap t $ ands $ map (\c => char c) (x ::: xs)
 
 public export
 space : {p : Parameters mn} ->
@@ -43,8 +43,8 @@ space = anyOf (into <$> unpack " \t\n")
 public export
 spaces : {p : Parameters mn} ->
          (Alternative mn, Monad mn, Subset Char (Tok p), Eq (Tok p), Inspect (Toks p) (Tok p)) =>
-         All (Parser mn p (NEList (Tok p)))
-spaces = nelist space
+         All (Parser mn p (List1 (Tok p)))
+spaces = list1 space
 
 public export
 parens : {p : Parameters mn} ->
@@ -85,9 +85,9 @@ alpha = lowerAlpha `alt` upperAlpha
 -- TODO define Bijection?
 public export
 alphas : {p : Parameters mn} ->
-         (Alternative mn, Monad mn, Subset Char (Tok p), Subset (Tok p) Char, Eq (Tok p), Inspect (Toks p) (Tok p)) =>  
+         (Alternative mn, Monad mn, Subset Char (Tok p), Subset (Tok p) Char, Eq (Tok p), Inspect (Toks p) (Tok p)) =>
          All (Parser mn p String)
-alphas = map (pack . map into . NEList.toList) (nelist alpha)
+alphas = map (pack . map into . forget) (list1 alpha)
 
 public export
 num : {p : Parameters mn} ->

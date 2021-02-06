@@ -10,7 +10,6 @@ modules = Util
 
         , Data.Inspect
         , Data.DList
-        , Data.NEList
         , Data.These
 --        , Data.Trie
         , Data.Tuple

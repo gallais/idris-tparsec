@@ -4,7 +4,7 @@ import Util
 import Relation.Indexed
 import Relation.Subset
 import Data.Inspect
-import Data.NEList
+import Data.List1
 import TParsec.Types
 import TParsec.Combinators
 
@@ -25,7 +25,7 @@ decimalNat : {p : Parameters mn} ->
              All (Parser mn p Nat)
 decimalNat =
   let convert = foldl (\ih, d => 10 * ih + d) 0 in
-  Combinators.map convert (nelist decimalDigit)
+  Combinators.map convert (list1 decimalDigit)
 
 public export
 decimalInteger : {p : Parameters mn} ->

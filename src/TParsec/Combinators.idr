@@ -6,7 +6,7 @@ import Util
 import Relation.Indexed
 import Induction.Nat
 import Data.Inspect
-import Data.NEList
+import Data.List1
 import TParsec.Success
 import TParsec.Types
 
@@ -223,11 +223,11 @@ and p q = andbind p (\ _ => q)
 ||| returned as a list. The list of parser is non-empty and
 ||| the list of results is non-empty as well.
 |||
-||| Unindexed signature: `NEList (Parser a) -> Parser (NEList a)`
+||| Unindexed signature: `List1 (Parser a) -> Parser (List1 a)`
 public export
 ands : Monad mn =>
-       All (NEList :. Parser mn p a :-> Parser mn p (NEList a))
-ands ps = NEList.foldr1 (\ p, ps => map (uncurry (<+>)) (and p (box ps))) (map (Combinators.map singleton) ps)
+       All (List1 :. Parser mn p a :-> Parser mn p (List1 a))
+ands ps = List1.foldr1 (\ p, ps => map (uncurry (<+>)) (and p (box ps))) (map (Combinators.map singleton) ps)
 
 ||| Runs a parser and a monadic computation in succession.
 |||
@@ -492,7 +492,7 @@ exact t = guard (\t' => t == t') anyTok
 public export
 exacts : {p : Parameters mn} ->
          (Alternative mn, Monad mn, Inspect (Toks p) (Tok p), Eq (Tok p)) =>
-         NEList (Tok p) -> All (Parser mn p (NEList (Tok p)))
+         List1 (Tok p) -> All (Parser mn p (List1 (Tok p)))
 exacts ts = ands (map (\t => exact t) ts)
 
 ||| Given a token, always succeeds unless it is encountered.
@@ -606,7 +606,7 @@ chainr1 p op = hchainr p op p
 |||
 ||| Unindexed signature: `Parser a -> Parser (List a)`
 public export
-nelist : (Alternative mn, Monad mn) =>
-         All (Parser mn p a :-> Parser mn p (NEList a))
-nelist = fix (Parser mn p a :-> Parser mn p (NEList a)) $ \rec, p =>
-  Combinators.map (uncurry consopt) (andopt p (Nat.app rec (box p)))
+list1 : (Alternative mn, Monad mn) =>
+         All (Parser mn p a :-> Parser mn p (List1 a))
+list1 = fix (Parser mn p a :-> Parser mn p (List1 a)) $ \rec, p =>
+  Combinators.map (uncurry $ \ a => maybe (singleton a) (cons a)) (andopt p (Nat.app rec (box p)))
