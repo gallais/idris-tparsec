@@ -12,7 +12,6 @@ modules = Util
         , Data.DList
         , Data.These
 --        , Data.Trie
-        , Data.Tuple
 
         , TParsec
         , TParsec.Success
