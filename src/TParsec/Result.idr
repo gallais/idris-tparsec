@@ -44,7 +44,7 @@ public export
   (HardFail e1) == (HardFail e2) = e1 == e2
   (SoftFail e1) == (SoftFail e2) = e1 == e2
   (Value x)     == (Value y)     = x == y
-  _             == _             = False  
+  _             == _             = False
 
 public export
 result : (h, s : e -> b) -> (v : a -> b) -> Result e a -> b

@@ -14,7 +14,7 @@ toList : DList a -> List a
 toList xs = runDList xs []
 
 public export
-fromList : List a -> DList a 
+fromList : List a -> DList a
 fromList = MkDList . (++)
 
 public export
@@ -45,9 +45,9 @@ public export
 replicate : Nat -> a -> DList a
 replicate n x = MkDList $ \xs => go n xs
   where
-  go : Nat -> List a -> List a   
+  go : Nat -> List a -> List a
   go  Z    xs = xs
-  go (S n) xs = x :: go n xs 
+  go (S n) xs = x :: go n xs
 
 public export
 foldr : (a -> b -> b) -> b -> DList a -> b

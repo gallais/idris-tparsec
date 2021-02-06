@@ -46,7 +46,7 @@ and p q = ltLift (Small p) (map (MkPair (Value p)) q)
 
 public export
 fromView : All (View toks tok :-> Success toks tok)
-fromView = go _ 
+fromView = go _
   where
   go : (n : Nat) -> View toks tok n -> Success toks tok n
   go  Z     v      = absurd v
