@@ -1,5 +1,6 @@
 module Examples.NList
 
+import Data.List
 import Data.DList
 import TParsec
 import TParsec.Running
@@ -23,8 +24,8 @@ nnats : (n : Nat) -> All (Parser' (NList Nat n))
 nnats = NList' decimalNat
 
 {-
-test : parseType "((1,2,3),(4,5,6))" (NList.nnats 2)
-test = MkSingleton $ the (List (List Nat)) $ [[1, 2, 3], [4, 5, 6]]
+test : parseType "((1,2,3),(4,5,6))" (nnats 2)
+test = MkSingleton {a = List (List Nat)} [[1, 2, 3], [4, 5, 6]]
 
 test2 : parseType "((1,2,3),(4,5,6),(7,8,9,10))" (nnats 2)
 test2 = MkSingleton [[1, 2, 3], [4, 5, 6], [7, 8, 9, 10]]
