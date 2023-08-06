@@ -8,7 +8,6 @@ import Data.List
 import Util
 import Relation.Subset
 import Relation.Indexed
-import Data.Tuple
 import Data.Inspect
 import TParsec.Success
 import TParsec.Result

@@ -48,7 +48,7 @@ Monad PosOr where
   (MkPO a) >>= f = MkPO $ a >>= (runPO . f)
 
 parse' : String -> All (Parser' a) -> Either Position a
-parse' str p = let st = runParser p lteRefl $ sizedInput {toks= \n=>Vect n Char} $ tokenize {tok=Char} str in
+parse' str p = let st = runParser p reflexive $ sizedInput {toks= \n=>Vect n Char} $ tokenize {tok=Char} str in
                map (Success.Value . snd) $ runStateT start (runPO st)
 
 Amb : All (Parser' Unit)

@@ -33,7 +33,7 @@ guardM p (MkSuccess v lt ts) = map (\v => MkSuccess v lt ts) (p v)
 
 public export
 lteLift : (0 prf : LTE m n) -> Success toks a m -> Success toks a n
-lteLift mlen (MkSuccess v sltm ts) = MkSuccess v (lteTransitive sltm mlen) ts
+lteLift mlen (MkSuccess v sltm ts) = MkSuccess v (transitive sltm mlen) ts
 
 public export
 ltLift : (0 prf : LT m n) -> Success toks a m -> Success toks a n
@@ -50,7 +50,7 @@ fromView = go _
   where
   go : (n : Nat) -> View toks tok n -> Success toks tok n
   go  Z     v      = absurd v
-  go (S n) (v, vs) = MkSuccess v lteRefl vs
+  go (S n) (v, vs) = MkSuccess v reflexive vs
 
 public export
 getTok : Inspect toks tok => All (toks :-> Maybe :. Success toks tok)

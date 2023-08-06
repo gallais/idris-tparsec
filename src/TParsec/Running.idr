@@ -73,7 +73,7 @@ parseMaybe : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
 parseMaybe str par =
   let
     input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str
-    result = runParser par lteRefl input
+    result = runParser par reflexive input
    in
   head' $ mapMaybe complete $ runMonad result
 
@@ -88,7 +88,7 @@ parseResults : (MonadRun mn, Tokenizer (Tok p), SizedInput (Tok p) (Toks p)) =>
 parseResults str par =
   let
     input  = sizedInput {tok = Tok p} {toks = Toks p} $ tokenize {tok = Tok p} str
-    st = runParser par lteRefl input
+    st = runParser par reflexive input
     res = sequence $ runMonad $ runResultT $ runStateT (start, []) (runTPT st)
    in
   map (mapMaybe $ complete . Builtin.snd) res
