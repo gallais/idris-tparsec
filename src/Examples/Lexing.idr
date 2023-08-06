@@ -2,6 +2,12 @@ module Examples.Lexing
 
 import TParsec.Lexer
 
+-- These imports unstick computation
+import Data.Trie
+import Data.Maybe
+import Data.These
+import Data.SortedMap
+
 %default total
 
 -- A small set of keywords for a language with expressions of the form

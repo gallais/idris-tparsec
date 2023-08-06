@@ -1,10 +1,7 @@
 module Examples.Ambig
 
 import Data.List
-import Data.Vect
-import Data.Nat
-import Control.Monad.State
-import Data.NEList
+import Data.List1
 import TParsec
 import TParsec.Running
 

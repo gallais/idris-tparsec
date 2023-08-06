@@ -1,8 +1,8 @@
 module Examples.STLC
 
 import Data.List
+import Data.List1
 import Data.Vect
-import Data.NEList
 import TParsec
 import TParsec.Running
 

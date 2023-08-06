@@ -15,6 +15,7 @@ module Examples.Arithmetic
 
 import TParsec
 import TParsec.Running
+import Data.List
 
 %default total
 
