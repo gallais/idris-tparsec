@@ -14,7 +14,7 @@ import TParsec.Types
 
 public export
 lteLower : (0 prf : LTE m n) -> Parser mn p a n -> Parser mn p a m
-lteLower mlen p = MkParser (\plem => runParser p (lteTransitive plem mlen))
+lteLower mlen p = MkParser (\plem => runParser p (transitive plem mlen))
 
 public export
 ltLower : (0 prf : LT m n) -> Parser mn p a n -> Parser mn p a m
@@ -141,9 +141,9 @@ andoptbind : (Monad mn, Alternative mn) =>
                   Parser mn p (a, Maybe b))
 andoptbind p q = MkParser $ \mlen, ts =>
                  do sa <- runParser p mlen ts
-                    let 0 salen = lteTransitive (Small sa) mlen
+                    let 0 salen = transitive (Small sa) mlen
                     let combine = Success.map (map Just) . (Success.and sa)
-                    (map combine (runParser (call (q (Value sa)) salen) lteRefl (Leftovers sa))) <|> pure (Success.map (flip MkPair Nothing) sa)
+                    (map combine (runParser (call (q (Value sa)) salen) reflexive (Leftovers sa))) <|> pure (Success.map (flip MkPair Nothing) sa)
 
 ||| Parses a value and processes it into another parser.
 |||
@@ -159,9 +159,9 @@ andbind : Monad mn =>
                Parser mn p (a, b))
 andbind p q = MkParser $ \mlen, ts =>
                 do sa <- runParser p mlen ts
-                   let 0 salen = lteTransitive (Small sa) mlen
+                   let 0 salen = transitive (Small sa) mlen
                    let adjust  = map (Success.and sa)
-                   adjust (runParser (call (q (Value sa)) salen) lteRefl (Leftovers sa))
+                   adjust (runParser (call (q (Value sa)) salen) reflexive (Leftovers sa))
 
 ||| Parses a values and processes it in the context of a monad.
 |||
@@ -533,7 +533,7 @@ anyOf : {p : Parameters mn} ->
 anyOf ts = alts (map (\t => exact t) ts)
 
 public export
-LChain : Parameters mn -> Type -> Nat -> Type
+0 LChain : Parameters mn -> Type -> Nat -> Type
 LChain p a n =
   Success (Toks p) a n -> Box (Parser mn p (a -> a)) n -> mn (Success (Toks p) a n)
 
@@ -542,7 +542,7 @@ schainl : (Alternative mn, Monad mn) => All (LChain {mn} p a)
 schainl = fix _ $ \rec, sa, op => schainlAux rec sa op <|> pure sa
   where
   schainlAux : All (Box (LChain {mn} p a) :-> LChain {mn} p a)
-  schainlAux rec sa op = do sop <- runParser (call op (Small sa)) lteRefl (Leftovers sa)
+  schainlAux rec sa op = do sop <- runParser (call op (Small sa)) reflexive (Leftovers sa)
                             let sa' = Success.map (\f => f (Success.Value sa)) sop
                             res <- call rec (Small sa) sa' (Nat.ltLower (Small sa) op)
                             pure (ltLift (Small sa) res)
@@ -552,7 +552,7 @@ iteratel : (Alternative mn, Monad mn) =>
 iteratel val op = MkParser $ \mlen, ts => do sa <- runParser val mlen ts
                                              schainl sa (Nat.lteLower mlen op)
 public export
-RChain : Parameters mn -> Type -> Nat -> Type
+0 RChain : Parameters mn -> Type -> Nat -> Type
 RChain p {mn} a n =
   Parser mn p (a -> a) n -> Parser mn p a n -> Parser mn p a n
 
@@ -564,10 +564,10 @@ iterater = fix _ $ \rec, op, val => alt (iteraterAux rec op val) val
   iteraterAux : All (Box (RChain p a) :-> RChain p a)
   iteraterAux rec op val = MkParser $ \mlen, ts =>
     do sop <- runParser op mlen ts
-       let 0 sopltn = lteTransitive (Small sop) mlen
+       let 0 sopltn = transitive (Small sop) mlen
        let op'      = ltLower sopltn op
        let val'     = ltLower sopltn val
-       res <- runParser (call rec sopltn op' val') lteRefl (Leftovers sop)
+       res <- runParser (call rec sopltn op' val') reflexive (Leftovers sop)
        pure (ltLift (Small sop) (Success.map (Value sop) res))
 
 public export

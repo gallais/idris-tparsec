@@ -27,5 +27,5 @@ Cst : Type -> (i -> Type)
 Cst t i = t
 
 public export
-All : (a : i -> Type) -> Type
+0 All : (a : i -> Type) -> Type
 All {i} a = {j : i} -> a j

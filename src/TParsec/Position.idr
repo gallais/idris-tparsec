@@ -28,7 +28,7 @@ public export
 update : Char -> Position -> Position
 update c p = if c == '\n'
                then MkPosition (S (line p)) 0
-               else record { offset = S (offset p) } p
+               else { offset := S (offset p) } p
 
 public export
 updates : String -> Position -> Position

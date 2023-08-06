@@ -32,16 +32,16 @@ app f a = MkBox $ \lt => (call f lt) (call a lt)
 
 public export
 extract : All (Box a) -> All a
-extract a = call a lteRefl
+extract a = call a reflexive
 
 public export
 duplicate : All (Box a :-> Box (Box a))
 duplicate a = MkBox $ \mltn => MkBox $ \pltm =>
-              call a (lteTransitive pltm (lteSuccLeft mltn))
+              call a (transitive pltm (lteSuccLeft mltn))
 
 public export
 lteLower : (0 prf : LTE m n) -> Box a n -> Box a m
-lteLower mlen b = MkBox $ \pltm => call b (lteTransitive pltm mlen)
+lteLower mlen b = MkBox $ \pltm => call b (transitive pltm mlen)
 
 public export
 ltLower : (0 prf : LT m n) -> Box a n -> Box a m
