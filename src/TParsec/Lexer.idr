@@ -2,7 +2,6 @@ module TParsec.Lexer
 
 import Data.List
 import Data.Maybe
-import Data.Tuple
 import Data.Trie
 import public TParsec.Position
 

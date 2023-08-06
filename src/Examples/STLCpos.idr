@@ -2,7 +2,7 @@ module Examples.STLCpos
 
 import Control.Monad.State
 import Data.List
-import Data.NEList
+import Data.List1
 import TParsec
 import TParsec.Running
 
@@ -31,11 +31,11 @@ type =
     in
   chainr1 lt (box arr)
 
---Test : Type
---Test = (parseResult "'a -> ('b -> 'c) -> 'd" type = Value $ Just $ ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d")))
---
---test : Test
---test = Refl
+Test : Type
+Test = (parseResult "'a -> ('b -> 'c) -> 'd" type = (Value $ Just $ ARR (K "a") (ARR (ARR (K "b") (K "c")) (K "d"))))
+
+test : Test
+test = Refl
 
 mutual
   data Val : Type where
@@ -107,9 +107,8 @@ stlc = fix _ $ \rec =>
    in
   MkSTLC (val ihv ihn) (neu ihv ihn)
 
-{-
 Test2 : Type
-Test2 = parseResult "\\x.(\\y.y:'a->'a) x" (val stlc) = Value $ Just $
+Test2 = parseResult "\\x.(\\y.y:'a->'a) x" (val stlc) = (Value $ Just $
                                                         Lam (MkPosition 0 1) "x" $
                                                           Emb (MkPosition 0 3) $
                                                             App (MkPosition 0 17)
@@ -117,19 +116,19 @@ Test2 = parseResult "\\x.(\\y.y:'a->'a) x" (val stlc) = Value $ Just $
                                                                      (Lam (MkPosition 0 5) "y" $
                                                                        Emb (MkPosition 0 7) (Var "y"))
                                                                      (ARR (K "a") (K "a")))
-                                                                (Emb (MkPosition 0 17) (Var "x"))
+                                                                (Emb (MkPosition 0 17) (Var "x")))
 
 test2 : Test2
 test2 = Refl
 
 Test3 : Type
-Test3 = parseResult "\\x.1:'a->'a" (val stlc) = HardFail $ ParseError $ MkPosition 0 3
+Test3 = parseResult "\\x.1:'a->'a" (val stlc) = (HardFail $ ParseError $ MkPosition 0 3)
 
 test3 : Test3
 test3 = Refl
 
 Test4 : Type
-Test4 = parseResult "\\g.\\f.\\a.g a (f a)" (val stlc) = Value $ Just $
+Test4 = parseResult "\\g.\\f.\\a.g a (f a)" (val stlc) = (Value $ Just $
                                                          Lam (MkPosition 0 1) "g" $
                                                            Lam (MkPosition 0 4) "f" $
                                                              Lam (MkPosition 0 7) "a" $
@@ -140,13 +139,13 @@ Test4 = parseResult "\\g.\\f.\\a.g a (f a)" (val stlc) = Value $ Just $
                                                                           (Emb (MkPosition 0 11) (Var "a")))
                                                                      (Emb (MkPosition 0 14) $ App (MkPosition 0 16)
                                                                                                   (Var "f")
-                                                                                                  (Emb (MkPosition 0 16) (Var "a")))
+                                                                                                  (Emb (MkPosition 0 16) (Var "a"))))
 
 test4 : Test4
 test4 = Refl
 
 Test5 : Type
-Test5 = parseResult "\\g.\\f.\\a.(g a) (f a)" (val stlc) = Value $ Just $
+Test5 = parseResult "\\g.\\f.\\a.(g a) (f a)" (val stlc) = (Value $ Just $
                                                            Lam (MkPosition 0 1) "g" $
                                                              Lam (MkPosition 0 4) "f" $
                                                                Lam (MkPosition 0 7) "a" $
@@ -157,8 +156,7 @@ Test5 = parseResult "\\g.\\f.\\a.(g a) (f a)" (val stlc) = Value $ Just $
                                                                             (Emb (MkPosition 0 12) (Var "a")))
                                                                        (Emb (MkPosition 0 16) $ App (MkPosition 0 18)
                                                                                                     (Var "f")
-                                                                                                    (Emb (MkPosition 0 18) (Var "a")))
+                                                                                                    (Emb (MkPosition 0 18) (Var "a"))))
 
 test5 : Test5
 test5 = Refl
--}

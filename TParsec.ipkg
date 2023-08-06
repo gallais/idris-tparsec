@@ -11,13 +11,13 @@ modules = Util
         , Data.Inspect
         , Data.DList
         , Data.These
---        , Data.Trie
+        , Data.Trie
 
         , TParsec
         , TParsec.Success
         , TParsec.Result
         , TParsec.Position
---        , TParsec.Lexer
+        , TParsec.Lexer
         , TParsec.Types
         , TParsec.Combinators
         , TParsec.Combinators.Chars

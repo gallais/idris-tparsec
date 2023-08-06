@@ -75,7 +75,7 @@ foldWithKeysM {a} {m} {c} fk fv = go []
   where
   go : List a -> Trie a b -> m c
   go as (MkTrie nd) =
-    bifold <$> bitraverse
+    bifold <$> These.bitraverse
                 (fv as)
                 (\sm => foldlM
                           (\x, (k, vs) => do let as' = as ++ [k]
@@ -83,5 +83,5 @@ foldWithKeysM {a} {m} {c} fk fv = go []
                                              z <- fk as'
                                              pure $ x <+> y <+> z)
                           neutral
-                          (toList sm))
+                          (SortedMap.toList sm))
                 nd
